@@ -32,9 +32,9 @@
 
     <name>The Weghst Pine Core</name>
 
-    <properties>
-        <liquibase.scan.packages>com.weghst.pine.liquibase</liquibase.scan.packages>
-    </properties>
+    <!--<properties>-->
+        <!--<liquibase.scan.packages>com.weghst.pine.liquibase</liquibase.scan.packages>-->
+    <!--</properties>-->
 
     <build>
         <plugins>
@@ -46,6 +46,23 @@
                         <manifestFile>src/main/resources/META-INF/MANIFEST.MF</manifestFile>
                     </archive>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>properties-maven-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>read-project-properties</goal>
+                        </goals>
+                        <configuration>
+                            <files>
+                                <file>src/test/resources/jdbc.properties</file>
+                            </files>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.liquibase</groupId>
@@ -62,25 +79,7 @@
                             <value>com.weghst.pine.liquibase</value>
                         </systemProperty>
                     </systemProperties>
-                    <rollbackTab>1439026604</rollbackTab>
                 </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>initialize</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>src/test/resources/jdbc.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
             </plugin>
         </plugins>
     </build>

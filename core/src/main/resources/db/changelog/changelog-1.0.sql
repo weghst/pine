@@ -12,8 +12,7 @@ CREATE TABLE `t_config`(
 
 INSERT INTO `t_config`(`key`, `value`, `remarks`, `lastUpdatedTime`) VALUES('hello.test', 'HELLO', 'TestData', UNIX_TIMESTAMP());
 
---rollback
-DROP TABLE `t_config`;
+--rollback DROP TABLE `t_config`;
 
 --changeset kevinz@weghst.com:1439026604
 CREATE TABLE `t_user`(
@@ -27,6 +26,5 @@ CREATE TABLE `t_user`(
 ALTER TABLE `t_user`
   ADD UNIQUE INDEX `EMAIL(UNIQUE)` (`email`);
 
---rollback
-DROP TABLE `t_user`;
+--rollback DROP TABLE `t_user`;
 
