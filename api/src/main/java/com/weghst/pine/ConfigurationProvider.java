@@ -20,6 +20,10 @@ import java.math.BigInteger;
 
 public interface ConfigurationProvider {
 
+    void setProperty(String key, Object value);
+
+    boolean removeProperty(String key);
+
     boolean containsKey(String key);
 
     boolean getBoolean(String key);
@@ -47,8 +51,6 @@ public interface ConfigurationProvider {
     String getString(String key, String defaultValue);
 
     String[] getStringArray(String key);
-
-    String[] getStringArray(String key, String[] defaultValue);
 
     BigDecimal getBigDecimal(String key);
 

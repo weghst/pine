@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -33,6 +33,14 @@ public final class ConfigUtils {
         } else {
             configurationProvider = new DefaultConfiguration();
         }
+    }
+
+    public static void setProperty(String key, Object value) {
+        configurationProvider.setProperty(key, value);
+    }
+
+    public static void removeProperty(String key) {
+        configurationProvider.removeProperty(key);
     }
 
     public static boolean containsKey(String key) {
@@ -89,10 +97,6 @@ public final class ConfigUtils {
 
     public static String[] getStringArray(String key) {
         return configurationProvider.getStringArray(key);
-    }
-
-    public static String[] getStringArray(String key, String[] defaultValue) {
-        return configurationProvider.getStringArray(key, defaultValue);
     }
 
     public static BigDecimal getBigDecimal(String key) {

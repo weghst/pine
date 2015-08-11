@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -21,6 +21,16 @@ import java.math.BigInteger;
 class DefaultConfiguration implements ConfigurationProvider {
 
     static final String[] EMPTY_STRING_ARRAY = new String[0];
+
+    public void setProperty(String key, Object value) {
+        System.setProperty(key, String.valueOf(value));
+    }
+
+    @Override
+    public boolean removeProperty(String key) {
+        setProperty(key, null);
+        return true;
+    }
 
     @Override
     public boolean containsKey(String key) {
@@ -135,12 +145,7 @@ class DefaultConfiguration implements ConfigurationProvider {
 
     @Override
     public String[] getStringArray(String key) {
-        return getStringArray(key, EMPTY_STRING_ARRAY);
-    }
-
-    @Override
-    public String[] getStringArray(String key, String[] defaultValue) {
-        return defaultValue;
+        return EMPTY_STRING_ARRAY;
     }
 
     @Override

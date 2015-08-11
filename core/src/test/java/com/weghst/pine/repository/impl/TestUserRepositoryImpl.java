@@ -4,13 +4,12 @@ import com.weghst.pine.SpringTestSupport;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.repository.UserRepository;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
-
-import javax.inject.Inject;
 
 public class TestUserRepositoryImpl extends SpringTestSupport {
 
-    @Inject
+    @Autowired
     private UserRepository userReposy;
 
     @Test

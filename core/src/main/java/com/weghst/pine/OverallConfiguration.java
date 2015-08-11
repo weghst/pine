@@ -1,102 +1,159 @@
 package com.weghst.pine;
 
+import org.apache.commons.configuration.Configuration;
+import org.apache.commons.configuration.MapConfiguration;
+import org.springframework.util.PropertyPlaceholderHelper;
+
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.util.Map;
+import java.util.Properties;
 
 public class OverallConfiguration implements ConfigurationProvider {
 
+    private static final PropertyPlaceholderHelper nonStrictHelper =
+            new PropertyPlaceholderHelper("${", "}", ":", true);
+
+    private Configuration configuration;
+
+    public OverallConfiguration() {
+        configuration = new MapConfiguration(System.getProperties());
+    }
+
+    @Override
+    public void setProperty(String key, Object value) {
+        configuration.setProperty(key, value);
+    }
+
+    @Override
+    public boolean removeProperty(String key) {
+        configuration.clearProperty(key);
+        return true;
+    }
+
     @Override
     public boolean containsKey(String key) {
-        return false;
+        return configuration.containsKey(key);
     }
 
     @Override
     public boolean getBoolean(String key) {
-        return false;
+        return getBoolean(key, false);
     }
 
     @Override
     public boolean getBoolean(String key, boolean defaultValue) {
-        return false;
+        return configuration.getBoolean(key, defaultValue);
     }
 
     @Override
     public int getInt(String key) {
-        return 0;
+        return getInt(key, 0);
     }
 
     @Override
     public int getInt(String key, int defaultValue) {
-        return 0;
+        return configuration.getInt(key, defaultValue);
     }
 
     @Override
     public long getLong(String key) {
-        return 0;
+        return getLong(key, 0L);
     }
 
     @Override
     public long getLong(String key, long defaultValue) {
-        return 0;
+        return configuration.getLong(key, defaultValue);
     }
 
     @Override
     public float getFloat(String key) {
-        return 0;
+        return configuration.getFloat(key, 0F);
     }
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        return 0;
+        return configuration.getFloat(key, defaultValue);
     }
 
     @Override
     public double getDouble(String key) {
-        return 0;
+        return getDouble(key, 0D);
     }
 
     @Override
     public double getDouble(String key, double defaultValue) {
-        return 0;
+        return configuration.getDouble(key, defaultValue);
     }
 
     @Override
     public String getString(String key) {
-        return null;
+        return getString(key, null);
     }
 
     @Override
     public String getString(String key, String defaultValue) {
-        return null;
+        return configuration.getString(key, defaultValue);
     }
 
     @Override
     public String[] getStringArray(String key) {
-        return new String[0];
-    }
-
-    @Override
-    public String[] getStringArray(String key, String[] defaultValue) {
-        return new String[0];
+        return configuration.getStringArray(key);
     }
 
     @Override
     public BigDecimal getBigDecimal(String key) {
-        return null;
+        return configuration.getBigDecimal(key);
     }
 
     @Override
     public BigDecimal getBigDecimal(String key, String defaultValue) {
-        return null;
+        try {
+            BigDecimal value = configuration.getBigDecimal(key);
+            if (value == null) {
+                return (new BigDecimal(defaultValue));
+            }
+            return value;
+        } catch (Exception e) {
+            return (new BigDecimal(defaultValue));
+        }
     }
 
     @Override
     public BigInteger getBigInteger(String key) {
-        return null;
+        return configuration.getBigInteger(key);
     }
 
     @Override
     public BigInteger getBigInteger(String key, String defaultValue) {
-        return null;
+        try {
+            BigInteger value = configuration.getBigInteger(key);
+            if (value == null) {
+                return (new BigInteger(defaultValue));
+            }
+            return value;
+        } catch (Exception e) {
+            return (new BigInteger(defaultValue));
+        }
+    }
+
+    private class CompositeProperties extends Properties {
+
+        private Map<String, String> properties;
+
+        @Override
+        public String getProperty(String key) {
+            String value = properties.get(key);
+            if (value == null) {
+                value = System.getProperty(key);
+            }
+            return value;
+        }
+
+        @Override
+        public synchronized Object setProperty(String key, String value) {
+            properties.put(key, value);
+            return value;
+        }
     }
 }

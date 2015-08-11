@@ -16,7 +16,8 @@
     limitations under the License.
 
 -->
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
@@ -32,10 +33,6 @@
 
     <name>The Weghst Pine Core</name>
 
-    <!--<properties>-->
-        <!--<liquibase.scan.packages>com.weghst.pine.liquibase</liquibase.scan.packages>-->
-    <!--</properties>-->
-
     <build>
         <plugins>
             <plugin>
@@ -48,37 +45,21 @@
                 </configuration>
             </plugin>
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>properties-maven-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>read-project-properties</goal>
-                        </goals>
-                        <configuration>
-                            <files>
-                                <file>src/test/resources/jdbc.properties</file>
-                            </files>
-                        </configuration>
-                    </execution>
-                </executions>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <configuration>
+                    <tasks>
+                        <echoproperties/>
+                    </tasks>
+                </configuration>
             </plugin>
             <plugin>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-maven-plugin</artifactId>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
-                    <changeLogFile>src/main/resources/db/changelog-master.xml</changeLogFile>
-                    <driver>${jdbc.driver}</driver>
-                    <url>${jdbc.url}</url>
-                    <username>${jdbc.username}</username>
-                    <password>${jdbc.password}</password>
-                    <systemProperties>
-                        <systemProperty>
-                            <key>liquibase.scan.packages</key>
-                            <value>com.weghst.pine.liquibase</value>
-                        </systemProperty>
-                    </systemProperties>
+                    <systemPropertyVariables>
+                        <java.io.tmpdir>${project.build.directory}</java.io.tmpdir>
+                    </systemPropertyVariables>
                 </configuration>
             </plugin>
         </plugins>
@@ -94,11 +75,6 @@
             <groupId>commons-configuration</groupId>
             <artifactId>commons-configuration</artifactId>
             <version>${commons.configuration.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>javax.inject</groupId>
-            <artifactId>javax.inject</artifactId>
-            <version>${javax.inject.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>

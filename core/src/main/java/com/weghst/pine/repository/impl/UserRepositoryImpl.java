@@ -8,18 +8,17 @@ import com.weghst.pine.repository.UserRepository;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.core.ResultSetExtractor;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 
-import javax.inject.Inject;
-import javax.inject.Named;
-
-@Named
+@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserRepositoryImpl.class);
@@ -30,7 +29,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String GET_BY_ID_SQL = "select * from t_user where id=";
     private static final String GET_BY_EMAIL_SQL = "select * from t_user where email=?";
 
-    @Inject
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Override
