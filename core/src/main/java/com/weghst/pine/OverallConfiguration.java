@@ -1,39 +1,36 @@
 package com.weghst.pine;
 
-import org.apache.commons.configuration.Configuration;
-import org.apache.commons.configuration.MapConfiguration;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 public class OverallConfiguration implements ConfigurationProvider {
 
     private static final PropertyPlaceholderHelper nonStrictHelper =
             new PropertyPlaceholderHelper("${", "}", ":", true);
 
-    private Configuration configuration;
+    private Properties properties;
 
     public OverallConfiguration() {
-        configuration = new MapConfiguration(System.getProperties());
+        properties = new CompositeProperties();
     }
 
     @Override
     public void setProperty(String key, Object value) {
-        configuration.setProperty(key, value);
+        properties.setProperty(key, value.toString());
     }
 
     @Override
     public boolean removeProperty(String key) {
-        configuration.clearProperty(key);
+        properties.remove(key);
         return true;
     }
 
     @Override
     public boolean containsKey(String key) {
-        return configuration.containsKey(key);
+        return properties.containsKey(key);
     }
 
     @Override
@@ -43,7 +40,13 @@ public class OverallConfiguration implements ConfigurationProvider {
 
     @Override
     public boolean getBoolean(String key, boolean defaultValue) {
-        return configuration.getBoolean(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return Boolean.parseBoolean(v);
     }
 
     @Override
@@ -53,7 +56,13 @@ public class OverallConfiguration implements ConfigurationProvider {
 
     @Override
     public int getInt(String key, int defaultValue) {
-        return configuration.getInt(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return Integer.parseInt(v);
     }
 
     @Override
@@ -63,17 +72,29 @@ public class OverallConfiguration implements ConfigurationProvider {
 
     @Override
     public long getLong(String key, long defaultValue) {
-        return configuration.getLong(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return Long.parseLong(v);
     }
 
     @Override
     public float getFloat(String key) {
-        return configuration.getFloat(key, 0F);
+        return getFloat(key, 0F);
     }
 
     @Override
     public float getFloat(String key, float defaultValue) {
-        return configuration.getFloat(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return Float.parseFloat(v);
     }
 
     @Override
@@ -83,7 +104,13 @@ public class OverallConfiguration implements ConfigurationProvider {
 
     @Override
     public double getDouble(String key, double defaultValue) {
-        return configuration.getDouble(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return Double.parseDouble(v);
     }
 
     @Override
@@ -93,57 +120,100 @@ public class OverallConfiguration implements ConfigurationProvider {
 
     @Override
     public String getString(String key, String defaultValue) {
-        return configuration.getString(key, defaultValue);
+        String v = properties.getProperty(key);
+        if (v == null) {
+            return defaultValue;
+        }
+
+        v = nonStrictHelper.replacePlaceholders(v, properties);
+        return v;
     }
 
     @Override
     public String[] getStringArray(String key) {
-        return configuration.getStringArray(key);
+        String v = getString(key);
+        if (v == null) {
+            return null;
+        }
+
+        List<String> list = new ArrayList<>();
+        StringBuilder sb = new StringBuilder();
+
+        char pc = '\0';
+        for (char c : v.toCharArray()) {
+            if (c == ',') {
+                if (pc == '\\') {
+                    sb.deleteCharAt(sb.length() - 1);
+                    sb.append(c);
+                    continue;
+                }
+
+                list.add(sb.toString());
+                sb = new StringBuilder();
+                continue;
+            }
+
+            sb.append(c);
+            pc = c;
+        }
+        list.add(sb.toString());
+
+
+        return list.toArray(new String[]{});
     }
 
     @Override
     public BigDecimal getBigDecimal(String key) {
-        return configuration.getBigDecimal(key);
+        String v = getString(key);
+        if (v == null) {
+            return null;
+        }
+
+        return new BigDecimal(v);
     }
 
     @Override
     public BigDecimal getBigDecimal(String key, String defaultValue) {
-        try {
-            BigDecimal value = configuration.getBigDecimal(key);
-            if (value == null) {
-                return (new BigDecimal(defaultValue));
-            }
-            return value;
-        } catch (Exception e) {
-            return (new BigDecimal(defaultValue));
+        String v = getString(key, defaultValue);
+        if (v == null) {
+            return new BigDecimal(defaultValue);
         }
+
+        return new BigDecimal(v);
     }
 
     @Override
     public BigInteger getBigInteger(String key) {
-        return configuration.getBigInteger(key);
+        String v = getString(key);
+        if (v == null) {
+            return null;
+        }
+
+        return new BigInteger(v);
     }
 
     @Override
     public BigInteger getBigInteger(String key, String defaultValue) {
-        try {
-            BigInteger value = configuration.getBigInteger(key);
-            if (value == null) {
-                return (new BigInteger(defaultValue));
-            }
-            return value;
-        } catch (Exception e) {
-            return (new BigInteger(defaultValue));
+        String v = getString(key, defaultValue);
+        if (v == null) {
+            return new BigInteger(defaultValue);
         }
+
+        return new BigInteger(v);
     }
 
     private class CompositeProperties extends Properties {
 
-        private Map<String, String> properties;
+        private Map<String, String> map = new HashMap<>();
+
+        @Override
+        public boolean containsKey(Object key) {
+            return map.containsKey(key);
+        }
 
         @Override
         public String getProperty(String key) {
-            String value = properties.get(key);
+            String value = map.get(key);
             if (value == null) {
                 value = System.getProperty(key);
             }
@@ -152,8 +222,13 @@ public class OverallConfiguration implements ConfigurationProvider {
 
         @Override
         public synchronized Object setProperty(String key, String value) {
-            properties.put(key, value);
+            map.put(key, value);
             return value;
+        }
+
+        @Override
+        public synchronized Object remove(Object key) {
+            return map.remove(key);
         }
     }
 }
