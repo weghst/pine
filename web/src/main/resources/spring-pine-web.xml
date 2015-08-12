@@ -54,7 +54,7 @@
     -->
     <bean id="transactionManager"
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="datasource"/>
+        <property name="dataSource" ref="dataSource"/>
     </bean>
 
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
@@ -86,6 +86,10 @@
     <!-- Pine configuration -->
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
 
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- Import basic SpringMVC Resteasy integration -->
     <import resource="classpath:springmvc-resteasy.xml"/>
 

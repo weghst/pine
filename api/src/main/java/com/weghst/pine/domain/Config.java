@@ -1,6 +1,11 @@
 package com.weghst.pine.domain;
 
-public class Config {
+import com.google.common.base.MoreObjects;
+
+import java.io.Serializable;
+import java.util.Objects;
+
+public class Config implements Serializable {
 
     private String key;
     private String value;
@@ -66,4 +71,36 @@ public class Config {
         this.lastBut2UpdatedTime = lastBut2UpdatedTime;
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(key);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (obj == null || obj.getClass() != getClass()) {
+            return false;
+        }
+
+        Config c = (Config) obj;
+        return Objects.equals(key, c.key);
+
+    }
+
+    @Override
+    public String toString() {
+        MoreObjects.ToStringHelper helper = MoreObjects.toStringHelper(this);
+        helper.add("key", key)
+                .add("value", value)
+                .add("remarks", remarks)
+                .add("comments", comments)
+                .add("needReboot", needReboot)
+                .add("lastUpdatedTime", lastUpdatedTime)
+                .add("lastBut2UpdatedTime", lastBut2UpdatedTime);
+        return helper.toString();
+    }
 }

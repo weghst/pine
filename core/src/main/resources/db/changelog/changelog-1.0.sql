@@ -20,6 +20,7 @@ CREATE TABLE `t_user`(
   `id` INT NOT NULL AUTO_INCREMENT COMMENT '用户唯一标识, 自动增长',
   `email` VARCHAR (32) COMMENT '用户邮箱, 唯一值',
   `password` VARCHAR (128) COMMENT '用户密码',
+  `emailValid` BOOLEAN NULL COMMENT '用户邮箱是否验证',
   `createdTime` BIGINT COMMENT '用户创建时间',
   PRIMARY KEY (`id`)
 );

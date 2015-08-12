@@ -1,11 +1,15 @@
 package com.weghst.pine.repository.impl;
 
+import com.weghst.pine.ConfigUtils;
+import com.weghst.pine.Pines;
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.repository.ConfigurationRepository;
 import com.weghst.pine.repository.DeletedException;
 import com.weghst.pine.repository.FindException;
 import com.weghst.pine.repository.SavedException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -18,7 +22,9 @@ import java.util.List;
 @Repository
 public class ConfigurationRepositoryImpl implements ConfigurationRepository {
 
-    private static final String SAVE_SQL = "insert into t_config(key,value,remarks,comments,needReboot,lastUpdatedTime) values(?,?,?,?,?,UNIX_TIMESTAMP())";
+    private static final Logger LOG = LoggerFactory.getLogger(ConfigurationRepositoryImpl.class);
+
+    private static final String SAVE_SQL = "insert into t_config(key,value,remarks,comments,needReboot,lastUpdatedTime) values(?,?,?,?,?,?)";
     private static final String DELETE_BY_KEY_SQL = "delete from t_config where key=?";
     private static final String UPDATE_SQL = "update t_config set value=?,remarks=?,comments=?,needReboot=?," +
             "lastUpdatedTime=UNIX_TIMESTAMP(),lastBut2UpdatedTime=lastUpdatedTime where key=?";
@@ -33,8 +39,11 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository {
 
     @Override
     public void save(Config config) {
+        LOG.debug("Save config: {}", config);
+
         int r = jdbcTemplate.update(SAVE_SQL, config.getKey(), config.getValue(),
-                config.getRemarks(), config.getComments(), config.isNeedReboot());
+                config.getRemarks(), config.getComments(), config.isNeedReboot(),
+                Pines.unixTimestamp());
         if (r != 1) {
             throw new SavedException("保存配置失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");
         }
@@ -42,6 +51,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository {
 
     @Override
     public void delete(String key) {
+        LOG.debug("Delete config by key: {}", key);
+
         int r = jdbcTemplate.update(DELETE_BY_KEY_SQL, key);
         if (r != 1) {
             throw new DeletedException("删除配置失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");
@@ -50,6 +61,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository {
 
     @Override
     public void update(Config config) {
+        LOG.debug("Update config: {}", config);
+
         int r = jdbcTemplate.update(UPDATE_SQL, config.getValue(), config.getRemarks(),
                 config.getComments(), config.isNeedReboot(), config.getKey());
         if (r != 1) {
@@ -59,6 +72,8 @@ public class ConfigurationRepositoryImpl implements ConfigurationRepository {
 
     @Override
     public void updateValue(String key, String value) {
+        LOG.debug("Update config value: {key={}, value={}}", key, value);
+
         int r = jdbcTemplate.update(UPDATE_VALUE_SQL, value, key);
         if (r != 1) {
             throw new DeletedException("修改配置失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");

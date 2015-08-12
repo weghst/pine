@@ -28,6 +28,10 @@
         <param-value>/r</param-value>
     </context-param>
 
+    <listener>
+        <listener-class>com.weghst.pine.web.ApplicationContextListener</listener-class>
+    </listener>
+
     <filter>
         <filter-name>CharacterEncoding</filter-name>
         <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>

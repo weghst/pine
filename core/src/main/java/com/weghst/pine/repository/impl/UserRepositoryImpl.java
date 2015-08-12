@@ -23,9 +23,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserRepositoryImpl.class);
 
-    private static final String SAVE_SQL = "insert into t_user(email,password,createdTime) values(?,?,?)";
+    private static final String SAVE_SQL = "insert into t_user(email,password,emailValid,createdTime) values(?,?,?,?)";
     private static final String DELETE_BY_ID_SQL = "delete from t_user where id=?";
-    private static final String UPDATE_BY_ID_SQL = "update t_user set email=?,password=? where id=?";
+    private static final String UPDATE_BY_ID_SQL = "update t_user set email=?,password=?,emailValid=? where id=?";
     private static final String GET_BY_ID_SQL = "select * from t_user where id=";
     private static final String GET_BY_EMAIL_SQL = "select * from t_user where email=?";
 
@@ -43,7 +43,8 @@ public class UserRepositoryImpl implements UserRepository {
             int i = 1;
             ps.setString(i++, user.getEmail());
             ps.setString(i++, user.getPassword());
-            ps.setLong(i++, Pines.currentTimeSeconds());
+            ps.setBoolean(i++, user.isEmailValid());
+            ps.setLong(i++, Pines.unixTimestamp());
             return ps;
         }, keyHolder);
 
@@ -72,6 +73,7 @@ public class UserRepositoryImpl implements UserRepository {
             int i = 1;
             ps.setString(i++, user.getEmail());
             ps.setString(i++, user.getPassword());
+            ps.setBoolean(i++, user.isEmailValid());
             ps.setInt(i++, user.getId());
         });
 
@@ -95,6 +97,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setId(id);
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
+                user.setEmailValid(rs.getBoolean("emailValid"));
                 user.setCreatedTime(rs.getLong("createdTime"));
             }
             return user;
@@ -118,6 +121,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setId(rs.getInt("id"));
                 user.setEmail(email);
                 user.setPassword(rs.getString("password"));
+                user.setEmailValid(rs.getBoolean("emailValid"));
                 user.setCreatedTime(rs.getLong("createdTime"));
             }
             return user;

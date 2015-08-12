@@ -1,10 +1,15 @@
 package com.weghst.pine;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.util.PropertyPlaceholderHelper;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 
 public class OverallConfiguration implements ConfigurationProvider {
 
@@ -158,8 +163,7 @@ public class OverallConfiguration implements ConfigurationProvider {
         }
         list.add(sb.toString());
 
-
-        return list.toArray(new String[]{});
+        return list.toArray(ArrayUtils.EMPTY_STRING_ARRAY);
     }
 
     @Override

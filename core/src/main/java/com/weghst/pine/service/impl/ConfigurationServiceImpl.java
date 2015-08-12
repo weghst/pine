@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
+/**
+ * 配置服务实现. 须通过XML配置初始化, 且需要保证该实现具有较高的执行优先级.
+ */
 public class ConfigurationServiceImpl implements InitializingBean, ConfigurationService {
 
     @Autowired
@@ -49,5 +52,4 @@ public class ConfigurationServiceImpl implements InitializingBean, Configuration
     public List<Config> findAll() {
         return configurationReposy.findAll();
     }
-
 }

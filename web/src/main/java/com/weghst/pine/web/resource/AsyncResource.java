@@ -17,9 +17,9 @@ package com.weghst.pine.web.resource;
 
 import com.weghst.pine.web.vo.TestVo;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.inject.Named;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -28,7 +28,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 @Path("/hello")
-@Named
+@Component
 public class AsyncResource {
 
     @GET
