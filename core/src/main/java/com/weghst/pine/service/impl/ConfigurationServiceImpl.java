@@ -7,6 +7,7 @@ import com.weghst.pine.service.ConfigurationService;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -25,6 +26,7 @@ public class ConfigurationServiceImpl implements InitializingBean, Configuration
         }
     }
 
+    @Transactional
     @Override
     public void saveOrUpdate(Config config) {
         if (get(config.getKey()) != null) {
@@ -36,6 +38,7 @@ public class ConfigurationServiceImpl implements InitializingBean, Configuration
         ConfigUtils.setProperty(config.getKey(), config.getValue());
     }
 
+    @Transactional
     @Override
     public void delete(String key) {
         configurationReposy.delete(key);
@@ -43,11 +46,13 @@ public class ConfigurationServiceImpl implements InitializingBean, Configuration
         ConfigUtils.removeProperty(key);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Config get(String key) {
         return configurationReposy.get(key);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Config> findAll() {
         return configurationReposy.findAll();

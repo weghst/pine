@@ -4,6 +4,7 @@ import com.weghst.pine.Pines;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.repository.DeletedException;
 import com.weghst.pine.repository.SavedException;
+import com.weghst.pine.repository.UpdatedException;
 import com.weghst.pine.repository.UserRepository;
 
 import org.slf4j.Logger;
@@ -26,6 +27,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String SAVE_SQL = "insert into t_user(email,password,emailValid,createdTime) values(?,?,?,?)";
     private static final String DELETE_BY_ID_SQL = "delete from t_user where id=?";
     private static final String UPDATE_BY_ID_SQL = "update t_user set email=?,password=?,emailValid=? where id=?";
+    private static final String UPDATE_EMAIL_VALID_BY_EMAIL = "update t_user set emailValid=? where email=?";
     private static final String GET_BY_ID_SQL = "select * from t_user where id=";
     private static final String GET_BY_EMAIL_SQL = "select * from t_user where email=?";
 
@@ -37,8 +39,8 @@ public class UserRepositoryImpl implements UserRepository {
         LOG.debug("Save user: {}", user);
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        int r = jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(SAVE_SQL);
+        int r = jdbcTemplate.update(conn -> {
+            PreparedStatement ps = conn.prepareStatement(SAVE_SQL);
 
             int i = 1;
             ps.setString(i++, user.getEmail());
@@ -78,14 +80,29 @@ public class UserRepositoryImpl implements UserRepository {
         });
 
         if (r != 1) {
-            throw new DeletedException("修改用户失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");
+            throw new UpdatedException("修改用户失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");
+        }
+    }
+
+    @Override
+    public void updateEmailValid(String email, boolean emailValid) {
+        LOG.debug("Update user emailValid: [email={}, emailValid={}]", email, emailValid);
+
+        int r = jdbcTemplate.update(UPDATE_EMAIL_VALID_BY_EMAIL, ps -> {
+            int i = 1;
+            ps.setBoolean(i++, emailValid);
+            ps.setString(i++, email);
+        });
+
+        if (r != 1) {
+            throw new UpdatedException("修改用户邮件验证失败. 预期影响[1]条记录, 实际影响[" + r + "]条记录");
         }
     }
 
     @Override
     public User get(int id) {
-        PreparedStatementCreator psc = con -> {
-            PreparedStatement ps = con.prepareStatement(GET_BY_ID_SQL);
+        PreparedStatementCreator psc = conn -> {
+            PreparedStatement ps = conn.prepareStatement(GET_BY_ID_SQL);
             ps.setInt(1, id);
             return ps;
         };
@@ -108,8 +125,8 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User get(String email) {
-        PreparedStatementCreator psc = con -> {
-            PreparedStatement ps = con.prepareStatement(GET_BY_EMAIL_SQL);
+        PreparedStatementCreator psc = conn -> {
+            PreparedStatement ps = conn.prepareStatement(GET_BY_EMAIL_SQL);
             ps.setString(1, email);
             return ps;
         };

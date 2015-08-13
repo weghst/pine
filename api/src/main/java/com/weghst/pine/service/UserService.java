@@ -13,4 +13,6 @@ public interface UserService {
     User get(int id);
 
     User get(String email);
+
+    void emailValidate(String email, String code);
 }

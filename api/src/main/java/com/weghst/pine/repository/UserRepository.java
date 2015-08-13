@@ -10,6 +10,8 @@ public interface UserRepository {
 
     void update(User user);
 
+    void updateEmailValid(String email, boolean emailValid);
+
     User get(int id);
 
     User get(String email);
