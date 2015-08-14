@@ -4,29 +4,19 @@ import com.weghst.pine.domain.User;
 import com.weghst.pine.repository.UserRepository;
 import com.weghst.pine.service.UserService;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.mail.javamail.JavaMailSender;
-import org.springframework.mail.javamail.MimeMessageHelper;
-import org.springframework.mail.javamail.MimeMessagePreparator;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.io.IOException;
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserService {
 
+    public static final String EMAIL_VALIDATING_CODE_CACHE_NAME = "pine.core.user.emailValidatingCode";
+
     @Autowired
-    private Configuration configuration;
-    @Autowired
-    private JavaMailSender mailSender;
+    private CacheManager cacheManager;
 
     @Autowired
     private UserRepository userReposy;
@@ -64,28 +54,10 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void emailValidate(String email, String code) {
-        // FIXME 待完善
-        try {
-            Template template = configuration.getTemplate("com/weghst/pine/service/user-email-validating.ftl");
-            Map<String, String> modal = new HashMap<>();
-            modal.put("code", code);
+        Cache cache = cacheManager.getCache(EMAIL_VALIDATING_CODE_CACHE_NAME);
+        String inteCode = cache.get(email, String.class);
+        if (inteCode == null) {
 
-            StringWriter writer = new StringWriter();
-            template.process(modal, writer);
-
-            MimeMessagePreparator preparator = mimeMessage -> {
-                MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
-                helper.setTo(email);
-                helper.setFrom("kevinz@weghst.com");
-
-                helper.setText(writer.toString(), true);
-            };
-
-            mailSender.send(preparator);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (TemplateException e) {
-            e.printStackTrace();
         }
     }
 }

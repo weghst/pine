@@ -31,7 +31,7 @@
         </property>
     </bean>
 
-    <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
         <property name="host" value="smtp.mxhichina.com"/>
         <property name="port" value="25"/>
         <property name="username" value="kevinz@weghst.com"/>
