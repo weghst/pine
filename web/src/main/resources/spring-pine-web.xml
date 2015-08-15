@@ -73,7 +73,9 @@
     </aop:config>
 
     <!-- One single JdbcTemplate -->
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"/>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+    </bean>
 
     <!-- Liquibase config -->
     <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">

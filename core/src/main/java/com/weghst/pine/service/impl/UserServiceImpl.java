@@ -15,7 +15,7 @@ public class UserServiceImpl implements UserService {
 
     public static final String EMAIL_VALIDATING_CODE_CACHE_NAME = "pine.core.user.emailValidatingCode";
 
-    @Autowired
+//    @Autowired
     private CacheManager cacheManager;
 
     @Autowired
