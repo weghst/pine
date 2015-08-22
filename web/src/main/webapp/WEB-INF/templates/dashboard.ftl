@@ -6,7 +6,6 @@
 
     <script type="text/javascript" src="/js/jquery.min.js"></script>
     <script type="text/javascript" src="/js/angular.min.js"></script>
-    <script type="text/javascript" src="/semantic-ui/semantic.min.js"></script>
 
     <link rel="stylesheet" href="/semantic-ui/semantic.min.css"/>
 

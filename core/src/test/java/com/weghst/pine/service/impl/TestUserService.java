@@ -13,6 +13,6 @@ public class TestUserService extends SpringTestSupport {
 
     @Test
     public void testEmailValidate() {
-//        userService.emailValidate("501276913@qq.com", "587697");
+        userService.emailValidate("501276913@qq.com", "587697");
     }
 }

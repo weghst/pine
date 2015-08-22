@@ -90,4 +90,11 @@
 
     <import resource="classpath:/spring-pine-core.xml"/>
 
+    <bean id="mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean">
+        <property name="host" value="smtp.mxhichina.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="kevinz@weghst.com"/>
+        <property name="password" value="njSzbjie0+"/>
+    </bean>
+
 </beans>
