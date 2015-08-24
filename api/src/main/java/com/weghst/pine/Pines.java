@@ -28,6 +28,14 @@ public final class Pines {
      *
      * @return
      */
+    public static long currentTimeMillis() {
+        return calendar().getTimeInMillis();
+    }
+
+    /**
+     *
+     * @return
+     */
     public static long unixTimestamp() {
         return calendar().getTimeInMillis() / 1000;
     }

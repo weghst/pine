@@ -28,3 +28,14 @@ CREATE TABLE `t_user`(
 ALTER TABLE `t_user`
   ADD UNIQUE INDEX `EMAIL(UNIQUE)` (`email`);
 --rollback DROP TABLE `t_user`;
+
+--changeset kevinz@weghst.com:1440394618
+CREATE TABLE `t_user_temp_field`(
+  `uid` BIGINT NOT NULL COMMENT '用户ID',
+  `field` VARCHAR(128) NOT NULL COMMENT '字段名称',
+  `value` VARCHAR(1024) COMMENT '字段值',
+  `createdTime` BIGINT COMMENT '创建时间',
+  `survivalMillis` BIGINT COMMENT '字段存活有效时间(单位:毫秒)',
+  PRIMARY KEY (`uid`, `field`)
+) COMMENT='用户临时字段存储表, uid与field为联合主键';
+--rollback DROP TABLE `t_user_temp_field`;

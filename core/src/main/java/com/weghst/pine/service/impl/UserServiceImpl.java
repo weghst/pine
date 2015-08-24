@@ -51,6 +51,18 @@ public class UserServiceImpl implements UserService {
         return userReposy.get(email);
     }
 
+    @Override
+    public void register(User user) {
+        save(user);
+
+        // 发送验证邮件
+    }
+
+    @Override
+    public void sendEmailValidate(User user) {
+
+    }
+
     @Transactional
     @Override
     public void emailValidate(String email, String code) {

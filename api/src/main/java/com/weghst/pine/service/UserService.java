@@ -14,5 +14,9 @@ public interface UserService {
 
     User get(String email);
 
+    void register(User user);
+
+    void sendEmailValidate(User user);
+
     void emailValidate(String email, String code);
 }
