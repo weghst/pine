@@ -18,5 +18,5 @@ public interface UserService {
 
     void sendEmailValidate(User user);
 
-    void emailValidate(String email, String code);
+    boolean emailValidate(String email, String code);
 }

@@ -18,4 +18,12 @@ public final class RandomUtils {
     public static int nextInt(int min, int max) {
         return RANDOM.nextInt(max - min) + min;
     }
+
+    /**
+     *
+     * @return
+     */
+    public static int nextCode6() {
+        return nextInt(N100000, N999999);
+    }
 }
