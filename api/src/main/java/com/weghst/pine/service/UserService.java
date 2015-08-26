@@ -1,6 +1,7 @@
 package com.weghst.pine.service;
 
 import com.weghst.pine.domain.User;
+import com.weghst.pine.domain.UserTempField;
 
 public interface UserService {
 
@@ -19,4 +20,5 @@ public interface UserService {
     void sendEmailValidate(User user);
 
     boolean emailValidate(String email, String code);
+
 }

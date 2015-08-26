@@ -1,24 +1,25 @@
 package com.weghst.pine;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.domain.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.testng.annotations.Test;
+
+import java.io.IOException;
+
+import redis.clients.jedis.Jedis;
 
 public class SpringCacheTest extends SpringTestSupport {
 
-    @Autowired
-    private CacheManager cacheManager;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private Jedis jedis;
 
     @Test
-    public void test1() {
+    public void test1() throws JsonProcessingException {
         Config config = new Config();
         config.setKey("hello.config");
         config.setValue("我是邹");
@@ -27,39 +28,37 @@ public class SpringCacheTest extends SpringTestSupport {
         config.setComments("这是注释");
         config.setRemarks("这是注释");
 
-        Cache cache = cacheManager.getCache("test:cache");
-        cache.put("test.config", config);
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        jedis.set("test.cache:config", objectMapper.writeValueAsString(config));
     }
 
     @Test
-    public void test1Get() {
-        Cache cache = cacheManager.getCache("test:cache");
-        Cache.ValueWrapper value = cache.get("test.config");
-        System.out.println(value.get());
+    public void test1Get() throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+
+        String val = jedis.get("test.cache:config");
+        Config config = objectMapper.readValue(val, Config.class);
+        System.out.println(config);
     }
 
     @Test
-    public void test2() {
+    public void test2() throws JsonProcessingException {
         User user = new User();
         user.setEmail("kevinz@weghst.com");
         user.setPassword("[PASSWORD]");
         user.setCreatedTime(System.currentTimeMillis());
 
-        Cache cache = cacheManager.getCache("test:cache");
-        cache.put("test.user", user);
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        jedis.set("test.cache:user", objectMapper.writeValueAsString(user));
     }
 
     @Test
-    public void test2Get() {
-        Cache cache = cacheManager.getCache("test:cache");
-        Cache.ValueWrapper value = cache.get("test.user");
-        System.out.println(value.get());
-    }
+    public void test2Get() throws IOException {
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
 
-    @Test
-    public void test3() {
-        redisTemplate.boundHashOps("hello:hash").put("name", "kevin");
-
+        String val = jedis.get("test.cache:user");
+        User user = objectMapper.readValue(val, User.class);
+        System.out.println(user);
     }
 
 }

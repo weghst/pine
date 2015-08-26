@@ -9,7 +9,7 @@ public class ObjectMapperFactory {
 
     static {
 //        OBJECT_MAPPER.enableDefaultTyping();
-        OBJECT_MAPPER.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
+//        OBJECT_MAPPER.enableDefaultTyping(ObjectMapper.DefaultTyping.NON_FINAL, JsonTypeInfo.As.PROPERTY);
     }
 
     public static ObjectMapper getObjectMapper() {

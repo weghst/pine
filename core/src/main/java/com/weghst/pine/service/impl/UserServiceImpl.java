@@ -1,28 +1,29 @@
 package com.weghst.pine.service.impl;
 
+import com.weghst.pine.Pines;
 import com.weghst.pine.UserTempFields;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.domain.UserTempField;
 import com.weghst.pine.repository.UserRepository;
 import com.weghst.pine.service.UserService;
 import com.weghst.pine.util.RandomUtils;
+import com.weghst.pine.util.RedisUtils;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import redis.clients.jedis.Jedis;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    public static final String EMAIL_VALIDATING_CODE_CACHE_NAME = "pine.core.user.emailValidatingCode";
-
-    @Autowired
-    private CacheManager cacheManager;
+    public static final String EMAIL_VALIDATING_CODE_CACHE_NS = "pine.core.user.emailValidatingCode";
 
     @Autowired
     private UserRepository userReposy;
+    @Autowired
+    private Jedis jedis;
 
     @Transactional
     @Override
@@ -74,8 +75,8 @@ public class UserServiceImpl implements UserService {
         userReposy.saveOrUpdate(userTempField);
 
         // 将验证码放入缓存
-        Cache cache = cacheManager.getCache(EMAIL_VALIDATING_CODE_CACHE_NAME);
-        cache.put(user.getEmail(), inteCode);
+        String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, user.getEmail());
+        jedis.set(cacheName, inteCode, "NX", "PX", userTempField.getSurvivalMillis());
 
         // send mail
     }
@@ -83,21 +84,33 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public boolean emailValidate(String email, String code) {
-        Cache cache = cacheManager.getCache(EMAIL_VALIDATING_CODE_CACHE_NAME);
-        String inteCode = cache.get(email, String.class);
+        String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, email);
+        String inteCode = jedis.get(cacheName);
         if (inteCode == null) {
             User user = get(email);
-            UserTempField userTempField = userReposy.getUserTempField(user.getId(),
+            UserTempField userTempField =getUserTempField0(user.getId(),
                     UserTempFields.USER_EMAIL_VALIDATING_CODE_FIELD);
-            if(userTempField!=null) {
+            if (userTempField != null) {
                 inteCode = userTempField.getValue();
             }
         }
 
-        if(code.equals(inteCode)) {
+        if (code.equals(inteCode)) {
+            jedis.del(cacheName); // 删除缓存
+
             userReposy.updateEmailValid(email, true);
             return true;
         }
         return false;
+    }
+
+    private UserTempField getUserTempField0(int uid, String field) {
+        UserTempField userTempField = userReposy.getUserTempField(uid, field);
+        if (userTempField != null &&
+                userTempField.getCreatedTime() + userTempField.getSurvivalMillis()
+                        > Pines.currentTimeMillis()) {
+            return userTempField;
+        }
+        return null;
     }
 }
