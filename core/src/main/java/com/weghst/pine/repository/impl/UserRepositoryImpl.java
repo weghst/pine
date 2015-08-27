@@ -30,7 +30,7 @@ public class UserRepositoryImpl implements UserRepository {
     private static final String DELETE_BY_ID_SQL = "delete from t_user where id=?";
     private static final String UPDATE_BY_ID_SQL = "update t_user set email=?,password=?,emailValid=? where id=?";
     private static final String UPDATE_EMAIL_VALID_BY_EMAIL = "update t_user set emailValid=? where email=?";
-    private static final String GET_BY_ID_SQL = "select * from t_user where id=";
+    private static final String GET_BY_ID_SQL = "select * from t_user where id=?";
     private static final String GET_BY_EMAIL_SQL = "select * from t_user where email=?";
 
     // ============================ UserTempField ================================//
@@ -166,6 +166,10 @@ public class UserRepositoryImpl implements UserRepository {
             int i = 1;
             ps.setInt(i++, userTempField.getUid());
             ps.setString(i++, userTempField.getField());
+            ps.setString(i++, userTempField.getValue());
+            ps.setLong(i++, Pines.currentTimeMillis());
+            ps.setLong(i++, userTempField.getSurvivalMillis());
+
             ps.setString(i++, userTempField.getValue());
             ps.setLong(i++, Pines.currentTimeMillis());
             ps.setLong(i++, userTempField.getSurvivalMillis());

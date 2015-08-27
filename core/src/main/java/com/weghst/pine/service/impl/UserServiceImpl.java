@@ -1,5 +1,6 @@
 package com.weghst.pine.service.impl;
 
+import com.weghst.pine.PineException;
 import com.weghst.pine.Pines;
 import com.weghst.pine.UserTempFields;
 import com.weghst.pine.domain.User;
@@ -9,9 +10,28 @@ import com.weghst.pine.service.UserService;
 import com.weghst.pine.util.RandomUtils;
 import com.weghst.pine.util.RedisUtils;
 
+
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.io.BufferedWriter;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.mail.Address;
+import javax.mail.internet.MimeMessage;
 
 import redis.clients.jedis.Jedis;
 
@@ -24,6 +44,10 @@ public class UserServiceImpl implements UserService {
     private UserRepository userReposy;
     @Autowired
     private Jedis jedis;
+    @Autowired
+    private freemarker.template.Configuration freemarker;
+    @Autowired
+    private JavaMailSender mailSender;
 
     @Transactional
     @Override
@@ -78,7 +102,31 @@ public class UserServiceImpl implements UserService {
         String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, user.getEmail());
         jedis.set(cacheName, inteCode, "NX", "PX", userTempField.getSurvivalMillis());
 
+        // 处理邮件模板
+        Map<String, Object> model = new HashMap<>();
+        model.put("code", inteCode);
+
+        StringWriter writer = new StringWriter();
+        try {
+            Template template = freemarker.getTemplate("com/weghst/pine/service/user-email-validating.ftl");
+            template.process(model, writer);
+        } catch (IOException e) {
+            throw new PineException(
+                    "读取[com/weghst/pine/service/user-email-validating.ftl]验证邮件模板错误", e);
+        } catch (TemplateException e) {
+            throw new PineException(
+                    "解析[com/weghst/pine/service/user-email-validating.ftl]验证邮件模板错误", e);
+        }
+
         // send mail
+        mailSender.send(mimeMessage -> {
+
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage);
+            helper.setSubject("注册邮箱验证");
+            helper.setFrom("noreplay@weghst.com");
+            helper.setTo(user.getEmail());
+            helper.setText(writer.toString(), true);
+        });
     }
 
     @Transactional
@@ -88,7 +136,7 @@ public class UserServiceImpl implements UserService {
         String inteCode = jedis.get(cacheName);
         if (inteCode == null) {
             User user = get(email);
-            UserTempField userTempField =getUserTempField0(user.getId(),
+            UserTempField userTempField = getUserTempField0(user.getId(),
                     UserTempFields.USER_EMAIL_VALIDATING_CODE_FIELD);
             if (userTempField != null) {
                 inteCode = userTempField.getValue();

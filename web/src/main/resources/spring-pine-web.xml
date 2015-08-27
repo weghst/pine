@@ -57,20 +57,7 @@
         <property name="dataSource" ref="dataSource"/>
     </bean>
 
-    <tx:advice id="txAdvice" transaction-manager="transactionManager">
-        <tx:attributes>
-            <tx:method name="save*"/>
-            <tx:method name="update*"/>
-            <tx:method name="delete*"/>
-            <tx:method name="get*" read-only="true"/>
-            <tx:method name="find*" read-only="true"/>
-        </tx:attributes>
-    </tx:advice>
-
-    <aop:config>
-        <aop:advisor advice-ref="txAdvice"
-                     pointcut="execution(* com.weghst.pine.service.impl.*ServiceImpl.*(..))"/>
-    </aop:config>
+    <tx:annotation-driven transaction-manager="transactionManager"/>
 
     <!-- One single JdbcTemplate -->
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
@@ -82,7 +69,7 @@
         <property name="dataSource" ref="dataSource"/>
         <property name="changeLog" value="classpath:db/changelog-master.xml"/>
         <property name="rollbackFile"
-                  value="#{ systemProperties['java.io.tmpdir'] }/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>
+                  value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>
     </bean>
 
     <!-- Pine configuration -->

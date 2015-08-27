@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -19,30 +19,32 @@ import org.apache.commons.codec.DecoderException;
 import org.apache.commons.codec.binary.Hex;
 import org.apache.commons.codec.binary.StringUtils;
 
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
-import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
 
 /**
  *
  */
 public final class DesUtils {
 
-    private static final Key DEFAULT_KEY;
-    private static final Cipher DEFAULT_ENCRYPT;
-    private static final Cipher DEFAULT_DECRYPT;
+    private static Cipher DEFAULT_ENCRYPT;
+    private static Cipher DEFAULT_DECRYPT;
 
     static {
-        try {
-            KeyGenerator keyGenerator = KeyGenerator.getInstance("DES");
-            DEFAULT_KEY = keyGenerator.generateKey();
-        } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e);
-        }
+        Key DEFAULT_KEY = new SecretKeySpec("PINE".getBytes(StandardCharsets.UTF_8), "DES");
+        setDefaultKey(DEFAULT_KEY);
+    }
 
-        DEFAULT_ENCRYPT = getCipher(Cipher.ENCRYPT_MODE, DEFAULT_KEY);
-        DEFAULT_DECRYPT = getCipher(Cipher.DECRYPT_MODE, DEFAULT_KEY);
+    /**
+     *
+     * @param key
+     */
+    public static void setDefaultKey(Key key) {
+        DEFAULT_ENCRYPT = getCipher(Cipher.ENCRYPT_MODE, key);
+        DEFAULT_DECRYPT = getCipher(Cipher.DECRYPT_MODE, key);
     }
 
     /**
@@ -52,7 +54,7 @@ public final class DesUtils {
      */
     public static Cipher getCipher(int mode, Key key) {
         try {
-            Cipher cipher = Cipher.getInstance("DES/ECB/PKCS5Padding");
+            Cipher cipher = Cipher.getInstance("DES/ECB/NoPadding");
             cipher.init(mode, key);
             return cipher;
         } catch (Exception e) {
