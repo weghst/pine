@@ -33,7 +33,8 @@ public class AsyncResource {
 
     @GET
     public String test() {
-        return "SUCCESS";
+        // FIXME
+        throw new RuntimeException();
     }
 
     @Path("/json")

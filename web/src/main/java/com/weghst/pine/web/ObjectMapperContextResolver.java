@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -16,7 +16,6 @@
 package com.weghst.pine.web;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr353.JSR353Module;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
@@ -29,14 +28,8 @@ import javax.ws.rs.ext.Provider;
 @Consumes(MediaType.APPLICATION_JSON)
 public class ObjectMapperContextResolver implements ContextResolver<ObjectMapper> {
 
-    private static final ObjectMapper DEFAULT_OBJECT_MAPPER = new ObjectMapper();
-
-    static {
-        DEFAULT_OBJECT_MAPPER.registerModule(new JSR353Module());
-    }
-
     @Override
     public ObjectMapper getContext(Class<?> type) {
-        return DEFAULT_OBJECT_MAPPER;
+        return ViewObjectMapperFactory.getObjectMapper();
     }
 }

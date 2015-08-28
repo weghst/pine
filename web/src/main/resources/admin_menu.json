@@ -1,0 +1,20 @@
+[
+  {
+    "text": "Dashboard",
+    "url": "http://www.baidu.com"
+  },
+  {
+    "text": "User Manager",
+    "url": "#",
+    "subMenus": [
+      {
+        "text": "User Create",
+        "url": "/user/"
+      },
+      {
+        "text": "User List",
+        "url": "/user"
+      }
+    ]
+  }
+]

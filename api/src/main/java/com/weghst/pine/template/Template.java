@@ -1,0 +1,26 @@
+package com.weghst.pine.template;
+
+import java.io.IOException;
+import java.io.Writer;
+
+/**
+ * @author zouyong
+ * @date 2015-08-28
+ */
+public interface Template {
+
+    /**
+     *
+     * @return
+     */
+    Object getDelegate();
+
+    /**
+     *
+     * @param model
+     * @param writer
+     * @throws IOException
+     * @throws TemplateException
+     */
+    void process(Object model, Writer writer) throws IOException, TemplateException;
+}

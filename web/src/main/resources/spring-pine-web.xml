@@ -20,11 +20,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:aop="http://www.springframework.org/schema/aop"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="com.weghst.pine"/>
     <context:property-placeholder location="classpath:jdbc.properties"/>
@@ -75,6 +73,21 @@
     <!-- Pine configuration -->
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
 
+    <import resource="classpath:spring-pine-core.xml"/>
+
+    <bean id="jedis" class="redis.clients.jedis.Jedis">
+        <constructor-arg type="java.lang.String" value="localhost"/>
+        <constructor-arg type="int" value="6379"/>
+    </bean>
+
+    <bean id="mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean">
+        <property name="host" value="smtp.mxhichina.com"/>
+        <property name="port" value="25"/>
+        <property name="username" value="noreplay@weghst.com"/>
+        <property name="password" value="njSzbjie0+"/>
+    </bean>
+
+
 
     <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
@@ -86,7 +99,11 @@
         <property name="prefix" value="/d"/>
     </bean>
 
-    <!-- Jackson ObjectMapper config -->
+    <!-- View Jackson ObjectMapper -->
+    <bean id="viewObjectMapper" class="com.weghst.pine.web.ViewObjectMapperFactory"
+          factory-method="getObjectMapper"/>
+
+    <!-- Resteasy Jackson ObjectMapper config -->
     <bean class="com.weghst.pine.web.ObjectMapperContextResolver"/>
 
     <!-- freemarker config -->
