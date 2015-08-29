@@ -16,8 +16,11 @@ import java.lang.reflect.Type;
  */
 public class MyBooleanSerializer extends NonTypedScalarSerializerBase<Boolean> {
 
-    public MyBooleanSerializer() {
+    private final boolean _forPrimitive;
+
+    public MyBooleanSerializer(boolean forPrimitive) {
         super(Boolean.class);
+        _forPrimitive = forPrimitive;
     }
 
     @Override
@@ -28,7 +31,7 @@ public class MyBooleanSerializer extends NonTypedScalarSerializerBase<Boolean> {
 
     @Override
     public JsonNode getSchema(SerializerProvider provider, Type typeHint) {
-        return createSchemaNode("boolean", false);
+        return createSchemaNode("boolean", !_forPrimitive);
     }
 
     @Override

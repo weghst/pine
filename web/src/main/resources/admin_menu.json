@@ -1,19 +1,102 @@
 [
   {
     "text": "Dashboard",
-    "url": "http://www.baidu.com"
+    "url": "#",
+    "icon": "fa fa-dashboard fa-fw"
   },
   {
-    "text": "User Manager",
+    "text": "Charts",
     "url": "#",
+    "icon": "fa fa-bar-chart-o fa-fw",
     "subMenus": [
       {
-        "text": "User Create",
-        "url": "/user/"
+        "text": "Float Charts",
+        "url": "#",
+        "icon": "menu-icon fa fa-caret-right"
       },
       {
-        "text": "User List",
-        "url": "/user"
+        "text": "Morris.js Charts",
+        "url": "#",
+        "icon": ""
+      }
+    ]
+  },
+  {
+    "text": "Tables",
+    "url": "#",
+    "icon": "fa fa-table fa-fw"
+  },
+  {
+    "text": "Form",
+    "url": "#",
+    "icon": "fa fa-edit fa-fw"
+  },
+  {
+    "text": "UI Elements",
+    "url": "#",
+    "icon": "fa fa-wrench fa-fw",
+    "subMenus": [
+      {
+        "text": "Panels and Wells",
+        "url": "#"
+      },
+      {
+        "text": "Buttons",
+        "url": "#"
+      },
+      {
+        "text": "Notifications",
+        "url": "#"
+      },
+      {
+        "text": "Typography",
+        "url": "#"
+      },
+      {
+        "text": "Icons",
+        "url": "#"
+      },
+      {
+        "text": "Grids",
+        "url": "#"
+      }
+    ]
+  },
+  {
+    "text": "Multi-Level Dropdown",
+    "url": "#",
+    "icon": "fa fa-sitemap fa-fw",
+    "subMenus": [
+      {
+        "text": "Second Level Item",
+        "url": "#"
+      },
+      {
+        "text": "Second Level Item2",
+        "url": "#"
+      },
+      {
+        "text": "Third Level",
+        "url": "#",
+        "icon": "fa arrow",
+        "subMenus": [
+          {
+            "text": "Third Level Item",
+            "url": "#"
+          },
+          {
+            "text": "Third Level Item2",
+            "url": "#"
+          },
+          {
+            "text": "Third Level Item3",
+            "url": "#"
+          },
+          {
+            "text": "Third Level Item4",
+            "url": "#"
+          }
+        ]
       }
     ]
   }

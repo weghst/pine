@@ -111,6 +111,12 @@
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="templateLoaderPath" value="/WEB-INF/templates/"/>
+        <property name="freemarkerSettings">
+            <props>
+                <prop key="auto_import">spring.ftl as s</prop>
+                <prop key="localized_lookup">false</prop>
+            </props>
+        </property>
     </bean>
 
     <!--
@@ -121,6 +127,7 @@
           class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="cache" value="true"/>
         <property name="suffix" value=".ftl"/>
+        <property name="requestContextAttribute" value="rc"/>
     </bean>
 
 </beans>
