@@ -9,7 +9,7 @@ public class SidebarMenu {
     private String url;
     private String icon;
     private boolean restricted;
-    private SidebarMenu[] subMenus;
+    private SidebarMenu[] submenus;
 
     public String getText() {
         return text;
@@ -43,11 +43,11 @@ public class SidebarMenu {
         this.restricted = restricted;
     }
 
-    public SidebarMenu[] getSubMenus() {
-        return subMenus;
+    public SidebarMenu[] getSubmenus() {
+        return submenus;
     }
 
-    public void setSubMenus(SidebarMenu[] subMenus) {
-        this.subMenus = subMenus;
+    public void setSubmenus(SidebarMenu[] submenus) {
+        this.submenus = submenus;
     }
 }

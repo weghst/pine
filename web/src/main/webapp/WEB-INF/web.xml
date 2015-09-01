@@ -23,11 +23,6 @@
 
     <module-name>Weghst Pine Web Application</module-name>
 
-    <context-param>
-        <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/r</param-value>
-    </context-param>
-
     <listener>
         <listener-class>com.weghst.pine.web.ApplicationContextListener</listener-class>
     </listener>
@@ -63,8 +58,16 @@
     </servlet-mapping>
 
     <error-page>
+        <error-code>403</error-code>
+        <location>/errorHandler.servlet</location>
+    </error-page>
+    <error-page>
         <error-code>404</error-code>
-        <location>/404.html</location>
+        <location>/errorHandler.servlet</location>
+    </error-page>
+    <error-page>
+        <error-code>500</error-code>
+        <location>/errorHandler.servlet</location>
     </error-page>
 
 </web-app>

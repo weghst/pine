@@ -1,103 +1,147 @@
 [
-  {
-    "text": "Dashboard",
-    "url": "#",
-    "icon": "fa fa-dashboard fa-fw"
-  },
-  {
-    "text": "Charts",
-    "url": "#",
-    "icon": "fa fa-bar-chart-o fa-fw",
-    "subMenus": [
-      {
-        "text": "Float Charts",
+    {
+        "text": "Dashboard",
         "url": "#",
-        "icon": "menu-icon fa fa-caret-right"
-      },
-      {
-        "text": "Morris.js Charts",
+        "icon": "fa fa-dashboard"
+    },
+    {
+        "text": "Layout Options",
         "url": "#",
-        "icon": ""
-      }
-    ]
-  },
-  {
-    "text": "Tables",
-    "url": "#",
-    "icon": "fa fa-table fa-fw"
-  },
-  {
-    "text": "Form",
-    "url": "#",
-    "icon": "fa fa-edit fa-fw"
-  },
-  {
-    "text": "UI Elements",
-    "url": "#",
-    "icon": "fa fa-wrench fa-fw",
-    "subMenus": [
-      {
-        "text": "Panels and Wells",
-        "url": "#"
-      },
-      {
-        "text": "Buttons",
-        "url": "#"
-      },
-      {
-        "text": "Notifications",
-        "url": "#"
-      },
-      {
-        "text": "Typography",
-        "url": "#"
-      },
-      {
-        "text": "Icons",
-        "url": "#"
-      },
-      {
-        "text": "Grids",
-        "url": "#"
-      }
-    ]
-  },
-  {
-    "text": "Multi-Level Dropdown",
-    "url": "#",
-    "icon": "fa fa-sitemap fa-fw",
-    "subMenus": [
-      {
-        "text": "Second Level Item",
-        "url": "#"
-      },
-      {
-        "text": "Second Level Item2",
-        "url": "#"
-      },
-      {
-        "text": "Third Level",
-        "url": "#",
-        "icon": "fa arrow",
-        "subMenus": [
-          {
-            "text": "Third Level Item",
-            "url": "#"
-          },
-          {
-            "text": "Third Level Item2",
-            "url": "#"
-          },
-          {
-            "text": "Third Level Item3",
-            "url": "#"
-          },
-          {
-            "text": "Third Level Item4",
-            "url": "#"
-          }
+        "icon": "fa fa-bar-chart-o",
+        "submenus": [
+            {
+                "text": "Top Navigation",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Boxed",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Fixed",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Collapsed Sidebar",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            }
         ]
-      }
-    ]
-  }
+    },
+    {
+        "text": "Widgets",
+        "url": "#",
+        "icon": "fa fa-th"
+    },
+    {
+        "text": "Charts",
+        "url": "#",
+        "icon": "fa fa-pie-chart",
+        "submenus": [
+            {
+                "text": "ChartJS",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Morris",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Flot",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Inline charts",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            }
+        ]
+    },
+    {
+        "text": "UI Elements",
+        "url": "#",
+        "icon": "fa fa-wrench",
+        "submenus": [
+            {
+                "text": "Panels and Wells",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Buttons",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Notifications",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Typography",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Icons",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Grids",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            }
+        ]
+    },
+    {
+        "text": "Multi-Level Dropdown",
+        "url": "#",
+        "icon": "fa fa-sitemap fa-fw",
+        "submenus": [
+            {
+                "text": "Second Level Item",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Second Level Item2",
+                "url": "#",
+                "icon": "fa fa-circle-o"
+            },
+            {
+                "text": "Third Level",
+                "url": "#",
+                "icon": "fa fa-circle-o",
+                "submenus": [
+                    {
+                        "text": "Third Level Item",
+                        "url": "#",
+                        "icon": "fa fa-circle-o"
+                    },
+                    {
+                        "text": "Third Level Item2",
+                        "url": "#",
+                        "icon": "fa fa-circle-o"
+                    },
+                    {
+                        "text": "Third Level Item3",
+                        "url": "#",
+                        "icon": "fa fa-circle-o"
+                    },
+                    {
+                        "text": "Third Level Item4",
+                        "url": "#",
+                        "icon": "fa fa-circle-o"
+                    }
+                ]
+            }
+        ]
+    }
 ]

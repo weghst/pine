@@ -76,7 +76,7 @@ public class AdminResource implements InitializingBean {
 
     private String buildSidebar(HttpServletRequest request) throws IOException {
         StringBuilder sb = new StringBuilder();
-        sb.append("<ul class=\"nav sidebar-menu\" id=\"side-menu\">");
+        sb.append("<ul class=\"sidebar-menu\">");
         for (SidebarMenu menu : sidebarMenus) {
             buildSidebar0(request, menu, sb, 1);
         }
@@ -90,27 +90,22 @@ public class AdminResource implements InitializingBean {
             throw new IllegalArgumentException("Sidebar Menu 最多只允许有3级菜单");
         }
 
-        sb.append("<li>").append("<a href=\"").append(request.getContextPath()).append(menu.getUrl()).append("\">");
+        sb.append("<li>");
+        sb.append("<a href=\"").append(request.getContextPath()).append(menu.getUrl()).append("\">");
         if (menu.getIcon() != null) {
             sb.append("<i class=\"").append(menu.getIcon()).append("\"></i>");
         }
 
-        sb.append(" ").append(menu.getText());
-        if (ArrayUtils.isNotEmpty(menu.getSubMenus()) && level == 1) {
+        sb.append(" <span>").append(menu.getText()).append("</span>");
+        if (ArrayUtils.isNotEmpty(menu.getSubmenus()) && level == 1) {
             sb.append("<span class=\"fa arrow\"></span>");
         }
         sb.append("</a>");
 
-        if (ArrayUtils.isNotEmpty(menu.getSubMenus())) {
-            sb.append("<ul class=\"nav ");
-            if (level == 1) {
-                sb.append("nav-second-level");
-            } else if (level == 2) {
-                sb.append("nav-third-level");
-            }
-            sb.append("\">");
+        if (ArrayUtils.isNotEmpty(menu.getSubmenus())) {
+            sb.append("<ul class=\"treeview-menu\">");
 
-            for (SidebarMenu sub : menu.getSubMenus()) {
+            for (SidebarMenu sub : menu.getSubmenus()) {
                 buildSidebar0(request, sub, sb, level + 1);
             }
             sb.append("</ul>");

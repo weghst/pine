@@ -1,0 +1,16 @@
+@import url("../vendor/bootstrap/css/bootstrap.css");
+@import url("../vendor/font-awesome/css/font-awesome.min.css");
+
+.jumbotron {
+    font-size: 21px;
+    font-weight: 200;
+    line-height: 2.1428571435;
+    color: inherit;
+    padding: 10px 0;
+    text-align: center;
+    background-color: transparent;
+}
+
+.red {
+    color: #d9534f;
+}
