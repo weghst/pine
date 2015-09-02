@@ -7,6 +7,8 @@
 <body>
 ERROR
 <br/>
+<pre>
 ${stackTrace}
+</pre>
 </body>
 </html>

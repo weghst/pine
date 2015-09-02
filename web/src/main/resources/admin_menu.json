@@ -6,12 +6,12 @@
     },
     {
         "text": "Layout Options",
-        "url": "#",
+        "url": "/vendor/validator.js",
         "icon": "fa fa-bar-chart-o",
         "submenus": [
             {
                 "text": "Top Navigation",
-                "url": "#",
+                "url": "/dashboard/data.json",
                 "icon": "fa fa-circle-o"
             },
             {

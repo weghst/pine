@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
@@ -90,15 +91,20 @@ public class AdminResource implements InitializingBean {
             throw new IllegalArgumentException("Sidebar Menu 最多只允许有3级菜单");
         }
 
-        sb.append("<li>");
-        sb.append("<a href=\"").append(request.getContextPath()).append(menu.getUrl()).append("\">");
+        sb.append("<li>").append("<a href=\"#\"");
+        if (!StringUtils.isEmpty(menu.getUrl()) && !"#".equals(menu.getUrl())) {
+            sb.append(" ng-click=\"sidebarMenuClick('").append(request.getContextPath())
+                    .append(menu.getUrl()).append("')\"");
+        }
+        sb.append(">");
+
         if (menu.getIcon() != null) {
             sb.append("<i class=\"").append(menu.getIcon()).append("\"></i>");
         }
 
         sb.append(" <span>").append(menu.getText()).append("</span>");
-        if (ArrayUtils.isNotEmpty(menu.getSubmenus()) && level == 1) {
-            sb.append("<span class=\"fa arrow\"></span>");
+        if (ArrayUtils.isNotEmpty(menu.getSubmenus())) {
+            sb.append("<i class=\"fa fa-angle-left pull-right\"></i>");
         }
         sb.append("</a>");
 
