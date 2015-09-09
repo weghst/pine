@@ -15,10 +15,14 @@
  */
 package com.weghst.pine.web.resource;
 
+
+import com.weghst.pine.web.vo.SimpleQueryVo;
+
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.ws.rs.BeanParam;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.core.Context;
@@ -67,5 +71,11 @@ public class AsyncResource {
         ModelAndView mav = new ModelAndView("test/test2");
         mav.getModelMap().put("hello", "Hello");
         return mav;
+    }
+
+    @Path("/query")
+    @GET
+    public void query(@BeanParam SimpleQueryVo q) {
+        System.out.println("Hello");
     }
 }

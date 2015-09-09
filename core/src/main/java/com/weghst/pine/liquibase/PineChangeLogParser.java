@@ -12,8 +12,7 @@ public class PineChangeLogParser extends XMLChangeLogSAXParser {
     @Override
     public DatabaseChangeLog parse(String physicalChangeLogLocation,
                                    ChangeLogParameters changeLogParameters,
-                                   ResourceAccessor resourceAccessor)
-            throws ChangeLogParseException {
+                                   ResourceAccessor resourceAccessor) throws ChangeLogParseException {
 
         ParsedNode parsedNode = parseToNode(physicalChangeLogLocation, changeLogParameters, resourceAccessor);
         if (parsedNode == null) {

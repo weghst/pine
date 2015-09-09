@@ -38,6 +38,14 @@ public class Paging<T> {
 
     /**
      *
+     * @param q
+     */
+    public Paging(Query q) {
+        this(q.getPage());
+    }
+
+    /**
+     *
      * @return
      */
     public int getSize() {
@@ -47,12 +55,14 @@ public class Paging<T> {
     /**
      *
      * @param size
+     * @return
      */
-    public void setSize(int size) {
+    public Paging setSize(int size) {
         if (size < 1) {
             throw new IllegalArgumentException("[size]必须大于1");
         }
         this.size = size;
+        return this;
     }
 
     /**
@@ -66,12 +76,14 @@ public class Paging<T> {
     /**
      *
      * @param page
+     * @return
      */
-    public void setPage(int page) {
+    public Paging setPage(int page) {
         if (page < 1) {
             throw new IllegalArgumentException("[page]必须大于1");
         }
         this.page = page;
+        return this;
     }
 
     /**
@@ -85,9 +97,11 @@ public class Paging<T> {
     /**
      *
      * @param total
+     * @return
      */
-    public void setTotal(int total) {
+    public Paging setTotal(int total) {
         this.total = total;
+        return this;
     }
 
     /**
@@ -101,9 +115,11 @@ public class Paging<T> {
     /**
      *
      * @param result
+     * @return
      */
-    public void setResult(List<T> result) {
+    public Paging setResult(List<T> result) {
         this.result = result;
+        return this;
     }
 
     /**

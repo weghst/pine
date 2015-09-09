@@ -2,7 +2,7 @@ package com.weghst.pine.web.resource;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weghst.pine.PineException;
-import com.weghst.pine.web.vo.SidebarMenu;
+import com.weghst.pine.web.vo.SidebarMenuVo;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -18,8 +18,11 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.GET;
+import javax.ws.rs.MatrixParam;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 
 @Path("/")
@@ -32,13 +35,13 @@ public class AdminResource implements InitializingBean {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    private SidebarMenu[] sidebarMenus;
+    private SidebarMenuVo[] sidebarMenus;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         Resource resource = resourceLoader.getResource("classpath:admin_menu.json");
         try {
-            sidebarMenus = objectMapper.readValue(resource.getFile(), SidebarMenu[].class);
+            sidebarMenus = objectMapper.readValue(resource.getFile(), SidebarMenuVo[].class);
         } catch (IOException e) {
             throw new PineException("加载[classpath:admin_menu.json]文件错误", e);
         }
@@ -75,17 +78,29 @@ public class AdminResource implements InitializingBean {
         return null;
     }
 
+    @Path("/{id}")
+    @GET
+    public String test1(@PathParam("id") String id, @MatrixParam("type") String type) {
+        return "HELLO test1";
+    }
+
+    @Path("/{id}")
+    @GET
+    public String test2(@PathParam("id") String id, @MatrixParam("type2") String type2) {
+        return "hello TEST2";
+    }
+
     private String buildSidebar(HttpServletRequest request) throws IOException {
         StringBuilder sb = new StringBuilder();
         sb.append("<ul class=\"sidebar-menu\">");
-        for (SidebarMenu menu : sidebarMenus) {
+        for (SidebarMenuVo menu : sidebarMenus) {
             buildSidebar0(request, menu, sb, 1);
         }
         sb.append("</ul>");
         return sb.toString();
     }
 
-    private void buildSidebar0(HttpServletRequest request, SidebarMenu menu,
+    private void buildSidebar0(HttpServletRequest request, SidebarMenuVo menu,
                                StringBuilder sb, int level) {
         if (level > 3) {
             throw new IllegalArgumentException("Sidebar Menu 最多只允许有3级菜单");
@@ -111,7 +126,7 @@ public class AdminResource implements InitializingBean {
         if (ArrayUtils.isNotEmpty(menu.getSubmenus())) {
             sb.append("<ul class=\"treeview-menu\">");
 
-            for (SidebarMenu sub : menu.getSubmenus()) {
+            for (SidebarMenuVo sub : menu.getSubmenus()) {
                 buildSidebar0(request, sub, sb, level + 1);
             }
             sb.append("</ul>");

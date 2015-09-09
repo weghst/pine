@@ -3,13 +3,13 @@ package com.weghst.pine.web.vo;
 /**
  * @author Kevin Zou
  */
-public class SidebarMenu {
+public class SidebarMenuVo {
 
     private String text;
     private String url;
     private String icon;
     private boolean restricted;
-    private SidebarMenu[] submenus;
+    private SidebarMenuVo[] submenus;
 
     public String getText() {
         return text;
@@ -43,11 +43,11 @@ public class SidebarMenu {
         this.restricted = restricted;
     }
 
-    public SidebarMenu[] getSubmenus() {
+    public SidebarMenuVo[] getSubmenus() {
         return submenus;
     }
 
-    public void setSubmenus(SidebarMenu[] submenus) {
+    public void setSubmenus(SidebarMenuVo[] submenus) {
         this.submenus = submenus;
     }
 }
