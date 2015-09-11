@@ -1,6 +1,7 @@
 
 .idea/
 target/
+build/
 *.iml
 *.ipr
 *.iws
