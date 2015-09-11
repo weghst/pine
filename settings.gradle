@@ -1,0 +1,6 @@
+rootProject.name = "pine-parent"
+
+include "api"
+include "core"
+include "web"
+
