@@ -22,6 +22,7 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -29,20 +30,23 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
+import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
+import javax.servlet.annotation.WebListener;
 
+@WebListener
 public class ApplicationContextListener implements ServletContextListener {
 
     private static final Logger LOG = LoggerFactory.getLogger(ApplicationContextListener.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
-        LOG.info("Pine initializing...");
+        LOG.info("Pine initializing... 初始化配置");
 
         loadPineProperties();
 
-        LOG.info("Pine initialized...");
+        LOG.info("Pine initialized... 初始化配置完成");
     }
 
     @Override

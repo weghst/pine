@@ -6,6 +6,10 @@ public class Restful {
     private String errorMessage;
     private Object data;
 
+    public Restful() {
+
+    }
+
     public Restful(int errorCode, String errorMessage) {
         this.errorCode = errorCode;
         this.errorMessage = errorMessage;

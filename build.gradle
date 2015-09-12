@@ -2,11 +2,12 @@ buildscript {
 
     repositories {
         mavenLocal()
+        maven { url "http://188.188.22.221:9011/nexus/content/groups/public" }
         mavenCentral()
     }
 
     dependencies {
-        classpath "com.bmuschko:gradle-tomcat-plugin:2.2.2"
+        classpath "org.akhikhl.gretty:gretty:1.2.4"
     }
 }
 
@@ -27,12 +28,23 @@ configure(allprojects) { project ->
 
     apply plugin: "java"
     apply plugin: "maven"
+    apply plugin: "maven-publish"
     apply plugin: "idea"
 
     repositories {
         mavenLocal()
+        maven { url "http://188.188.22.221:9011/nexus/content/groups/public" }
         mavenCentral()
     }
+
+    configurations {
+        springloaded
+
+        compile.exclude group: "commons-logging", module: "commons-logging"
+    }
+
+    compileJava.options.encoding = "UTF-8"
+    compileTestJava.options.encoding = "UTF-8"
 
     compileJava {
         sourceCompatibility = 1.8
@@ -52,6 +64,8 @@ configure(allprojects) { project ->
             exclude module: "junit"
             exclude module: "ant"
         }
+
+        springloaded "org.springframework:springloaded:1.2.4.RELEASE"
     }
 }
 
@@ -67,6 +81,14 @@ project("api") {
 }
 
 project("core") {
+
+    jar {
+        manifest {
+            attributes(
+                    "Liquibase-Package": "com.weghst.pine.liquibase"
+            )
+        }
+    }
 
     dependencies {
         compile(project(":api"))
@@ -95,7 +117,28 @@ project("core") {
 project("web") {
 
     apply plugin: "war"
-    apply plugin: "com.bmuschko.tomcat"
+    apply plugin: "eclipse-wtp"
+    apply plugin: "org.akhikhl.gretty"
+
+    gretty {
+        def springloaded = "-javaagent:" + configurations.springloaded.asPath;
+        jvmArgs = ["-Dfile.encoding=UTF-8", springloaded, "-noverify"]
+
+        servletContainer = "tomcat7"
+        recompileOnSourceChange = false
+        reloadOnClassChange = false
+        // reloadOnConfigChange = false
+        // reloadOnLibChange = false
+
+        afterEvaluate {
+            appRunDebug {
+                debugPort = 5005    // default
+                debugSuspend = true // default
+            }
+        }
+        port = 8080
+        contextPath = "/"
+    }
 
     dependencies {
         providedCompile("javax.servlet:javax.servlet-api:3.1.0")
@@ -106,7 +149,9 @@ project("web") {
         compile("org.springframework:spring-webmvc:$springVersion")
 
         compile("org.jboss.resteasy:resteasy-jackson2-provider:$resteasyVersion")
-        compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion")
+        compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
+            exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
+        }
 
         compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
         compile("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
@@ -115,17 +160,6 @@ project("web") {
         runtime("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion")
         runtime("com.jolbox:bonecp-spring:$bonecpVersion")
         runtime("ch.qos.logback:logback-classic:$logbackVersion")
-
     }
 
-    tomcat {
-        contextPath = "/"
-
-        dependencies {
-            def tomcatVersion = '7.0.59'
-            tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-                    "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
-                    "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
-        }
-    }
 }

@@ -1,7 +1,5 @@
 package com.weghst.pine;
 
-import sun.security.provider.PolicySpiFile;
-
 /**
  * @author zouyong
  * @date 2015-08-27
