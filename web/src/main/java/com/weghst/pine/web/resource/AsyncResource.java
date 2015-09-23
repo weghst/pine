@@ -103,8 +103,9 @@ public class AsyncResource {
         System.out.println("Hello World");
 
         test3();
+        testSpring.test1();
 
-        return "HELLO";
+        return "Hello World" + testSpring.test2();
     }
 
     public void test3() {
@@ -113,6 +114,7 @@ public class AsyncResource {
 
     public String test6() {
         System.out.println("New TEST5 METHOD");
+        testSpring.test1();
         return "NEW return";
     }
 

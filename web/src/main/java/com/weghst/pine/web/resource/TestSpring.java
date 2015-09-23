@@ -10,4 +10,12 @@ import org.springframework.stereotype.Service;
 @Service
 public class TestSpring {
 
+    public void test1() {
+        System.out.println("Test1...........");
+    }
+
+    public String test2() {
+        return "Test2";
+    }
+
 }

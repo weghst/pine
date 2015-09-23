@@ -66,14 +66,14 @@
     <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
         <property name="dataSource" ref="dataSource"/>
         <property name="changeLog" value="classpath:db/changelog-master.xml"/>
-        <property name="rollbackFile"
-                  value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>
+        <!--<property name="rollbackFile"-->
+                  <!--value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>-->
     </bean>
 
     <!-- Pine configuration -->
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
 
-    <import resource="classpath:spring-pine-core.xml"/>
+    <import resource="classpath*:/spring-pine-core.xml"/>
 
     <bean id="jedis" class="redis.clients.jedis.Jedis">
         <constructor-arg type="java.lang.String" value="localhost"/>
@@ -93,7 +93,7 @@
     <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
     <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- Import basic SpringMVC Resteasy integration -->
-    <import resource="classpath:springmvc-resteasy.xml"/>
+    <import resource="classpath*:/springmvc-resteasy.xml"/>
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
         <property name="prefix" value="/d"/>

@@ -1,13 +1,13 @@
 buildscript {
-
     repositories {
         mavenLocal()
-        maven { url "http://188.188.22.221:9011/nexus/content/groups/public" }
+        maven { url gradle.privateMavenRepositoryUrl }
         mavenCentral()
     }
 
     dependencies {
         classpath "org.akhikhl.gretty:gretty:1.2.4"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE"
     }
 }
 
@@ -26,19 +26,44 @@ configure(allprojects) { project ->
     ext.mariadbVersion = "1.2.0"
     ext.testngVersion = "6.9.6"
 
-    apply plugin: "java"
     apply plugin: "maven"
-    apply plugin: "maven-publish"
     apply plugin: "idea"
+    apply plugin: "eclipse"
 
     repositories {
         mavenLocal()
-        maven { url "http://188.188.22.221:9011/nexus/content/groups/public" }
+        maven { url gradle.privateMavenRepositoryUrl }
         mavenCentral()
     }
 
     configurations {
-        springloaded
+        deployerJars
+    }
+
+    uploadArchives {
+        repositories.mavenDeployer {
+            configuration = configurations.deployerJars
+
+            repository(url: "file://localhost/tmp-pine/") {
+                Properties authProps = new Properties()
+                authProps.load(new FileInputStream("/maven-upload-auth.properties"))
+                authentication(userName: authProps["username"], password: authProps["password"])
+            }
+        }
+    }
+
+    dependencies {
+        deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+    }
+
+}
+
+configure(subprojects) { project ->
+
+    apply plugin: "java"
+
+    configurations {
+        springLoaded
 
         compile.exclude group: "commons-logging", module: "commons-logging"
     }
@@ -56,6 +81,10 @@ configure(allprojects) { project ->
         targetCompatibility = 1.8
     }
 
+    jar {
+        baseName = "$rootProject.name-$project.name"
+    }
+
     dependencies {
         compile("org.slf4j:slf4j-api:$slf4jVersion")
 
@@ -65,7 +94,7 @@ configure(allprojects) { project ->
             exclude module: "ant"
         }
 
-        springloaded "org.springframework:springloaded:1.2.4.RELEASE"
+        springLoaded "org.springframework:springloaded:1.2.4.RELEASE"
     }
 }
 
@@ -114,15 +143,18 @@ project("core") {
     }
 }
 
+project("auth") {
+
+}
+
 project("web") {
 
     apply plugin: "war"
-    apply plugin: "eclipse-wtp"
     apply plugin: "org.akhikhl.gretty"
 
     gretty {
-        def springloaded = "-javaagent:" + configurations.springloaded.asPath;
-        jvmArgs = ["-Dfile.encoding=UTF-8", springloaded, "-noverify"]
+        def slPath = "-javaagent:" + configurations.springLoaded.asPath;
+        jvmArgs = [slPath, "-noverify"]
 
         servletContainer = "tomcat7"
         recompileOnSourceChange = false
@@ -132,8 +164,8 @@ project("web") {
 
         afterEvaluate {
             appRunDebug {
-                debugPort = 5005    // default
-                debugSuspend = true // default
+                debugPort = 5005     // default
+                debugSuspend = false // default
             }
         }
         port = 8080
