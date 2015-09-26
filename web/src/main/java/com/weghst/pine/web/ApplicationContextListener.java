@@ -22,7 +22,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -30,7 +29,6 @@ import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
 
-import javax.servlet.ServletContext;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;

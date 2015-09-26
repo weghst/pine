@@ -2,21 +2,23 @@
 <html ng-app="Pine">
 <head>
     <meta charset="UTF-8">
+    <base href="${rc.getContextUrl("/")}">
     <title>Dashboard</title>
 
-    <link rel="stylesheet" href="${rc.contextPath}/vendor/bootstrap/css/bootstrap.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/vendor/font-awesome/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/css/pine.css"/>
-    <link rel="stylesheet" href="${rc.contextPath}/css/skins/skin-green.css"/>
+    <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="kendo/css/kendo.common.min.css" />
+    <link rel="stylesheet" href="kendo/css/kendo.default.min.css" />
 
-    <script type="text/javascript" src="${rc.contextPath}/vendor/jquery.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/vendor/angular.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/vendor/bootstrap/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="${rc.contextPath}/vendor/ui-bootstrap-tpls.min.js"></script>
+    <link rel="stylesheet" href="css/pine.css"/>
+    <link rel="stylesheet" href="css/skins/skin-green.css"/>
 
-    <script type="text/javascript" src="${rc.contextPath}/vendor/slimscroll/jquery.slimscroll.js"></script>
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <script type="text/javascript" src="js/angular.min.js"></script>
+    <script type="text/javascript" src="kendo/js/kendo.web.min.js"></script>
+    <script type="text/javascript" src="js/jquery.slimscroll.js"></script>
+
     <script type="text/javascript">
-        var app = angular.module("Pine", ["ui.bootstrap"]);
+        var app = angular.module("Pine", ["kendo.directives"]);
         app.config(function ($controllerProvider, $compileProvider, $filterProvider) {
             app.controllerProvider = $controllerProvider;
             app.compileProvider = $compileProvider;

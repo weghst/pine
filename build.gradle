@@ -26,6 +26,11 @@ configure(allprojects) { project ->
     ext.mariadbVersion = "1.2.0"
     ext.testngVersion = "6.9.6"
 
+    apply plugin: "java"
+    apply plugin: "findbugs"
+    apply plugin: "checkstyle"
+    apply plugin: "pmd"
+
     apply plugin: "maven"
     apply plugin: "idea"
     apply plugin: "eclipse"
@@ -59,8 +64,6 @@ configure(allprojects) { project ->
 }
 
 configure(subprojects) { project ->
-
-    apply plugin: "java"
 
     configurations {
         springLoaded
@@ -165,7 +168,7 @@ project("web") {
         afterEvaluate {
             appRunDebug {
                 debugPort = 5005     // default
-                debugSuspend = false // default
+                debugSuspend = true // default
             }
         }
         port = 8080
@@ -192,6 +195,10 @@ project("web") {
         runtime("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion")
         runtime("com.jolbox:bonecp-spring:$bonecpVersion")
         runtime("ch.qos.logback:logback-classic:$logbackVersion")
+
+//        compile("org.springframework.boot:spring-boot-legacy:1.0.1.RELEASE")
+//        providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:1.2.6.RELEASE")
+//        compile("org.springframework.boot:spring-boot-starter-web")
     }
 
 }
