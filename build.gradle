@@ -29,7 +29,7 @@ configure(allprojects) { project ->
     apply plugin: "java"
     apply plugin: "findbugs"
     apply plugin: "checkstyle"
-    apply plugin: "pmd"
+    // apply plugin: "pmd"
 
     apply plugin: "maven"
     apply plugin: "idea"
@@ -43,6 +43,29 @@ configure(allprojects) { project ->
 
     configurations {
         deployerJars
+    }
+
+    findbugs {
+        ignoreFailures = true
+    }
+
+    tasks.withType(FindBugs) {
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+
+    checkstyle {
+        // toolVersion = "6.10.1"
+        ignoreFailures = true
+        configFile = rootProject.file("etc/google_checks.xml")
+    }
+
+    checkstyleMain << {
+        ant.xslt(in: reports.xml.destination,
+                style: rootProject.file("etc/checkstyle-noframes-sorted.xsl"),
+                out: new File(reports.xml.destination.parent, 'main.html'))
     }
 
     uploadArchives {
@@ -59,6 +82,7 @@ configure(allprojects) { project ->
 
     dependencies {
         deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+        checkstyle "com.puppycrawl.tools:checkstyle:6.10.1"
     }
 
 }
@@ -71,8 +95,7 @@ configure(subprojects) { project ->
         compile.exclude group: "commons-logging", module: "commons-logging"
     }
 
-    compileJava.options.encoding = "UTF-8"
-    compileTestJava.options.encoding = "UTF-8"
+    [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
     compileJava {
         sourceCompatibility = 1.8
@@ -156,7 +179,7 @@ project("web") {
     apply plugin: "org.akhikhl.gretty"
 
     gretty {
-        def slPath = "-javaagent:" + configurations.springLoaded.asPath;
+        def slPath = "-javaagent:" + configurations.springLoaded.asPath
         jvmArgs = [slPath, "-noverify"]
 
         servletContainer = "tomcat7"
