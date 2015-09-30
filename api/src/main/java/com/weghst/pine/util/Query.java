@@ -3,13 +3,13 @@ package com.weghst.pine.util;
 /**
  * @author Kevin Zou
  */
-public interface Query {
+public interface Query<T> {
 
     /**
      *
      * @return
      */
-    String getQ();
+    T getQ();
 
     /**
      *
@@ -21,11 +21,24 @@ public interface Query {
      *
      * @return
      */
-    String getOrder();
+    Order getOrder();
 
     /**
      *
      * @return
      */
-    int getPage();
+    int getCount();
+
+    /**
+     *
+     * @return
+     */
+    int getOffset();
+
+    /**
+     *
+     */
+    enum Order {
+        asc, desc
+    }
 }

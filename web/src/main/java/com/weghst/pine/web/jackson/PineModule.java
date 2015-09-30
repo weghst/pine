@@ -1,7 +1,7 @@
 package com.weghst.pine.web.jackson;
 
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.weghst.pine.web.Restful;
+import com.weghst.pine.web.resource.Restful;
 
 /**
  * @author zouyong

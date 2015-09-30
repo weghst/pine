@@ -1,6 +1,8 @@
 package com.weghst.pine.web;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr353.JSR353Module;
 import com.weghst.pine.web.jackson.PineModule;
 
@@ -14,6 +16,9 @@ public final class ViewObjectMapperFactory {
     static {
         OBJECT_MAPPER.registerModule(new JSR353Module());
         OBJECT_MAPPER.registerModule(new PineModule());
+
+        // OBJECT_MAPPER.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
+        // OBJECT_MAPPER.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
     }
 
     public static ObjectMapper getObjectMapper() {

@@ -27,10 +27,10 @@ import javax.ws.rs.ext.Provider;
 /**
  * @author Kevin Zou
  */
-@Provider
-@Produces("text/html")
 @Component
-public class ExceptionMessageBodyWriter implements MessageBodyWriter<Exception> {
+@Provider
+@Produces(MediaType.TEXT_HTML)
+public class HtmlMessageBodyWriter implements MessageBodyWriter<Exception> {
 
     @Autowired
     private FreeMarkerConfig freeMarkerConfig;
@@ -38,7 +38,7 @@ public class ExceptionMessageBodyWriter implements MessageBodyWriter<Exception> 
     @Override
     public boolean isWriteable(Class<?> aClass, Type type, Annotation[] annotations,
                                MediaType mediaType) {
-        return true;
+        return mediaType.equals(MediaType.TEXT_HTML_TYPE);
     }
 
     @Override

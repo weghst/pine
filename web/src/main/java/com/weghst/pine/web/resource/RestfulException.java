@@ -1,4 +1,4 @@
-package com.weghst.pine.web;
+package com.weghst.pine.web.resource;
 
 public class RestfulException extends RuntimeException {
 

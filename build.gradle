@@ -7,7 +7,8 @@ buildscript {
 
     dependencies {
         classpath "org.akhikhl.gretty:gretty:1.2.4"
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.6.RELEASE"
+        classpath "org.zeroturnaround:gradle-jrebel-plugin:1.1.2"
+        classpath "com.bmuschko:gradle-tomcat-plugin:2.2.2"
     }
 }
 
@@ -176,32 +177,53 @@ project("auth") {
 project("web") {
 
     apply plugin: "war"
-    apply plugin: "org.akhikhl.gretty"
+    // apply plugin: "org.akhikhl.gretty"
+    apply plugin: "rebel"
+    apply plugin: "com.bmuschko.tomcat"
 
-    gretty {
-        def slPath = "-javaagent:" + configurations.springLoaded.asPath
-        jvmArgs = [slPath, "-noverify"]
-
-        servletContainer = "tomcat7"
-        recompileOnSourceChange = false
-        reloadOnClassChange = false
-        // reloadOnConfigChange = false
-        // reloadOnLibChange = false
-
-        afterEvaluate {
-            appRunDebug {
-                debugPort = 5005     // default
-                debugSuspend = true // default
+    rebel {
+        // configurations.compile.files.each { file ->
+        //     println "$file.name -> $file.path"
+        // }
+        classpath {
+            resource {
+                directory = project(":api").sourceSets.main.output.classesDir
+            }
+            resource {
+                directory = project(":core").sourceSets.main.output.classesDir
             }
         }
-        port = 8080
+    }
+
+    tomcat {
+        httpPort = 8080
         contextPath = "/"
     }
+
+    // gretty {
+    //     def slPath = "-javaagent:" + configurations.springLoaded.asPath
+    //     jvmArgs = [slPath, "-noverify"]
+
+    //     servletContainer = "tomcat7"
+    //     recompileOnSourceChange = false
+    //     reloadOnClassChange = false
+    //     // reloadOnConfigChange = false
+    //     // reloadOnLibChange = false
+
+    //     afterEvaluate {
+    //         appRunDebug {
+    //             debugPort = 5005     // default
+    //             debugSuspend = true // default
+    //         }
+    //     }
+    //     port = 8080
+    //     contextPath = "/"
+    // }
 
     dependencies {
         providedCompile("javax.servlet:javax.servlet-api:3.1.0")
 
-        compile(project(":core"));
+        compile(project(":core"))
         compile("org.ow2.asm:asm:5.0.4")
         compile("org.slf4j:jcl-over-slf4j:$slf4jVersion")
         compile("org.springframework:spring-webmvc:$springVersion")
@@ -219,9 +241,10 @@ project("web") {
         runtime("com.jolbox:bonecp-spring:$bonecpVersion")
         runtime("ch.qos.logback:logback-classic:$logbackVersion")
 
-//        compile("org.springframework.boot:spring-boot-legacy:1.0.1.RELEASE")
-//        providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:1.2.6.RELEASE")
-//        compile("org.springframework.boot:spring-boot-starter-web")
+        def tomcatVersion = '7.0.59'
+        tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+                "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+                "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
     }
 
 }
