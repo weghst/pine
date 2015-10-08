@@ -81,7 +81,7 @@ public class AdminResource implements InitializingBean {
     @Path("/{id}")
     @GET
     public String test1(@PathParam("id") String id, @MatrixParam("type") String type) {
-        return "HELLO test1";
+        return "HELLO test1+++++++++999999|||||||||||||||||";
     }
 
     @Path("/{id}")
