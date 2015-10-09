@@ -26,9 +26,23 @@ configure(allprojects) { project ->
     ext.mariadbVersion = "1.2.0"
     ext.testngVersion = "6.9.6"
 
+    // 获取项目所有的[ProjectDependency](示例: compile project(":XXX"))
+    ext.allProjectDependencies = { p ->
+        def projectDependencies = p.configurations.runtime.allDependencies.withType(ProjectDependency)
+        def dependencyProjects = projectDependencies*.dependencyProject
+
+        if (!dependencyProjects.isEmpty()) {
+            dependencyProjects.each { dependencyProjects += allProjectDependencies(it) }
+        }
+        return dependencyProjects.unique()
+    }
+
+
     apply plugin: "java"
     apply plugin: "findbugs"
     apply plugin: "checkstyle"
+    apply plugin: "jacoco"
+    apply plugin: "jdepend"
     // apply plugin: "pmd"
 
     apply plugin: "maven"
@@ -49,11 +63,10 @@ configure(allprojects) { project ->
         ignoreFailures = true
     }
 
-    tasks.withType(FindBugs) {
-        reports {
-            xml.enabled = false
-            html.enabled = true
-        }
+    findbugsMain << {
+        ant.xslt(in: reports.xml.destination,
+                style: rootProject.file("etc/findbugs-default.xsl"),
+                out: new File(reports.xml.destination.parent, "findbugs.html"))
     }
 
     checkstyle {
@@ -65,7 +78,13 @@ configure(allprojects) { project ->
     checkstyleMain << {
         ant.xslt(in: reports.xml.destination,
                 style: rootProject.file("etc/checkstyle-noframes-sorted.xsl"),
-                out: new File(reports.xml.destination.parent, 'main.html'))
+                out: new File(reports.xml.destination.parent, "checkstyle.html"))
+    }
+
+    jdependMain << {
+        ant.xslt(in: reports.xml.destination,
+                style: rootProject.file("etc/jdepend.xsl"),
+                out: new File(reports.xml.destination.parent, "jdepend.html"))
     }
 
     uploadArchives {
@@ -179,22 +198,6 @@ project("web") {
     apply plugin: "rebel"
     apply plugin: "com.bmuschko.tomcat"
 
-    rebel {
-        classpath {
-            resource {
-                directory = project(":api").sourceSets.main.output.classesDir
-            }
-            resource {
-                directory = project(":api").sourceSets.main.output.resourcesDir
-            }
-            resource {
-                directory = project(":core").sourceSets.main.output.classesDir
-            }
-            resource {
-                directory = project(":core").sourceSets.main.output.resourcesDir
-            }
-        }
-    }
 
     tomcat {
         httpPort = 8080
@@ -217,9 +220,10 @@ project("web") {
 
             build.forTasks("generateRebel", "tomcatRun")
 
+            def suspend = System.getProperty("jpdaSuspend", "n")
+            def address = System.getProperty("jpdaAddress", "5005")
+
             // Enable debug via jvm arguments and append JVM arguments of the currently running vm (except -D).
-            def suspend = "n"
-            def address = 5005
             build.setJvmArguments("-javaagent:$System.env.JREBEL_HOME/jrebel.jar",
                     "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=${address}",
                     *env.java.jvmArguments)
@@ -267,4 +271,20 @@ project("web") {
                 "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
     }
 
+    rebel { // TODO: 须最后加载该项
+        rebelXmlDirectory = sourceSets.main.output.resourcesDir
+
+        classpath {
+            resource {}
+        }
+
+        allProjectDependencies(project).each { p ->
+            classpath.resource {
+                directory = p.sourceSets.main.output.classesDir
+            }
+            classpath.resource {
+                directory = p.sourceSets.main.output.resourcesDir
+            }
+        }
+    }
 }
