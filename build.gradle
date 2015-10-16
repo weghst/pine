@@ -2,10 +2,12 @@ buildscript {
     repositories {
         mavenLocal()
         maven { url gradle.privateMavenRepositoryUrl }
+        maven { url "http://repo.spring.io/plugins-release" }
         mavenCentral()
     }
 
     dependencies {
+        classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         classpath "org.zeroturnaround:gradle-jrebel-plugin:1.1.2"
         classpath "com.bmuschko:gradle-tomcat-plugin:2.2.2"
     }
@@ -44,6 +46,11 @@ configure(allprojects) { project ->
     apply plugin: "jacoco"
     apply plugin: "jdepend"
     // apply plugin: "pmd"
+
+    apply plugin: "propdeps"
+    apply plugin: "propdeps-maven"
+    apply plugin: "propdeps-idea"
+    apply plugin: "propdeps-eclipse"
 
     apply plugin: "maven"
     apply plugin: "idea"
@@ -109,8 +116,6 @@ configure(allprojects) { project ->
 configure(subprojects) { project ->
 
     configurations {
-        springLoaded
-
         compile.exclude group: "commons-logging", module: "commons-logging"
     }
 
@@ -131,26 +136,25 @@ configure(subprojects) { project ->
     }
 
     dependencies {
-        compile("org.slf4j:slf4j-api:$slf4jVersion")
+        compile "org.slf4j:slf4j-api:$slf4jVersion"
+        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
 
         testCompile("org.testng:testng:$testngVersion") {
             exclude module: "guice"
             exclude module: "junit"
             exclude module: "ant"
         }
-
-        springLoaded "org.springframework:springloaded:1.2.4.RELEASE"
     }
 }
 
 project("api") {
 
     dependencies {
-        compile("commons-codec:commons-codec:1.10")
-        compile("com.google.guava:guava:19.0-rc1")
-        compile("com.google.code.findbugs:jsr305:3.0.0")
-        compile("org.glassfish:javax.json:1.0.4")
-        compile("com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion")
+        compile "commons-codec:commons-codec:1.10"
+        compile "com.google.guava:guava:19.0-rc1"
+        compile "com.google.code.findbugs:jsr305:3.0.0"
+        compile "org.glassfish:javax.json:1.0.4"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
     }
 }
 
@@ -165,23 +169,23 @@ project("core") {
     }
 
     dependencies {
-        compile(project(":api"))
-        compile("org.apache.commons:commons-lang3:3.4")
-        compile("javax.mail:mail:1.4.7")
-        compile("org.freemarker:freemarker:$freemarkerVersion")
-        compile("org.springframework:spring-jdbc:$springVersion")
-        compile("org.springframework:spring-context:$springVersion")
-        compile("org.springframework:spring-context-support:$springVersion")
+        compile project(":api")
+        compile "org.apache.commons:commons-lang3:3.4"
+        compile "javax.mail:mail:1.4.7"
+        compile "org.freemarker:freemarker:$freemarkerVersion"
+        compile "org.springframework:spring-jdbc:$springVersion"
+        compile "org.springframework:spring-context:$springVersion"
+        compile "org.springframework:spring-context-support:$springVersion"
         compile("org.quartz-scheduler:quartz:2.2.1") {
             exclude module: "c3p0"
         }
-        compile("org.quartz-scheduler:quartz-jobs:2.2.1")
-        compile("redis.clients:jedis:2.7.3")
-        compile("org.aspectj:aspectjweaver:1.8.6")
-        compile("org.liquibase:liquibase-core:3.4.1")
+        compile "org.quartz-scheduler:quartz-jobs:2.2.1"
+        compile "redis.clients:jedis:2.7.3"
+        compile "org.aspectj:aspectjweaver:1.8.6"
+        compile "org.liquibase:liquibase-core:3.4.1"
 
-        testCompile("org.springframework:spring-test:$springVersion")
-        testCompile("com.jolbox:bonecp-spring:$bonecpVersion")
+        testCompile "org.springframework:spring-test:$springVersion"
+        testCompile "com.jolbox:bonecp-spring:$bonecpVersion"
         testCompile("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion") {
             exclude module: "commons-dbcp"
         }
@@ -245,25 +249,25 @@ project("web") {
     }
 
     dependencies {
-        providedCompile("javax.servlet:javax.servlet-api:3.1.0")
+        providedCompile "javax.servlet:javax.servlet-api:3.1.0"
 
-        compile(project(":core"))
-        compile("org.ow2.asm:asm:5.0.4")
-        compile("org.slf4j:jcl-over-slf4j:$slf4jVersion")
-        compile("org.springframework:spring-webmvc:$springVersion")
+        compile project(":core")
+        compile "org.ow2.asm:asm:5.0.4"
+        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+        compile "org.springframework:spring-webmvc:$springVersion"
 
-        compile("org.jboss.resteasy:resteasy-jackson2-provider:$resteasyVersion")
+        compile "org.jboss.resteasy:resteasy-jackson2-provider:$resteasyVersion"
         compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
             exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
         }
 
-        compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-        compile("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
-        compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+        // compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        // compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
 
-        runtime("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion")
-        runtime("com.jolbox:bonecp-spring:$bonecpVersion")
-        runtime("ch.qos.logback:logback-classic:$logbackVersion")
+        runtime "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+        runtime "com.jolbox:bonecp-spring:$bonecpVersion"
+        runtime "ch.qos.logback:logback-classic:$logbackVersion"
 
         def tomcatVersion = '7.0.59'
         tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",

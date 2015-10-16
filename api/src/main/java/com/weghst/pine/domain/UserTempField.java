@@ -1,13 +1,14 @@
 package com.weghst.pine.domain;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class UserTempField implements Serializable {
 
     private int uid;
     private String field;
     private String value;
-    private long createdTime;
+    private Date createdTime;
     private long survivalMillis;
 
     public int getUid() {
@@ -34,11 +35,11 @@ public class UserTempField implements Serializable {
         this.value = value;
     }
 
-    public long getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(long createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

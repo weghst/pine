@@ -108,7 +108,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
                 user.setEmailValid(rs.getBoolean("emailValid"));
-                user.setCreatedTime(rs.getLong("createdTime"));
+                user.setCreatedTime(rs.getDate("createdTime"));
             }
             return user;
         };
@@ -129,7 +129,7 @@ public class UserRepositoryImpl implements UserRepository {
                 user.setEmail(email);
                 user.setPassword(rs.getString("password"));
                 user.setEmailValid(rs.getBoolean("emailValid"));
-                user.setCreatedTime(rs.getLong("createdTime"));
+                user.setCreatedTime(rs.getDate("createdTime"));
             }
             return user;
         };
@@ -184,7 +184,7 @@ public class UserRepositoryImpl implements UserRepository {
                 userTempField.setUid(uid);
                 userTempField.setField(field);
                 userTempField.setValue(rs.getString("value"));
-                userTempField.setCreatedTime(rs.getLong("createdTime"));
+                userTempField.setCreatedTime(rs.getDate("createdTime"));
                 userTempField.setSurvivalMillis(rs.getLong("survivalMillis"));
             }
             return userTempField;

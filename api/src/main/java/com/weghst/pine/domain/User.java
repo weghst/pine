@@ -3,6 +3,7 @@ package com.weghst.pine.domain;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Objects;
 
 public class User implements Serializable {
@@ -11,7 +12,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean emailValid;
-    private long createdTime;
+    private Date createdTime;
 
     public int getId() {
         return id;
@@ -45,11 +46,11 @@ public class User implements Serializable {
         this.emailValid = emailValid;
     }
 
-    public long getCreatedTime() {
+    public Date getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(long createdTime) {
+    public void setCreatedTime(Date createdTime) {
         this.createdTime = createdTime;
     }
 

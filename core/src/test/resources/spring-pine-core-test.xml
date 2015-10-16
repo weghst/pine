@@ -58,19 +58,23 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
+    <aop:config>
+        <aop:pointcut id="" expression=""/>
+    </aop:config>
 
     <!-- One single JdbcTemplate -->
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
-        <property name="dataSource" ref="dataSource"/>
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+        <constructor-arg ref="dataSource"/>
+        <property name="cacheLimit" value="1024"/>
     </bean>
 
-    <bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">
-        <property name="dataSource" ref="dataSource"/>
-        <property name="changeLog" value="classpath:db/changelog-master.xml"/>
+    <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
+        <!--<property name="dataSource" ref="dataSource"/>-->
+        <!--<property name="changeLog" value="classpath:db/changelog-master.xml"/>-->
         <!--<property name="dropFirst" value="true"/>-->
-        <property name="rollbackFile"
-                  value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>
-    </bean>
+        <!--<property name="rollbackFile"-->
+                  <!--value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>-->
+    <!--</bean>-->
 
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
 

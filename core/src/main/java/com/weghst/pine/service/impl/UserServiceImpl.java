@@ -17,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,6 +83,7 @@ public class UserServiceImpl implements UserService {
         userTempField.setUid(user.getId());
         userTempField.setField(UserTempFields.USER_EMAIL_VALIDATING_CODE_FIELD);
         userTempField.setValue(inteCode);
+        userTempField.setCreatedTime(new Date());
         userTempField.setSurvivalMillis(24 * 60 * 60 * 1000);
         userReposy.saveOrUpdate(userTempField);
 
@@ -134,7 +136,7 @@ public class UserServiceImpl implements UserService {
     private UserTempField getUserTempField0(int uid, String field) {
         UserTempField userTempField = userReposy.getUserTempField(uid, field);
         if (userTempField != null &&
-                userTempField.getCreatedTime() + userTempField.getSurvivalMillis()
+                userTempField.getCreatedTime().getTime() + userTempField.getSurvivalMillis()
                         > Pines.currentTimeMillis()) {
             return userTempField;
         }
