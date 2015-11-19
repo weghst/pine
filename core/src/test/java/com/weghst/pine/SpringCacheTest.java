@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.util.Date;
 
 import redis.clients.jedis.Jedis;
 
@@ -46,7 +47,7 @@ public class SpringCacheTest extends SpringTestSupport {
         User user = new User();
         user.setEmail("kevinz@weghst.com");
         user.setPassword("[PASSWORD]");
-        user.setCreatedTime(System.currentTimeMillis());
+        user.setCreatedTime(new Date());
 
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         jedis.set("test.cache:user", objectMapper.writeValueAsString(user));

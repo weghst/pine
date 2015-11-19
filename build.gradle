@@ -98,11 +98,11 @@ configure(allprojects) { project ->
         repositories.mavenDeployer {
             configuration = configurations.deployerJars
 
-            repository(url: "file://localhost/tmp-pine/") {
-                Properties authProps = new Properties()
-                authProps.load(new FileInputStream("/maven-upload-auth.properties"))
-                authentication(userName: authProps["username"], password: authProps["password"])
-            }
+            //repository(url: "file://localhost/tmp-pine/") {
+            //    Properties authProps = new Properties()
+            //    authProps.load(new FileInputStream("/maven-upload-auth.properties"))
+            //    authentication(userName: authProps["username"], password: authProps["password"])
+            //}
         }
     }
 
@@ -147,17 +147,6 @@ configure(subprojects) { project ->
     }
 }
 
-project("api") {
-
-    dependencies {
-        compile "commons-codec:commons-codec:1.10"
-        compile "com.google.guava:guava:19.0-rc1"
-        compile "com.google.code.findbugs:jsr305:3.0.0"
-        compile "org.glassfish:javax.json:1.0.4"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
-    }
-}
-
 project("core") {
 
     jar {
@@ -169,13 +158,22 @@ project("core") {
     }
 
     dependencies {
-        compile project(":api")
+        compile "commons-codec:commons-codec:1.10"
+        compile "com.google.guava:guava:19.0-rc1"
+        compile "com.google.code.findbugs:jsr305:3.0.0"
+        compile "org.glassfish:javax.json:1.0.4"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
         compile "org.apache.commons:commons-lang3:3.4"
         compile "javax.mail:mail:1.4.7"
-        compile "org.freemarker:freemarker:$freemarkerVersion"
-        compile "org.springframework:spring-jdbc:$springVersion"
+        // compile "org.freemarker:freemarker:$freemarkerVersion"
+        compile "org.mybatis.scripting:mybatis-freemarker:1.1.1"
+        compile "org.mybatis:mybatis-spring:1.2.3"
+
+        provided "org.springframework:spring-jdbc:$springVersion"
+
         compile "org.springframework:spring-context:$springVersion"
         compile "org.springframework:spring-context-support:$springVersion"
+
         compile("org.quartz-scheduler:quartz:2.2.1") {
             exclude module: "c3p0"
         }
@@ -192,16 +190,11 @@ project("core") {
     }
 }
 
-project("auth") {
-
-}
-
 project("web") {
 
     apply plugin: "war"
     apply plugin: "rebel"
     apply plugin: "com.bmuschko.tomcat"
-
 
     tomcat {
         httpPort = 8080

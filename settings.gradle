@@ -2,7 +2,5 @@ gradle.ext.privateMavenRepositoryUrl = "http://188.188.22.221:9011/nexus/content
 
 rootProject.name = "pine"
 
-include "api"
 include "core"
-include "auth"
 include "web"

@@ -92,4 +92,13 @@
         <constructor-arg type="int" value="6379"/>
     </bean>
 
+    <bean id="rpcAspect" class="com.weghst.pine.service.RpcAspect"/>
+
+    <aop:config>
+        <aop:pointcut id="rpcMethodPointcut" expression="execution(* com.weghst.pine.service..*ServiceImpl.*(..))"/>
+        <aop:aspect ref="rpcAspect">
+            <aop:around method="invoke" pointcut-ref="rpcMethodPointcut"/>
+        </aop:aspect>
+    </aop:config>
+
 </beans>
