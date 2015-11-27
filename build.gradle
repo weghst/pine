@@ -10,6 +10,7 @@ buildscript {
         classpath "org.springframework.build.gradle:propdeps-plugin:0.0.7"
         classpath "org.zeroturnaround:gradle-jrebel-plugin:1.1.2"
         classpath "com.bmuschko:gradle-tomcat-plugin:2.2.2"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:0.7.1"
     }
 }
 
@@ -20,7 +21,6 @@ configure(allprojects) { project ->
 
     ext.slf4jVersion = "1.7.12"
     ext.springVersion = "4.2.0.RELEASE"
-    ext.freemarkerVersion = "2.3.23"
     ext.jacksonVersion = "2.6.0"
     ext.logbackVersion = "1.1.3"
     ext.bonecpVersion = "0.8.0.RELEASE"
@@ -41,14 +41,10 @@ configure(allprojects) { project ->
 
 
     apply plugin: "java"
+    apply plugin: "com.google.protobuf"
     apply plugin: "findbugs"
-    apply plugin: "checkstyle"
-    apply plugin: "jacoco"
-    apply plugin: "jdepend"
-    // apply plugin: "pmd"
 
     apply plugin: "propdeps"
-    apply plugin: "propdeps-maven"
     apply plugin: "propdeps-idea"
     apply plugin: "propdeps-eclipse"
 
@@ -70,28 +66,23 @@ configure(allprojects) { project ->
         ignoreFailures = true
     }
 
-    findbugsMain << {
-        ant.xslt(in: reports.xml.destination,
-                style: rootProject.file("etc/findbugs-default.xsl"),
-                out: new File(reports.xml.destination.parent, "findbugs.html"))
-    }
-
-    checkstyle {
-        // toolVersion = "6.10.1"
-        ignoreFailures = true
-        configFile = rootProject.file("etc/google_checks.xml")
-    }
-
-    checkstyleMain << {
-        ant.xslt(in: reports.xml.destination,
-                style: rootProject.file("etc/checkstyle-noframes-sorted.xsl"),
-                out: new File(reports.xml.destination.parent, "checkstyle.html"))
-    }
-
-    jdependMain << {
-        ant.xslt(in: reports.xml.destination,
-                style: rootProject.file("etc/jdepend.xsl"),
-                out: new File(reports.xml.destination.parent, "jdepend.html"))
+    protobuf {
+        protoc {
+            // The version of protoc must match protobuf-java. If you don't depend on
+            // protobuf-java directly, you will be transitively depending on the
+            // protobuf-java version that grpc depends on.
+            artifact = "com.google.protobuf:protoc:3.0.0-beta-1"
+        }
+        plugins {
+            grpc {
+                artifact = 'io.grpc:protoc-gen-grpc-java:0.9.0'
+            }
+        }
+        generateProtoTasks {
+            all()*.plugins {
+                grpc {}
+            }
+        }
     }
 
     uploadArchives {
@@ -108,9 +99,20 @@ configure(allprojects) { project ->
 
     dependencies {
         deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
-        checkstyle "com.puppycrawl.tools:checkstyle:6.10.1"
     }
 
+    idea {
+        module {
+            excludeDirs = [file(".gradle")]
+            ["classes", "dependency-cache", "libs", "reports", "resources", "test-results", "tmp"].each {
+                excludeDirs << file("$buildDir/$it")
+            }
+
+            //and hint to mark some of existing source dirs as generated sources
+            sourceDirs += file("$buildDir/generated/source/proto/main/grpc")
+            sourceDirs += file("$buildDir/generated/source/proto/main/java")
+        }
+    }
 }
 
 configure(subprojects) { project ->
@@ -122,13 +124,13 @@ configure(subprojects) { project ->
     [compileJava, compileTestJava, javadoc]*.options*.encoding = "UTF-8"
 
     compileJava {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
     }
 
     compileTestJava {
-        sourceCompatibility = 1.8
-        targetCompatibility = 1.8
+        sourceCompatibility = 1.7
+        targetCompatibility = 1.7
     }
 
     jar {
@@ -143,145 +145,6 @@ configure(subprojects) { project ->
             exclude module: "guice"
             exclude module: "junit"
             exclude module: "ant"
-        }
-    }
-}
-
-project("core") {
-
-    jar {
-        manifest {
-            attributes(
-                    "Liquibase-Package": "com.weghst.pine.liquibase"
-            )
-        }
-    }
-
-    dependencies {
-        compile "commons-codec:commons-codec:1.10"
-        compile "com.google.guava:guava:19.0-rc1"
-        compile "com.google.code.findbugs:jsr305:3.0.0"
-        compile "org.glassfish:javax.json:1.0.4"
-        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
-        compile "org.apache.commons:commons-lang3:3.4"
-        compile "javax.mail:mail:1.4.7"
-        // compile "org.freemarker:freemarker:$freemarkerVersion"
-        compile "org.mybatis.scripting:mybatis-freemarker:1.1.1"
-        compile "org.mybatis:mybatis-spring:1.2.3"
-
-        provided "org.springframework:spring-jdbc:$springVersion"
-
-        compile "org.springframework:spring-context:$springVersion"
-        compile "org.springframework:spring-context-support:$springVersion"
-
-        compile("org.quartz-scheduler:quartz:2.2.1") {
-            exclude module: "c3p0"
-        }
-        compile "org.quartz-scheduler:quartz-jobs:2.2.1"
-        compile "redis.clients:jedis:2.7.3"
-        compile "org.aspectj:aspectjweaver:1.8.6"
-        compile "org.liquibase:liquibase-core:3.4.1"
-
-        testCompile "org.springframework:spring-test:$springVersion"
-        testCompile "com.jolbox:bonecp-spring:$bonecpVersion"
-        testCompile("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion") {
-            exclude module: "commons-dbcp"
-        }
-    }
-}
-
-project("web") {
-
-    apply plugin: "war"
-    apply plugin: "rebel"
-    apply plugin: "com.bmuschko.tomcat"
-
-    tomcat {
-        httpPort = 8080
-        contextPath = "/"
-    }
-
-    task tomcatDebug {
-        description "Start Tomcat debug."
-        group "web application"
-    } << {
-        org.gradle.tooling.GradleConnector gradleConnector = org.gradle.tooling.GradleConnector.newConnector()
-        if (System.env.GRADLE_HOME != null) {   // 如果设置$GRADLE_HOME环境变量, 则直接使用否则通过Gradle Wrapper从远程下载
-            gradleConnector.useInstallation(file(System.env.GRADLE_HOME))
-        }
-
-        org.gradle.tooling.ProjectConnection conn = gradleConnector.forProjectDirectory(file("$projectDir")).connect()
-        try {
-            org.gradle.tooling.model.build.BuildEnvironment env = conn.getModel(org.gradle.tooling.model.build.BuildEnvironment.class)
-            org.gradle.tooling.BuildLauncher build = conn.newBuild()
-
-            build.forTasks("generateRebel", "tomcatRun")
-
-            def suspend = System.getProperty("jpdaSuspend", "n")
-            def address = System.getProperty("jpdaAddress", "5005")
-
-            // Enable debug via jvm arguments and append JVM arguments of the currently running vm (except -D).
-            build.setJvmArguments("-javaagent:$System.env.JREBEL_HOME/jrebel.jar",
-                    "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=${address}",
-                    *env.java.jvmArguments)
-            build.setStandardInput(System.in)
-            build.setStandardOutput(System.out)
-            build.setStandardError(System.err)
-
-            // def listener = [
-            //         statusChanged: { org.gradle.tooling.ProgressEvent event ->
-            //         }
-            // ] as org.gradle.tooling.ProgressListener
-            // build.addProgressListener(listener)
-
-            // Run tomcatRun in the new JVM with debug parameters
-            build.run()
-        } finally {
-            conn.close();
-        }
-    }
-
-    dependencies {
-        providedCompile "javax.servlet:javax.servlet-api:3.1.0"
-
-        compile project(":core")
-        compile "org.ow2.asm:asm:5.0.4"
-        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
-        compile "org.springframework:spring-webmvc:$springVersion"
-
-        compile "org.jboss.resteasy:resteasy-jackson2-provider:$resteasyVersion"
-        compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
-            exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
-        }
-
-        // compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
-        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        // compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
-
-        runtime "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
-        runtime "com.jolbox:bonecp-spring:$bonecpVersion"
-        runtime "ch.qos.logback:logback-classic:$logbackVersion"
-
-        def tomcatVersion = '7.0.59'
-        tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
-                "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
-                "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
-    }
-
-    rebel { // TODO: 须最后加载该项
-        rebelXmlDirectory = sourceSets.main.output.resourcesDir
-
-        classpath {
-            resource {}
-        }
-
-        allProjectDependencies(project).each { p ->
-            classpath.resource {
-                directory = p.sourceSets.main.output.classesDir
-            }
-            classpath.resource {
-                directory = p.sourceSets.main.output.resourcesDir
-            }
         }
     }
 }

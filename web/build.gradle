@@ -1,0 +1,95 @@
+project(":pine-web") {
+
+    apply plugin: "war"
+    apply plugin: "rebel"
+    apply plugin: "com.bmuschko.tomcat"
+
+    tomcat {
+        httpPort = 8080
+        contextPath = "/"
+    }
+
+    task tomcatDebug {
+        description "Start Tomcat debug."
+        group "web application"
+    } << {
+        org.gradle.tooling.GradleConnector gradleConnector = org.gradle.tooling.GradleConnector.newConnector()
+        if (System.env.GRADLE_HOME != null) {   // 如果设置$GRADLE_HOME环境变量, 则直接使用否则通过Gradle Wrapper从远程下载
+            gradleConnector.useInstallation(file(System.env.GRADLE_HOME))
+        }
+
+        org.gradle.tooling.ProjectConnection conn = gradleConnector.forProjectDirectory(file("$projectDir")).connect()
+        try {
+            org.gradle.tooling.model.build.BuildEnvironment env = conn.getModel(org.gradle.tooling.model.build.BuildEnvironment.class)
+            org.gradle.tooling.BuildLauncher build = conn.newBuild()
+
+            build.forTasks("generateRebel", "tomcatRun")
+
+            def suspend = System.getProperty("jpdaSuspend", "n")
+            def address = System.getProperty("jpdaAddress", "5005")
+
+            // Enable debug via jvm arguments and append JVM arguments of the currently running vm (except -D).
+            build.setJvmArguments("-javaagent:$System.env.JREBEL_HOME/jrebel.jar",
+                    "-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=${suspend},address=${address}",
+                    *env.java.jvmArguments)
+            build.setStandardInput(System.in)
+            build.setStandardOutput(System.out)
+            build.setStandardError(System.err)
+
+            // def listener = [
+            //         statusChanged: { org.gradle.tooling.ProgressEvent event ->
+            //         }
+            // ] as org.gradle.tooling.ProgressListener
+            // build.addProgressListener(listener)
+
+            // Run tomcatRun in the new JVM with debug parameters
+            build.run()
+        } finally {
+            conn.close();
+        }
+    }
+
+    dependencies {
+        providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+
+        compile project(":pine-core")
+        compile "org.ow2.asm:asm:5.0.4"
+        compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
+        compile "org.springframework:spring-webmvc:$springVersion"
+
+        compile "org.jboss.resteasy:resteasy-jackson2-provider:$resteasyVersion"
+        compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
+            exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
+        }
+
+        // compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+        compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        // compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+
+        runtime "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+        runtime "com.jolbox:bonecp-spring:$bonecpVersion"
+        runtime "ch.qos.logback:logback-classic:$logbackVersion"
+
+        def tomcatVersion = '7.0.59'
+        tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
+                "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",
+                "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatVersion}"
+    }
+
+    rebel { // TODO: 须最后加载该项
+        rebelXmlDirectory = sourceSets.main.output.resourcesDir
+
+        classpath {
+            resource {}
+        }
+
+        allProjectDependencies(project).each { p ->
+            classpath.resource {
+                directory = p.sourceSets.main.output.classesDir
+            }
+            classpath.resource {
+                directory = p.sourceSets.main.output.resourcesDir
+            }
+        }
+    }
+}

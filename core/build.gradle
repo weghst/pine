@@ -1,0 +1,43 @@
+project(":pine-core") {
+    jar {
+        manifest {
+            attributes(
+                    "Liquibase-Package": "com.weghst.pine.liquibase"
+            )
+        }
+    }
+
+    dependencies {
+        compile "commons-codec:commons-codec:1.10"
+        compile "com.google.guava:guava:19.0-rc1"
+        compile "com.google.code.findbugs:jsr305:3.0.0"
+        compile "org.glassfish:javax.json:1.0.4"
+        compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
+        compile "org.apache.commons:commons-lang3:3.4"
+        compile "javax.mail:mail:1.4.7"
+        // compile "org.freemarker:freemarker:$freemarkerVersion"
+        compile "org.mybatis.scripting:mybatis-freemarker:1.1.1"
+        compile "org.mybatis:mybatis-spring:1.2.3"
+
+        provided "org.springframework:spring-jdbc:$springVersion"
+
+        compile "org.springframework:spring-context:$springVersion"
+        compile "org.springframework:spring-context-support:$springVersion"
+
+        compile "io.grpc:grpc-all:0.9.0"
+
+        compile("org.quartz-scheduler:quartz:2.2.1") {
+            exclude module: "c3p0"
+        }
+        compile "org.quartz-scheduler:quartz-jobs:2.2.1"
+        compile "redis.clients:jedis:2.7.3"
+        compile "org.aspectj:aspectjweaver:1.8.6"
+        compile "org.liquibase:liquibase-core:3.4.1"
+
+        testCompile "org.springframework:spring-test:$springVersion"
+        testCompile "com.jolbox:bonecp-spring:$bonecpVersion"
+        testCompile("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion") {
+            exclude module: "commons-dbcp"
+        }
+    }
+}
