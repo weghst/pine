@@ -20,7 +20,7 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
-    <bean id="core.freemarker.configuration"
+    <bean id="pine.core.freemarker.configuration"
           class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="preferFileSystemAccess" value="false"/>
@@ -31,10 +31,10 @@
         </property>
     </bean>
 
-    <bean id="core.templateEngine" class="com.weghst.pine.template.FreemarkerTemplateEngine">
-        <property name="configuration" ref="core.freemarker.configuration"/>
+    <bean id="pine.core.templateEngine" class="com.weghst.pine.template.FreemarkerTemplateEngine">
+        <property name="configuration" ref="pine.core.freemarker.configuration"/>
     </bean>
 
-    <bean id="core.mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean"/>
+    <bean id="pine.core.mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean"/>
 
 </beans>

@@ -22,7 +22,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
 
-@Repository
+//@Repository
 public class UserRepositoryImpl implements UserRepository {
 
     private static final Logger LOG = LoggerFactory.getLogger(UserRepositoryImpl.class);

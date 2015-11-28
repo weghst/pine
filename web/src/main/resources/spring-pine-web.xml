@@ -22,7 +22,8 @@
        xmlns:tx="http://www.springframework.org/schema/tx"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd" default-lazy-init="false">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd"
+       default-lazy-init="false">
 
     <context:component-scan base-package="com.weghst.pine"/>
     <context:property-placeholder location="classpath:pine.properties"/>
@@ -33,14 +34,14 @@
         <property name="jdbcUrl" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
-        <property name="idleConnectionTestPeriodInSeconds" value="60"/>
-        <property name="idleMaxAgeInSeconds" value="240"/>
-        <property name="maxConnectionsPerPartition" value="30"/>
-        <property name="minConnectionsPerPartition" value="1"/>
-        <property name="partitionCount" value="3"/>
-        <property name="acquireIncrement" value="6"/>
-        <property name="statementsCacheSize" value="100"/>
-        <property name="defaultAutoCommit" value="false"/>
+        <property name="idleConnectionTestPeriodInSeconds" value="${bonecp.idleConnectionTestPeriodInSeconds}"/>
+        <property name="idleMaxAgeInSeconds" value="${bonecp.idleMaxAgeInSeconds}"/>
+        <property name="minConnectionsPerPartition" value="${bonecp.minConnectionsPerPartition}"/>
+        <property name="maxConnectionsPerPartition" value="${bonecp.maxConnectionsPerPartition}"/>
+        <property name="partitionCount" value="${bonecp.partitionCount}"/>
+        <property name="acquireIncrement" value="${bonecp.acquireIncrement}"/>
+        <property name="statementsCacheSize" value="${bonecp.statementsCacheSize}"/>
+        <property name="defaultAutoCommit" value="${bonecp.defaultAutoCommit}"/>
     </bean>
 
     <!--
@@ -56,6 +57,19 @@
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <!--
+        MyBatis 配置
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configurationProperties">
+            <props>
+                <prop key="defaultScriptingLanguage">org.mybatis.scripting.freemarker.FreeMarkerLanguageDriver</prop>
+            </props>
+        </property>
+        <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
+    </bean>
+
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
         <property name="cacheLimit" value="1024"/>
@@ -63,10 +77,10 @@
 
     <!-- Liquibase config -->
     <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
-        <!--<property name="dataSource" ref="dataSource"/>-->
-        <!--<property name="changeLog" value="classpath:db/changelog-master.xml"/>-->
-        <!--<property name="rollbackFile"-->
-                  <!--value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>-->
+    <!--<property name="dataSource" ref="dataSource"/>-->
+    <!--<property name="changeLog" value="classpath:db/changelog-master.xml"/>-->
+    <!--<property name="rollbackFile"-->
+    <!--value="${java.io.tmpdir}/db.rollback.#{ T(java.lang.System).currentTimeMillis() / 1000 }.sql"/>-->
     <!--</bean>-->
 
     <!-- Pine configuration -->
@@ -105,8 +119,7 @@
     <bean class="com.weghst.pine.web.ObjectMapperContextResolver"/>
 
     <!-- freemarker config -->
-    <bean id="freemarkerConfig"
-          class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="templateLoaderPath" value="/WEB-INF/templates/"/>
         <property name="freemarkerSettings">
@@ -120,8 +133,7 @@
         View resolvers can also be configured with ResourceBundles or XML files. If you need
         different view resolving based on Locale, you have to use the resource bundle resolver.
     -->
-    <bean id="viewResolver"
-          class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
+    <bean id="viewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
         <property name="cache" value="true"/>
         <property name="suffix" value=".ftl"/>
         <property name="requestContextAttribute" value="rc"/>

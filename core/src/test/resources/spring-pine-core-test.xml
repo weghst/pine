@@ -27,22 +27,22 @@
         http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
 
     <context:component-scan base-package="com.weghst.pine"/>
-    <context:property-placeholder location="classpath:jdbc.properties"/>
+    <context:property-placeholder location="classpath:pine.properties"/>
+    <context:property-placeholder location="~/.pine/pine-config.properties" ignore-resource-not-found="true"/>
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClass}"/>
         <property name="jdbcUrl" value="${jdbc.url}"/>
         <property name="username" value="${jdbc.username}"/>
         <property name="password" value="${jdbc.password}"/>
-        <property name="idleConnectionTestPeriod" value="60"/>
-        <property name="idleMaxAge" value="240"/>
-        <property name="maxConnectionsPerPartition" value="30"/>
-        <!--<property name="minConnectionsPerPartition" value="10"/>-->
-        <property name="minConnectionsPerPartition" value="1"/>
-        <property name="partitionCount" value="3"/>
-        <property name="acquireIncrement" value="5"/>
-        <!--<property name="statementsCacheSize" value="100"/>-->
-        <property name="releaseHelperThreads" value="1"/>
+        <property name="idleConnectionTestPeriodInSeconds" value="${bonecp.idleConnectionTestPeriodInSeconds}"/>
+        <property name="idleMaxAgeInSeconds" value="${bonecp.idleMaxAgeInSeconds}"/>
+        <property name="minConnectionsPerPartition" value="${bonecp.minConnectionsPerPartition}"/>
+        <property name="maxConnectionsPerPartition" value="${bonecp.maxConnectionsPerPartition}"/>
+        <property name="partitionCount" value="${bonecp.partitionCount}"/>
+        <property name="acquireIncrement" value="${bonecp.acquireIncrement}"/>
+        <property name="statementsCacheSize" value="${bonecp.statementsCacheSize}"/>
+        <property name="defaultAutoCommit" value="${bonecp.defaultAutoCommit}"/>
     </bean>
 
     <!--
@@ -58,11 +58,20 @@
     </bean>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
-    <aop:config>
-        <aop:pointcut id="" expression=""/>
-    </aop:config>
 
-    <!-- One single JdbcTemplate -->
+    <!--
+        MyBatis 配置
+    -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configurationProperties">
+            <props>
+                <prop key="defaultScriptingLanguage">org.mybatis.scripting.freemarker.FreeMarkerLanguageDriver</prop>
+            </props>
+        </property>
+        <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
+    </bean>
+
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
         <constructor-arg ref="dataSource"/>
         <property name="cacheLimit" value="1024"/>
