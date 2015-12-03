@@ -15,10 +15,10 @@ public class LockFactory {
     }
 
     /**
-     * @param lock
+     * @param path
      * @return
      */
-    public static Lock getLock(String lock) {
-        return lockProvider.getLock(lock);
+    public static Lock getLock(String path) {
+        return lockProvider.getLock(path);
     }
 }

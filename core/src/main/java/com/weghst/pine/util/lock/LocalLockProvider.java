@@ -17,13 +17,21 @@ public class LocalLockProvider implements LockProvider {
     private final Map<String, LocalLock> lockMap = new HashMap<>();
 
     @Override
-    public synchronized Lock getLock(String key) {
-        LocalLock localLock = lockMap.get(key);
-        if (localLock == null) {
-            localLock = new LocalLock(key);
-            lockMap.put(key, localLock);
+    public Lock getLock(String key) {
+        synchronized (lockMap) {
+            LocalLock localLock = lockMap.get(key);
+            if (localLock == null) {
+                localLock = new LocalLock(key);
+                lockMap.put(key, localLock);
+            }
+            return localLock;
         }
-        return localLock.lock;
+    }
+
+    public void removeLock(String key) {
+        synchronized (lockMap) {
+            lockMap.remove(key);
+        }
     }
 
     private class LocalLock implements Lock {
@@ -48,7 +56,7 @@ public class LocalLockProvider implements LockProvider {
             lock.unlock();
 
             if (count.decrementAndGet() <= 0) {
-                lockMap.remove(key);
+                removeLock(key);
             }
         }
 

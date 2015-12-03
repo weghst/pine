@@ -1,6 +1,7 @@
 package com.weghst.pine.util;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -16,12 +17,11 @@ public class AssembledQuery extends AbstractQuery<Map<String, String>> {
     }
 
     public void setQ(Map<String, String> q) {
-        this.q = Collections.unmodifiableMap(q);
+        this.q = new HashMap<>(q);
     }
 
     public boolean contains(String name) {
         return (q != null && q.containsKey(name));
-
     }
 
     public String getString(String name) {

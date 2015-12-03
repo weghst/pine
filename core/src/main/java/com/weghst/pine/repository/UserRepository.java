@@ -5,13 +5,13 @@ import com.weghst.pine.domain.UserTempField;
 
 public interface UserRepository {
 
-    void save(User user);
+    int save(User user);
 
-    void delete(int id);
+    int delete(int id);
 
-    void update(User user);
+    int update(User user);
 
-    void updateEmailValid(String email, boolean emailValid);
+    int updateEmailValid(String email, boolean emailValid);
 
     User get(int id);
 
@@ -23,14 +23,13 @@ public interface UserRepository {
      *
      * @param userTempField
      */
-    void saveOrUpdate(UserTempField userTempField);
+    int saveOrUpdate(UserTempField userTempField);
 
     /**
-     *
-     * @param uid
+     *  @param uid
      * @param field
      */
-    void deleteUserTempField(int uid, String field);
+    int deleteUserTempField(int uid, String field);
 
     /**
      *

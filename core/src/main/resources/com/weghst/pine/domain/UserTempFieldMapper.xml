@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.weghst.pine.domain.UserTempField">
+
+    <insert id="saveOrUpdate" parameterType="com.weghst.pine.domain.UserTempField">
+        INSERT INTO t_user_temp_field(uid,field,value,createdTime,survivalMillis)
+        VALUES (#{uid}, #{field}, #{value}, #{createdTime}, #{survivalMillis})
+        ON DUPLICATE KEY UPDATE value=#{value}, createdTime=#{createdTime}, survivalMillis=#{survivalMillis}
+    </insert>
+
+    <delete id="deleteByUidAndField" parameterType="map">
+        DELETE FROM t_user_temp_field WHERE uid=#{uid} AND field=#{field}
+    </delete>
+
+    <delete id="cleanByExpiredTime" parameterType="long">
+        DELETE FROM t_user_temp_field WHERE createdTime &lt; #{value} - survivalMillis
+    </delete>
+
+    <select id="getByUidAndField" parameterType="map" resultType="com.weghst.pine.domain.UserTempField">
+        SELECT uid,field,value,createdTime,survivalMillis FROM t_user_temp_field WHERE uid=#{uid} AND field=#{field}
+    </select>
+
+</mapper>

@@ -47,7 +47,6 @@ public class SpringCacheTest extends SpringTestSupport {
         User user = new User();
         user.setEmail("kevinz@weghst.com");
         user.setPassword("[PASSWORD]");
-        user.setCreatedTime(new Date());
 
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         jedis.set("test.cache:user", objectMapper.writeValueAsString(user));

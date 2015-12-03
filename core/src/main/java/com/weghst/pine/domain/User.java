@@ -12,7 +12,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean emailValid;
-    private Date createdTime;
+    private long createdTime;
 
     public int getId() {
         return id;
@@ -46,11 +46,11 @@ public class User implements Serializable {
         this.emailValid = emailValid;
     }
 
-    public Date getCreatedTime() {
+    public long getCreatedTime() {
         return createdTime;
     }
 
-    public void setCreatedTime(Date createdTime) {
+    public void setCreatedTime(long createdTime) {
         this.createdTime = createdTime;
     }
 

@@ -4,15 +4,27 @@
 <mapper namespace="com.weghst.pine.domain.User">
 
     <insert id="save" parameterType="com.weghst.pine.domain.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_user(email,password,emailValid) VALUES ('${email}','${password}',${emailValid})
+        INSERT INTO t_user(email, password, emailValid) VALUES (#{email}, #{password}, #{emailValid})
     </insert>
 
     <delete id="deleteById" parameterType="int">
-        DELETE FROM t_user WHERE id=${id}
+        DELETE FROM t_user WHERE id=#{value}
     </delete>
 
     <update id="updateById" parameterType="com.weghst.pine.domain.User">
-        UPDATE t_user SET email='${email}', password='${password}', emailValid=${emailValid} WHERE id=${id}
+        UPDATE t_user SET email=#{email}, password=#{password}, emailValid=#{emailValid} WHERE id=#{id}
     </update>
+
+    <update id="updateEmailValidByEmail" parameterType="map">
+        update t_user set emailValid=#{emailValid} where email=#{email}
+    </update>
+
+    <select id="getById" parameterType="int" resultType="com.weghst.pine.domain.User">
+        select * from t_user where id=#{value}
+    </select>
+
+    <select id="getByEmail" parameterType="string" resultType="com.weghst.pine.domain.User">
+        select * from t_user where email=#{value}
+    </select>
 
 </mapper>
