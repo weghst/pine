@@ -72,11 +72,6 @@
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="dataSource"/>
-        <property name="cacheLimit" value="1024"/>
-    </bean>
-
     <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
         <!--<property name="dataSource" ref="dataSource"/>-->
         <!--<property name="changeLog" value="classpath:db/changelog-master.xml"/>-->
@@ -100,14 +95,5 @@
         <constructor-arg type="java.lang.String" value="localhost"/>
         <constructor-arg type="int" value="6379"/>
     </bean>
-
-    <bean id="rpcAspect" class="com.weghst.pine.service.RpcAspect"/>
-
-    <aop:config>
-        <aop:pointcut id="rpcMethodPointcut" expression="execution(* com.weghst.pine.service..*ServiceImpl.*(..))"/>
-        <aop:aspect ref="rpcAspect">
-            <aop:around method="invoke" pointcut-ref="rpcMethodPointcut"/>
-        </aop:aspect>
-    </aop:config>
 
 </beans>

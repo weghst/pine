@@ -7,3 +7,4 @@ include ":pine-web"
 
 project(":pine-core").projectDir = "$rootDir/core" as File
 project(":pine-web").projectDir = "$rootDir/web" as File
+

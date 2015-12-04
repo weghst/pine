@@ -61,14 +61,12 @@ project(":pine-web") {
         compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
             exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
         }
-
-        // compile("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        // compile("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
 
-        runtime "org.mariadb.jdbc:mariadb-java-client:$mariadbVersion"
+        runtime "ch.qos.logback:logback-classic:$logbackVersion"
         runtime "com.jolbox:bonecp-spring:$bonecpVersion"
         runtime "ch.qos.logback:logback-classic:$logbackVersion"
+        runtime "mysql:mysql-connector-java:5.1.37"
 
         def tomcatVersion = '7.0.59'
         tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",

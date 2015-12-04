@@ -25,6 +25,9 @@
         </encoder>
     </appender>
 
+    <logger name="org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor" level="error"/>
+    <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="error"/>
+
     <root level="debug">
         <appender-ref ref="STDOUT"/>
     </root>

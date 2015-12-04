@@ -8,6 +8,8 @@ project(":pine-core") {
     }
 
     dependencies {
+        compile "org.springframework:spring-jdbc:$springVersion"
+
         compile "commons-codec:commons-codec:1.10"
         compile "com.google.guava:guava:19.0-rc1"
         compile "com.google.code.findbugs:jsr305:3.0.0"
@@ -17,23 +19,17 @@ project(":pine-core") {
             exclude group: "log4j", module: "log4j"
             exclude group: "jline", module: "jline"
         }
-//        compile("org.apache.zookeeper:zookeeper:3.4.6") {
-//            exclude group: "log4j", module: "log4j"
-//            exclude group: "org.slf4j", module: "slf4j-log4j12"
-//            exclude group: "jline", module: "jline"
-//        }
+
         compile "org.apache.commons:commons-lang3:3.4"
         compile "javax.mail:mail:1.4.7"
+        compile "io.grpc:grpc-all:0.9.0"
         // compile "org.freemarker:freemarker:$freemarkerVersion"
         compile "org.mybatis.scripting:mybatis-freemarker:1.1.1"
         compile "org.mybatis:mybatis-spring:1.2.3"
 
-        provided "org.springframework:spring-jdbc:$springVersion"
-
         compile "org.springframework:spring-context:$springVersion"
         compile "org.springframework:spring-context-support:$springVersion"
 
-        compile "io.grpc:grpc-all:0.9.0"
 
         compile("org.quartz-scheduler:quartz:2.2.1") {
             exclude module: "c3p0"
@@ -46,8 +42,6 @@ project(":pine-core") {
         testCompile "org.springframework:spring-test:$springVersion"
         testCompile "ch.qos.logback:logback-classic:1.1.3"
         testCompile "com.jolbox:bonecp-spring:$bonecpVersion"
-        testCompile("org.mariadb.jdbc:mariadb-java-client:$mariadbVersion") {
-            exclude module: "commons-dbcp"
-        }
+        testCompile "mysql:mysql-connector-java:5.1.37"
     }
 }

@@ -26,8 +26,6 @@
        default-lazy-init="false">
 
     <context:component-scan base-package="com.weghst.pine"/>
-    <context:property-placeholder location="classpath:pine.properties"/>
-    <context:property-placeholder location="~/.pine/pine-config.properties" ignore-resource-not-found="true"/>
 
     <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
         <property name="driverClass" value="${jdbc.driverClass}"/>
@@ -70,11 +68,6 @@
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
 
-    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
-        <constructor-arg ref="dataSource"/>
-        <property name="cacheLimit" value="1024"/>
-    </bean>
-
     <!-- Liquibase config -->
     <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
     <!--<property name="dataSource" ref="dataSource"/>-->
@@ -85,6 +78,10 @@
 
     <!-- Pine configuration -->
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
+
+    <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
+        <property name="port" value="${grpc.port}"/>
+    </bean>
 
     <import resource="classpath*:/spring-pine-core.xml"/>
 
@@ -105,7 +102,7 @@
     <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
     <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <!-- Import basic SpringMVC Resteasy integration -->
-    <import resource="classpath*:/springmvc-resteasy.xml"/>
+    <import resource="classpath:springmvc-resteasy.xml"/>
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
         <property name="prefix" value="/d"/>

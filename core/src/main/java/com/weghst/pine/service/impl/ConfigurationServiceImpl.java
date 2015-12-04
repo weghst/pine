@@ -2,7 +2,7 @@ package com.weghst.pine.service.impl;
 
 import com.weghst.pine.ConfigUtils;
 import com.weghst.pine.domain.Config;
-import com.weghst.pine.repository.ConfigurationRepository;
+import com.weghst.pine.repository.ConfigRepository;
 import com.weghst.pine.service.ConfigurationService;
 
 import org.springframework.beans.factory.InitializingBean;
@@ -17,7 +17,7 @@ import java.util.List;
 public class ConfigurationServiceImpl implements InitializingBean, ConfigurationService {
 
     @Autowired
-    private ConfigurationRepository configurationReposy;
+    private ConfigRepository configurationReposy;
 
     @Override
     public void afterPropertiesSet() throws Exception {

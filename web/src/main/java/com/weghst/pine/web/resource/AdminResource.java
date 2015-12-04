@@ -3,7 +3,6 @@ package com.weghst.pine.web.resource;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.weghst.pine.PineException;
 import com.weghst.pine.web.vo.SidebarMenuVo;
-
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +13,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.io.IOException;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.GET;
-import javax.ws.rs.MatrixParam;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
+import java.io.IOException;
 
 @Path("/")
 @Component

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+option java_multiple_files = true;
+
+option java_package = "com.weghst.pine";
+
+option java_outer_classname = "UserProto";
+
+service User {
+    rpc save (UserReq) returns (UserRep) {
+    }
+}
+
+message UserReq {
+    int32 id = 1;
+    string email = 2;
+    string password = 3;
+    bool emailValid = 4;
+    int64 createdTime = 5;
+}
+
+message UserRep {
+    int32 id = 1;
+}

@@ -2,6 +2,9 @@
 .idea/
 target/
 build/
+generated/
 *.iml
 *.ipr
 *.iws
+
+node_modules/
