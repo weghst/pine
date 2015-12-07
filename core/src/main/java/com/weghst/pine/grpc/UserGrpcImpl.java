@@ -6,10 +6,12 @@ import com.weghst.pine.UserReq;
 import com.weghst.pine.service.UserService;
 import io.grpc.stub.StreamObserver;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 /**
  * @author Kevin Zou <kevinz@weghst.com>
  */
+@Component
 public class UserGrpcImpl implements UserGrpc.User {
 
     @Autowired

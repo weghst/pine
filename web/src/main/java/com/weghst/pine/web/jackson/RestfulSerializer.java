@@ -14,8 +14,7 @@ import java.io.IOException;
 public class RestfulSerializer extends JsonSerializer<Restful> {
 
     @Override
-    public void serialize(Restful value, JsonGenerator gen, SerializerProvider serializers) throws IOException,
-            JsonProcessingException {
+    public void serialize(Restful value, JsonGenerator gen, SerializerProvider serializers) throws IOException {
         if (value.getErrorCode() != 0) {
             gen.writeStartObject();
             gen.writeNumberField("errorCode", value.getErrorCode());

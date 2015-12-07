@@ -5,6 +5,7 @@ import com.weghst.pine.PineException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -94,10 +95,13 @@ public class WebConfigurationListener implements ServletContextListener {
     }
 
     private void registerDispatcherServlet(ServletContext sc) {
-        DispatcherServlet dispatcherServlet = new DispatcherServlet();
-        dispatcherServlet.setContextConfigLocation("classpath*:spring-pine-web.xml");
-        ServletRegistration.Dynamic servletRegistration = sc.addServlet("dispatcherServlet", dispatcherServlet);
-        servletRegistration.addMapping(System.getProperty(Constants.RESTFUL_PATH_PREFIX_PROP) + "/*");
+        XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
+        webApplicationContext.setConfigLocation("classpath:spring-pine-web.xml");
+
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(webApplicationContext);
+        ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
+        dynamic.setLoadOnStartup(1);
+        dynamic.addMapping(System.getProperty(Constants.RESTFUL_PATH_PREFIX_PROP) + "/*");
     }
 
 }
