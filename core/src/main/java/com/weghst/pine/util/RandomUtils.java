@@ -2,6 +2,9 @@ package com.weghst.pine.util;
 
 import java.util.Random;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public final class RandomUtils {
 
     public static final int N100000 = 100000;

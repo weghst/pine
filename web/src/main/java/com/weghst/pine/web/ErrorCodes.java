@@ -1,8 +1,7 @@
 package com.weghst.pine.web;
 
 /**
- * @author Zou Yong(zouyong@mychebao.com)
- * @date 2015-09-30 14:47
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public enum ErrorCodes {
 

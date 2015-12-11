@@ -1,8 +1,7 @@
 package com.weghst.pine.template;
 
 /**
- * @author Kevin Zou
- * @date 2015-08-28
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public interface TemplateEngine {
 

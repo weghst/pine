@@ -9,7 +9,7 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
- *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class JavaMailSenderFactoryBean implements FactoryBean<JavaMailSender>, InitializingBean {
 

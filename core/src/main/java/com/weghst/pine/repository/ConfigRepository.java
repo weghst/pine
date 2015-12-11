@@ -4,6 +4,9 @@ import com.weghst.pine.domain.Config;
 
 import java.util.List;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public interface ConfigRepository {
 
     int save(Config config);

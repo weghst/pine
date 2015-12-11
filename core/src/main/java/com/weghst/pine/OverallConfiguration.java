@@ -11,6 +11,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.Properties;
 
+/**
+ * 较全面的属性配置实现.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class OverallConfiguration implements ConfigurationProvider {
 
     private static final PropertyPlaceholderHelper nonStrictHelper =

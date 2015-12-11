@@ -4,7 +4,8 @@
 <mapper namespace="com.weghst.pine.domain.User">
 
     <insert id="save" parameterType="com.weghst.pine.domain.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_user(email, password, emailValid) VALUES (#{email}, #{password}, #{emailValid})
+        INSERT INTO t_user(email, password, emailValid, createdTime)
+        VALUES (#{email}, #{password}, #{emailValid}, UNIX_TIMESTAMP())
     </insert>
 
     <delete id="deleteById" parameterType="int">

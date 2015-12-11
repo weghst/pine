@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
- * @author Kevin Zou
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class MyBooleanSerializer extends NonTypedScalarSerializerBase<Boolean> {
 

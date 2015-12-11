@@ -3,15 +3,18 @@ package com.weghst.pine.util.lock;
 import java.util.concurrent.locks.Lock;
 
 /**
- * @author Zou Yong(zouyong@mychebao.com)
- * @date 2015-11-28 10:52
+ * 同步锁提供者接口定义.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public interface LockProvider {
 
     /**
-     * @param key
-     * @return
+     * 返回同步锁实例.
+     *
+     * @param path 同步路径
+     * @return 同步锁
      */
-    Lock getLock(String key);
+    Lock getLock(String path);
 
 }

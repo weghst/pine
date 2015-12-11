@@ -10,18 +10,21 @@ import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.Lock;
 
 /**
- * @author Zou Yong(zouyong@mychebao.com)
- * @date 2015-11-28 12:46
+ * 分布式同步锁实现. 由{@code ZooKeeper}管理实现锁对象.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class DistributedLockProvider implements LockProvider {
 
     private CuratorFramework curatorFramework;
 
     /**
-     * @param connectStr
+     * 通过连接地址端口构建分布式锁实例.
+     *
+     * @param connectString 连接地址 (.e.g 127.0.0.1:6370)
      */
-    public DistributedLockProvider(String connectStr) {
-        curatorFramework = CuratorFrameworkFactory.newClient(connectStr, new ExponentialBackoffRetry(1000, 3));
+    public DistributedLockProvider(String connectString) {
+        curatorFramework = CuratorFrameworkFactory.newClient(connectString, new ExponentialBackoffRetry(1000, 3));
         curatorFramework.start();
     }
 

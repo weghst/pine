@@ -1,8 +1,7 @@
 package com.weghst.pine.template;
 
 /**
- * @author zouyong
- * @date 2015-08-28
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class TemplateException extends Exception {
 

@@ -28,6 +28,9 @@ import javax.crypto.spec.SecretKeySpec;
 /**
  *
  */
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public final class DesUtils {
 
     private static Cipher DEFAULT_ENCRYPT;

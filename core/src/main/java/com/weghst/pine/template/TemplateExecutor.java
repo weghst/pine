@@ -3,7 +3,7 @@ package com.weghst.pine.template;
 import java.io.IOException;
 
 /**
- * @author Kevin Zou
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public interface TemplateExecutor {
 

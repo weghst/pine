@@ -13,6 +13,8 @@ import java.util.List;
 
 /**
  * 配置服务实现. 须通过XML配置初始化, 且需要保证该实现具有较高的执行优先级.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class ConfigurationServiceImpl implements InitializingBean, ConfigurationService {
 

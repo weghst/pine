@@ -1,13 +1,11 @@
 package com.weghst.pine.web;
 
-import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr353.JSR353Module;
 import com.weghst.pine.web.jackson.PineModule;
 
 /**
- * @author Kevin Zou
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public final class ViewObjectMapperFactory {
 

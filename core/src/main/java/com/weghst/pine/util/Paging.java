@@ -6,6 +6,9 @@ import java.util.List;
  *
  * @param <T>
  */
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class Paging<T> {
 
     public static final int DEFAULT_SIZE = 10;

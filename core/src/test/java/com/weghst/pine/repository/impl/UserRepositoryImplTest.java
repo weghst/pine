@@ -10,7 +10,7 @@ import org.testng.annotations.Test;
 import static org.testng.Assert.*;
 
 /**
- * @author Kevin Zou <kevinz@weghst.com>
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class UserRepositoryImplTest extends SpringTestSupport {
 

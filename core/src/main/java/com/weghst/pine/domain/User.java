@@ -3,10 +3,14 @@ package com.weghst.pine.domain;
 import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
-import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class User implements Serializable {
+
+    private static final long serialVersionUID = 8302778139312618271L;
 
     private int id;
     private String email;
@@ -55,34 +59,26 @@ public class User implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hash(id, email, password);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return id == user.id;
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null || obj.getClass() != getClass()) {
-            return false;
-        }
-
-        User u = (User) obj;
-        return id == u.id
-                && Objects.equals(email, u.email)
-                && Objects.equals(password, u.password);
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        MoreObjects.ToStringHelper helper = MoreObjects.toStringHelper(this);
-        helper.add("id", id)
+        return MoreObjects.toStringHelper(this)
+                .add("id", id)
                 .add("email", email)
-                .add("password", "[PASSWORD]")
+                .add("password", password)
                 .add("emailValid", emailValid)
-                .add("createdTime", createdTime);
-        return helper.toString();
+                .add("createdTime", createdTime)
+                .toString();
     }
 }

@@ -5,7 +5,12 @@ import com.google.common.base.MoreObjects;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class Config implements Serializable {
+
+    private static final long serialVersionUID = -2534573636855113712L;
 
     private String key;
     private String value;
@@ -72,35 +77,28 @@ public class Config implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        return Objects.hashCode(key);
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Config config = (Config) o;
+        return Objects.equals(key, config.key);
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (obj == null || obj.getClass() != getClass()) {
-            return false;
-        }
-
-        Config c = (Config) obj;
-        return Objects.equals(key, c.key);
-
+    public int hashCode() {
+        return Objects.hash(key);
     }
 
     @Override
     public String toString() {
-        MoreObjects.ToStringHelper helper = MoreObjects.toStringHelper(this);
-        helper.add("key", key)
+        return MoreObjects.toStringHelper(this)
+                .add("key", key)
                 .add("value", value)
                 .add("remarks", remarks)
                 .add("comments", comments)
                 .add("needReboot", needReboot)
                 .add("lastUpdatedTime", lastUpdatedTime)
-                .add("lastBut2UpdatedTime", lastBut2UpdatedTime);
-        return helper.toString();
+                .add("lastBut2UpdatedTime", lastBut2UpdatedTime)
+                .toString();
     }
 }

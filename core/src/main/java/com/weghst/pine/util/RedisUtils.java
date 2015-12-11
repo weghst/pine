@@ -1,5 +1,8 @@
 package com.weghst.pine.util;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public final class RedisUtils {
 
     public static String getCacheName(String... args) {

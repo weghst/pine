@@ -5,7 +5,7 @@
 
     <insert id="saveOrUpdate" parameterType="com.weghst.pine.domain.UserTempField">
         INSERT INTO t_user_temp_field(uid,field,value,createdTime,survivalMillis)
-        VALUES (#{uid}, #{field}, #{value}, #{createdTime}, #{survivalMillis})
+        VALUES (#{uid}, #{field}, #{value}, UNIX_TIMESTAMP(), #{survivalMillis})
         ON DUPLICATE KEY UPDATE value=#{value}, createdTime=#{createdTime}, survivalMillis=#{survivalMillis}
     </insert>
 

@@ -18,6 +18,9 @@ import java.net.URL;
 import java.util.EnumSet;
 import java.util.Properties;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 @WebListener("Web configuration listener")
 public class WebConfigurationListener implements ServletContextListener {
 

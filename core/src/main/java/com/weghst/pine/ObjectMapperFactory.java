@@ -2,6 +2,9 @@ package com.weghst.pine;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class ObjectMapperFactory {
 
     private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();

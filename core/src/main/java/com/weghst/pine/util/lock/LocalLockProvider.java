@@ -9,26 +9,27 @@ import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
 /**
- * @author Zou Yong(zouyong@mychebao.com)
- * @date 2015-11-28 10:54
+ * 本地同步锁提供者, 只对当前进程有效.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class LocalLockProvider implements LockProvider {
 
     private final Map<String, LocalLock> lockMap = new HashMap<>();
 
     @Override
-    public Lock getLock(String key) {
+    public Lock getLock(String path) {
         synchronized (lockMap) {
-            LocalLock localLock = lockMap.get(key);
+            LocalLock localLock = lockMap.get(path);
             if (localLock == null) {
-                localLock = new LocalLock(key);
-                lockMap.put(key, localLock);
+                localLock = new LocalLock(path);
+                lockMap.put(path, localLock);
             }
             return localLock;
         }
     }
 
-    public void removeLock(String key) {
+    private void removeLock(String key) {
         synchronized (lockMap) {
             lockMap.remove(key);
         }

@@ -3,6 +3,9 @@ package com.weghst.pine.repository;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.domain.UserTempField;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public interface UserRepository {
 
     int save(User user);

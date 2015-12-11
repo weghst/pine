@@ -10,7 +10,7 @@ import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 /**
- * @author Kevin Zou
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class FreemarkerTemplateEngine implements TemplateEngine {
 

@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2015 The Weghst Inc. (kevinz@weghst.com)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
+ * <p>
  * http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -20,13 +20,21 @@ import java.math.BigInteger;
 import java.util.Iterator;
 import java.util.ServiceLoader;
 
+/**
+ * 系统参数及业务参数工具类.
+ * <p>
+ * 通过{@code META-INF/services/com.weghst.pine.ConfigurationProvider}配置参数提供实现,
+ * 如果未设置则默认使用{@link DefaultConfiguration}
+ * </p>
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public final class ConfigUtils {
 
     private final static ConfigurationProvider configurationProvider;
 
     static {
-        ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(
-                ConfigurationProvider.class);
+        ServiceLoader<ConfigurationProvider> serviceLoader = ServiceLoader.load(ConfigurationProvider.class);
         Iterator<ConfigurationProvider> it = serviceLoader.iterator();
         if (it.hasNext()) {
             configurationProvider = it.next();
@@ -35,83 +43,210 @@ public final class ConfigUtils {
         }
     }
 
-    public static void setProperty(String key, Object value) {
-        configurationProvider.setProperty(key, value);
+    /**
+     * 设置参数.
+     *
+     * @param name  属性名称
+     * @param value 参数值
+     */
+    public static void setProperty(String name, Object value) {
+        configurationProvider.setProperty(name, value);
     }
 
-    public static void removeProperty(String key) {
-        configurationProvider.removeProperty(key);
+    /**
+     * 移除参数.
+     *
+     * @param name 属性名称
+     */
+    public static void removeProperty(String name) {
+        configurationProvider.removeProperty(name);
     }
 
-    public static boolean containsKey(String key) {
-        return configurationProvider.containsKey(key);
+    /**
+     * 判断是否有配置指定参数.
+     *
+     * @param name 属性名称
+     * @return boolean
+     */
+    public static boolean containsKey(String name) {
+        return configurationProvider.containsKey(name);
     }
 
-    public static boolean getBoolean(String key) {
-        return configurationProvider.getBoolean(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code false}.
+     *
+     * @param name 属性名称
+     * @return boolean
+     */
+    public static boolean getBoolean(String name) {
+        return configurationProvider.getBoolean(name);
     }
 
-    public static boolean getBoolean(String key, boolean defaultValue) {
-        return configurationProvider.getBoolean(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return boolean
+     */
+    public static boolean getBoolean(String name, boolean defaultValue) {
+        return configurationProvider.getBoolean(name, defaultValue);
     }
 
-    public static int getInt(String key) {
-        return configurationProvider.getInt(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return int
+     */
+    public static int getInt(String name) {
+        return configurationProvider.getInt(name);
     }
 
-    public static int getInt(String key, int defaultValue) {
-        return configurationProvider.getInt(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return int
+     */
+    public static int getInt(String name, int defaultValue) {
+        return configurationProvider.getInt(name, defaultValue);
     }
 
-    public static long getLong(String key) {
-        return configurationProvider.getLong(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return long
+     */
+    public static long getLong(String name) {
+        return configurationProvider.getLong(name);
     }
 
-    public static long getLong(String key, long defaultValue) {
-        return configurationProvider.getLong(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return long
+     */
+    public static long getLong(String name, long defaultValue) {
+        return configurationProvider.getLong(name, defaultValue);
     }
 
-    public static float getFloat(String key) {
-        return configurationProvider.getFloat(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return float
+     */
+    public static float getFloat(String name) {
+        return configurationProvider.getFloat(name);
     }
 
-    public static float getFloat(String key, float defaultValue) {
-        return configurationProvider.getFloat(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return float
+     */
+    public static float getFloat(String name, float defaultValue) {
+        return configurationProvider.getFloat(name, defaultValue);
     }
 
-    public static double getDouble(String key) {
-        return configurationProvider.getDouble(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return double
+     */
+    public static double getDouble(String name) {
+        return configurationProvider.getDouble(name);
     }
 
-    public static double getDouble(String key, double defaultValue) {
-        return configurationProvider.getDouble(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return double
+     */
+    public static double getDouble(String name, double defaultValue) {
+        return configurationProvider.getDouble(name, defaultValue);
     }
 
-    public static String getString(String key) {
-        return configurationProvider.getString(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return String
+     */
+    public static String getString(String name) {
+        return configurationProvider.getString(name);
     }
 
-    public static String getString(String key, String defaultValue) {
-        return configurationProvider.getString(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return String
+     */
+    public static String getString(String name, String defaultValue) {
+        return configurationProvider.getString(name, defaultValue);
     }
 
-    public static String[] getStringArray(String key) {
-        return configurationProvider.getStringArray(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code new String[0]}.
+     *
+     * @param name 属性名称
+     * @return String[]
+     */
+    public static String[] getStringArray(String name) {
+        return configurationProvider.getStringArray(name);
     }
 
-    public static BigDecimal getBigDecimal(String key) {
-        return configurationProvider.getBigDecimal(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return BigDecimal
+     */
+    public static BigDecimal getBigDecimal(String name) {
+        return configurationProvider.getBigDecimal(name);
     }
 
-    public static BigDecimal getBigDecimal(String key, String defaultValue) {
-        return configurationProvider.getBigDecimal(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return BigDecimal
+     */
+    public static BigDecimal getBigDecimal(String name, String defaultValue) {
+        return configurationProvider.getBigDecimal(name, defaultValue);
     }
 
-    public static BigInteger getBigInteger(String key) {
-        return configurationProvider.getBigInteger(key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return BigInteger
+     */
+    public static BigInteger getBigInteger(String name) {
+        return configurationProvider.getBigInteger(name);
     }
 
-    public static BigInteger getBigInteger(String key, String defaultValue) {
-        return configurationProvider.getBigInteger(key, defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return BigInteger
+     */
+    public static BigInteger getBigInteger(String name, String defaultValue) {
+        return configurationProvider.getBigInteger(name, defaultValue);
     }
 }

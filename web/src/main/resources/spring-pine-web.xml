@@ -83,7 +83,7 @@
     <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
 
     <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
-        <property name="port" value="#{systemProperties['grpc.port']}"/>
+        <property name="port" value="#{systemProperties['pine.grpc.port']}"/>
     </bean>
 
     <import resource="classpath*:/spring-pine-core.xml"/>
@@ -108,7 +108,7 @@
     <import resource="classpath:springmvc-resteasy.xml"/>
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
-        <property name="prefix" value="#{systemProperties['restful.path.prefix']}"/>
+        <property name="prefix" value="#{systemProperties['pine.restful.path.prefix']}"/>
     </bean>
 
     <!-- View Jackson ObjectMapper -->

@@ -6,6 +6,9 @@ import java.util.Comparator;
 
 import liquibase.changelog.DatabaseChangeLog;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class PineDatabaseChangeLog extends DatabaseChangeLog {
 
     public PineDatabaseChangeLog(String physicalFilePath) {

@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * @author Kevin Zou
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 class FreemarkerTemplate implements Template {
 

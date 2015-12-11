@@ -4,8 +4,7 @@ import java.io.IOException;
 import java.io.Writer;
 
 /**
- * @author zouyong
- * @date 2015-08-28
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public interface Template {
 

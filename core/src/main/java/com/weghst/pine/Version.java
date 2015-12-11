@@ -7,7 +7,7 @@ package com.weghst.pine;
  * {@code qualifier }部分并不会参与比较. 当Version实例{@code major, minor, incremental }部分相同及使
  * {@code qualifier }部分不相同, 这两个Version也会认为是相等的.
  *
- * @author Kevin Zou <kevinz@skfiy.org>
+ * @author Kevin Zou (kevinz@skfiy.org)
  */
 public class Version implements Comparable<Version> {
 

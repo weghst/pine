@@ -23,6 +23,9 @@ import java.util.Map;
 
 import redis.clients.jedis.Jedis;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 @Service
 public class UserServiceImpl implements UserService {
 

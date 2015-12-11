@@ -7,6 +7,9 @@ import liquibase.parser.core.ParsedNode;
 import liquibase.parser.core.xml.XMLChangeLogSAXParser;
 import liquibase.resource.ResourceAccessor;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class PineChangeLogParser extends XMLChangeLogSAXParser {
 
     @Override

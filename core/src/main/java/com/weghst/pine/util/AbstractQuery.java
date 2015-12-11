@@ -1,7 +1,12 @@
 package com.weghst.pine.util;
 
+import org.springframework.util.Assert;
+
 /**
- * @author Kevin Zou
+ * 搜索搜索/查询类定义.
+ *
+ * @param <T> 搜索/查询参数类型
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public abstract class AbstractQuery<T> implements Query<T> {
 
@@ -10,39 +15,74 @@ public abstract class AbstractQuery<T> implements Query<T> {
     private int count;
     private int offset;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public String getSort() {
+    public final String getSort() {
         return sort;
     }
 
-    public void setSort(String sort) {
+    /**
+     * 设置排序字段名称.
+     *
+     * @param sort 排序字段名称
+     */
+    public final void setSort(String sort) {
         this.sort = sort;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public Order getOrder() {
+    public final Order getOrder() {
         return order;
     }
 
-    public void setOrder(Order order) {
+    /**
+     * 设置排序方式, 默认值为{@link com.weghst.pine.util.Query.Order#asc}.
+     *
+     * @param order 排序方式
+     */
+    public final void setOrder(Order order) {
+        Assert.notNull(order);
         this.order = order;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int getCount() {
+    public final int getCount() {
         return count;
     }
 
-    public void setCount(int count) {
+    /**
+     * 设置返回结果集记录数, 必须是一个正整数.
+     *
+     * @param count 结果集记录数
+     */
+    public final void setCount(int count) {
+        Assert.isTrue(count > 0);
         this.count = count;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public int getOffset() {
+    public final int getOffset() {
         return offset;
     }
 
-    public void setOffset(int offset) {
+    /**
+     * 设置返回结果集偏移量, 必须是一个大于等于0的数字.
+     *
+     * @param offset 结果集偏移量
+     */
+    public final void setOffset(int offset) {
+        Assert.isTrue(offset >= 0);
         this.offset = offset;
     }
 }

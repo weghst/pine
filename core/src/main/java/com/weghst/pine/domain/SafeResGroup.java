@@ -2,6 +2,9 @@ package com.weghst.pine.domain;
 
 import java.util.Set;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class SafeResGroup {
 
     private int id;

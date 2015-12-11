@@ -1,8 +1,16 @@
 package com.weghst.pine.domain;
 
-import java.io.Serializable;
+import com.google.common.base.MoreObjects;
 
+import java.io.Serializable;
+import java.util.Objects;
+
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class UserTempField implements Serializable {
+
+    private static final long serialVersionUID = -7494062694414583353L;
 
     private int uid;
     private String field;
@@ -50,4 +58,28 @@ public class UserTempField implements Serializable {
         this.survivalMillis = survivalMillis;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        UserTempField that = (UserTempField) o;
+        return uid == that.uid &&
+                Objects.equals(field, that.field);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(uid, field);
+    }
+
+    @Override
+    public String toString() {
+        return MoreObjects.toStringHelper(this)
+                .add("uid", uid)
+                .add("field", field)
+                .add("value", value)
+                .add("createdTime", createdTime)
+                .add("survivalMillis", survivalMillis)
+                .toString();
+    }
 }

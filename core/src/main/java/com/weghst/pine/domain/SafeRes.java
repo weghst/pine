@@ -2,6 +2,9 @@ package com.weghst.pine.domain;
 
 import java.io.Serializable;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class SafeRes implements Serializable {
 
     private int id;

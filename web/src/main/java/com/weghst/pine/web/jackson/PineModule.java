@@ -4,8 +4,7 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.weghst.pine.web.resource.Restful;
 
 /**
- * @author zouyong
- * @date 2015-08-29
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class PineModule extends SimpleModule {
 

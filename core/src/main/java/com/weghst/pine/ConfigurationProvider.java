@@ -1,12 +1,12 @@
 /**
  * Copyright (C) 2015 The Weghst Inc. (kevinz@weghst.com)
- *
+ * <p>
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- *
- *         http://www.apache.org/licenses/LICENSE-2.0
- *
+ * <p>
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * <p>
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,46 +18,177 @@ package com.weghst.pine;
 import java.math.BigDecimal;
 import java.math.BigInteger;
 
+/**
+ * 系统参数/业务参数提供者接口定义.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public interface ConfigurationProvider {
 
-    void setProperty(String key, Object value);
+    /**
+     * 设置参数.
+     *
+     * @param name  属性名称
+     * @param value 参数值
+     */
+    void setProperty(String name, Object value);
 
-    boolean removeProperty(String key);
+    /**
+     * 移除参数.
+     *
+     * @param name 属性名称
+     */
+    boolean removeProperty(String name);
 
-    boolean containsKey(String key);
+    /**
+     * 判断是否有配置指定参数.
+     *
+     * @param name 属性名称
+     * @return boolean
+     */
+    boolean containsKey(String name);
 
-    boolean getBoolean(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code false}.
+     *
+     * @param name 属性名称
+     * @return boolean
+     */
+    boolean getBoolean(String name);
 
-    boolean getBoolean(String key, boolean defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return boolean
+     */
+    boolean getBoolean(String name, boolean defaultValue);
 
-    int getInt(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return int
+     */
+    int getInt(String name);
 
-    int getInt(String key, int defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return int
+     */
+    int getInt(String name, int defaultValue);
 
-    long getLong(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return long
+     */
+    long getLong(String name);
 
-    long getLong(String key, long defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return long
+     */
+    long getLong(String name, long defaultValue);
 
-    float getFloat(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return float
+     */
+    float getFloat(String name);
 
-    float getFloat(String key, float defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return float
+     */
+    float getFloat(String name, float defaultValue);
 
-    double getDouble(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code 0}.
+     *
+     * @param name 属性名称
+     * @return double
+     */
+    double getDouble(String name);
 
-    double getDouble(String key, double defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return double
+     */
+    double getDouble(String name, double defaultValue);
 
-    String getString(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return String
+     */
+    String getString(String name);
 
-    String getString(String key, String defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return String
+     */
+    String getString(String name, String defaultValue);
 
-    String[] getStringArray(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code new String[0]}.
+     *
+     * @param name 属性名称
+     * @return String[]
+     */
+    String[] getStringArray(String name);
 
-    BigDecimal getBigDecimal(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return BigDecimal
+     */
+    BigDecimal getBigDecimal(String name);
 
-    BigDecimal getBigDecimal(String key, String defaultValue);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return BigDecimal
+     */
+    BigDecimal getBigDecimal(String name, String defaultValue);
 
-    BigInteger getBigInteger(String key);
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回{@code null}.
+     *
+     * @param name 属性名称
+     * @return BigInteger
+     */
+    BigInteger getBigInteger(String name);
 
-    BigInteger getBigInteger(String key, String defaultValue);
-
+    /**
+     * 返回指定属性名称的参数值, 如果不存在则返回指定的默认值.
+     *
+     * @param name         属性名称
+     * @param defaultValue 默认值
+     * @return BigInteger
+     */
+    BigInteger getBigInteger(String name, String defaultValue);
 }

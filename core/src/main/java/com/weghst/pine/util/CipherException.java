@@ -15,6 +15,9 @@
  */
 package com.weghst.pine.util;
 
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class CipherException extends RuntimeException {
 
     public CipherException(String message) {
