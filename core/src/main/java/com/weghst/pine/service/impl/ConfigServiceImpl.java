@@ -3,10 +3,11 @@ package com.weghst.pine.service.impl;
 import com.weghst.pine.ConfigUtils;
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.repository.ConfigRepository;
-import com.weghst.pine.service.ConfigurationService;
+import com.weghst.pine.service.ConfigService;
 
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -16,7 +17,7 @@ import java.util.List;
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-public class ConfigurationServiceImpl implements InitializingBean, ConfigurationService {
+public class ConfigServiceImpl implements InitializingBean, ConfigService {
 
     @Autowired
     private ConfigRepository configurationReposy;

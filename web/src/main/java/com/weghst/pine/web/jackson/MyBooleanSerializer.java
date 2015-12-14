@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 
 /**
+ * Jackson Boolean 序列化, 如果 {@code Boolean} 值为 {@code true} 则序列化为 {@code 1}, 反之序列化为 {@code 0}.
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class MyBooleanSerializer extends NonTypedScalarSerializerBase<Boolean> {

@@ -80,7 +80,7 @@
     </bean>
 
     <!-- Pine configuration -->
-    <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigurationServiceImpl"/>
+    <bean id="configService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
 
     <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
         <property name="port" value="#{systemProperties['pine.grpc.port']}"/>

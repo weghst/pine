@@ -19,6 +19,14 @@ import java.util.EnumSet;
 import java.util.Properties;
 
 /**
+ * Pine Web 配置监听器实现.
+ * <ol>
+ * <li>最先加载配置 {@code classpath:pine.properties}, 然后再加载配置 {@code ~/.pine/pine.properties}.
+ * 如果 {@code ~/.pine/pine.properties}不存在则忽略, 如果配置属性名称相同则后加载会覆盖之前的属性值.</li>
+ * <li>注册字符编码过滤器 {@link CharacterEncodingFilter}, 编码设置 {@link Constants#ENCODING_PROP}.</li>
+ * <li>注册 {@link DispatcherServlet} 并初始化Spring配置, 默认加载配置文件为 {@code classpath:spring-pine-web.xml}.</li>
+ * </ol>
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @WebListener("Web configuration listener")

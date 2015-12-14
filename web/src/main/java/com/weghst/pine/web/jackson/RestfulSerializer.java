@@ -9,6 +9,8 @@ import com.weghst.pine.web.resource.Restful;
 import java.io.IOException;
 
 /**
+ * {@link Restful} 定制序列化实现.
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class RestfulSerializer extends JsonSerializer<Restful> {
@@ -23,8 +25,10 @@ public class RestfulSerializer extends JsonSerializer<Restful> {
         }
 
         if (value.getResult() != null) {
-            // gen.writeObjectField("data", value.getData());
             gen.writeObject(value.getResult());
+        } else {
+            gen.writeStartObject();
+            gen.writeEndObject();
         }
     }
 }

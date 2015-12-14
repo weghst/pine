@@ -5,9 +5,11 @@ import com.weghst.pine.domain.Config;
 import java.util.List;
 
 /**
+ * 配置逻辑接口定义.
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-public interface ConfigurationService {
+public interface ConfigService {
 
     void saveOrUpdate(Config config);
 

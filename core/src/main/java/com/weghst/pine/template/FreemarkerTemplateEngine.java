@@ -30,10 +30,10 @@ public class FreemarkerTemplateEngine implements TemplateEngine {
             freemarker.template.Template template = configuration.getTemplate(templateUrl);
             executor.doExecute(new FreemarkerTemplate(template));
         } catch (IOException e) {
-            LOG.debug("读取模板[{}]错误", templateUrl, e);
+            LOG.error("读取模板[{}]错误", templateUrl, e);
             throw new PineException(e);
         } catch (TemplateException e) {
-            LOG.debug("解析模板[{}]错误", templateUrl, e);
+            LOG.error("解析模板[{}]错误", templateUrl, e);
             throw new PineException(e);
         }
     }

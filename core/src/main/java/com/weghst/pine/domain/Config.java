@@ -12,6 +12,9 @@ public class Config implements Serializable {
 
     private static final long serialVersionUID = -2534573636855113712L;
 
+    /**
+     * 属性名称.
+     */
     private String key;
     private String value;
     private String remarks;

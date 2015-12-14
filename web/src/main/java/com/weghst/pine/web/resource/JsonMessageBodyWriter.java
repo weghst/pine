@@ -21,8 +21,9 @@ import javax.ws.rs.ext.MessageBodyWriter;
 import javax.ws.rs.ext.Provider;
 
 /**
- * @author Zou Yong(zouyong@mychebao.com)
- * @date 2015-09-30 14:55
+ * {@code JSON} 消息输出实现.
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 @Component
 @Provider

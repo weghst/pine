@@ -1,6 +1,7 @@
 package com.weghst.pine.vo;
 
 import lombok.Data;
+import lombok.Singular;
 
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,7 @@ public class UserVo {
     /**
      * HELLO.
      */
+    @Singular
     private List<String> keys;
     /**
      * Map.

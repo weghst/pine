@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.weghst.pine.web.resource.Restful;
 
 /**
+ * Pine Jackson 序列化配置.
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class PineModule extends SimpleModule {

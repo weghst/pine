@@ -1,5 +1,10 @@
 package com.weghst.pine.web.resource;
 
+import com.weghst.pine.web.ErrorCodes;
+
+/**
+ * @author Kevin Zou (kevinz@weghst.com)
+ */
 public class RestfulException extends RuntimeException {
 
     private int errorCode;
@@ -14,9 +19,20 @@ public class RestfulException extends RuntimeException {
         this.errorCode = errorCode;
     }
 
-    public RestfulException(int errorCode, Throwable cause) {
-        super(cause);
-        this.errorCode = errorCode;
+    public RestfulException(ErrorCodes errorCodes) {
+        this(errorCodes.getCode(), errorCodes.getMessage());
+    }
+
+    public RestfulException(ErrorCodes errorCodes, String message) {
+        this(errorCodes.getCode(), message);
+    }
+
+    public RestfulException(ErrorCodes errorCodes, String message, Throwable cause) {
+        this(errorCodes.getCode(), message, cause);
+    }
+
+    public RestfulException(ErrorCodes errorCodes, Throwable cause) {
+        this(errorCodes, errorCodes.getMessage(), cause);
     }
 
     public int getErrorCode() {
