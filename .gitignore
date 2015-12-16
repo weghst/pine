@@ -6,5 +6,5 @@ generated/
 *.iml
 *.ipr
 *.iws
-
+rebel.xml
 node_modules/

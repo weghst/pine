@@ -3,6 +3,9 @@ package com.weghst.pine.web.resource;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.service.UserService;
 import com.weghst.pine.web.ErrorCodes;
+import com.weghst.pine.web.vo.UserVo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -16,8 +19,18 @@ import javax.ws.rs.core.MediaType;
 @Path("/users")
 public class UserResource {
 
+    private static final Logger LOG = LoggerFactory.getLogger(UserResource.class);
+
     @Autowired
     private UserService userService;
+
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    @POST
+    public Restful create(UserVo userVo) {
+        LOG.debug("{}", userVo);
+        return new Restful(userVo);
+    }
 
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("/{id}")
@@ -38,7 +51,6 @@ public class UserResource {
     }
 
     @Consumes(MediaType.APPLICATION_JSON)
-    @Path("/")
     @GET
     public Restful getByEmail(@QueryParam("email") String email) {
         User user = userService.get(email);

@@ -2,14 +2,20 @@ package com.weghst.pine;
 
 import io.grpc.Server;
 import io.grpc.ServerBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
+ * gRPC 服务管理.
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class GrpcServer implements InitializingBean, DisposableBean {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GrpcServer.class);
 
     private int port;
     private Server server;
@@ -24,7 +30,8 @@ public class GrpcServer implements InitializingBean, DisposableBean {
 
         server = serverBuilder.build();
         server.start();
-        System.out.println("Started............................port for " + port);
+
+        LOG.info("Started gRPC server port for {}", port);
     }
 
     @Override
@@ -32,6 +39,7 @@ public class GrpcServer implements InitializingBean, DisposableBean {
         if (server != null) {
             server.shutdown();
         }
+        LOG.info("Shutdown gRPC server");
     }
 
     public void setPort(int port) {

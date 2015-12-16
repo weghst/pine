@@ -32,7 +32,10 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public int delete(int id) {
         SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.delete("com.weghst.pine.domain.User.deleteById", id);
+        int r = sqlSession.delete("com.weghst.pine.domain.User.deleteById", id);
+
+        deleteUserTempField(id);
+        return r;
     }
 
     @Override
@@ -67,6 +70,12 @@ public class UserRepositoryImpl implements UserRepository {
     public int saveOrUpdate(UserTempField userTempField) {
         SqlSession sqlSession = sqlSessionFactory.openSession();
         return sqlSession.insert("com.weghst.pine.domain.UserTempField.saveOrUpdate", userTempField);
+    }
+
+    @Override
+    public int deleteUserTempField(int uid) {
+        SqlSession sqlSession = sqlSessionFactory.openSession();
+        return sqlSession.insert("com.weghst.pine.domain.UserTempField.deleteByUid", uid);
     }
 
     @Override
