@@ -1,9 +1,0 @@
-MANIFEST
-*.egg-info/
-build/
-dist/
-*.egg
-*.egg/
-*.eggs/
-doc/
-_grpcio_metadata.py
