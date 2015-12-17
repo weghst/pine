@@ -61,7 +61,9 @@ project(":pine-web") {
         compile("org.jboss.resteasy:resteasy-spring:$resteasyVersion") {
             exclude group: "org.jboss.resteasy", module: "resteasy-jettison-provider"
         }
+        compile "org.jboss.resteasy:resteasy-hibernatevalidator-provider:3.0.14.Final"
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+        // compile "com.belerweb:pinyin4j:2.5.0"
 
         runtime "ch.qos.logback:logback-classic:$logbackVersion"
         runtime "com.jolbox:bonecp-spring:$bonecpVersion"

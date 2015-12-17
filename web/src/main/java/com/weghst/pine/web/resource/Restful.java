@@ -2,6 +2,7 @@ package com.weghst.pine.web.resource;
 
 import com.weghst.pine.web.ErrorCodes;
 
+import com.weghst.pine.web.vo.IdentifierVo;
 import org.springframework.util.Assert;
 
 /**
@@ -88,5 +89,24 @@ public class Restful {
      */
     public Object getResult() {
         return result;
+    }
+
+    /**
+     *
+     * @param result
+     * @return
+     */
+    public static Restful newRestful(Object result) {
+        return new Restful(result);
+    }
+
+    /**
+     *
+     * @param value
+     * @return
+     */
+    public static Restful newRestfulForIdentifier(Object value) {
+        Restful restful = new Restful(new IdentifierVo(value));
+        return restful;
     }
 }

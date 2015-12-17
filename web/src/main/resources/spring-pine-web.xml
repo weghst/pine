@@ -43,13 +43,6 @@
         <property name="defaultAutoCommit" value="#{systemProperties['bonecp.defaultAutoCommit']}"/>
     </bean>
 
-    <!--
-        事务配置, 事务方法命名规范
-            insert -> save*
-            update -> update*
-            delete -> delete*
-            select -> get*/load*/find*
-    -->
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
@@ -83,7 +76,7 @@
     <bean id="configService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
 
     <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
-        <property name="port" value="#{systemProperties['pine.grpc.port']}"/>
+        <property name="port" value="#{systemProperties[T(com.weghst.pine.Constants).GRPC_PORT_PROP]}"/>
     </bean>
 
     <import resource="classpath*:/spring-pine-core.xml"/>
@@ -108,7 +101,7 @@
     <import resource="classpath:springmvc-resteasy.xml"/>
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
-        <property name="prefix" value="#{systemProperties['pine.restful.path.prefix']}"/>
+        <property name="prefix" value="#{systemProperties[T(com.weghst.pine.Constants).RESTFUL_PATH_PREFIX_PROP]}"/>
     </bean>
 
     <!-- View Jackson ObjectMapper -->

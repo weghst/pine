@@ -3,9 +3,11 @@ package com.weghst.pine.web.resource;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.service.UserService;
 import com.weghst.pine.web.ErrorCodes;
+import com.weghst.pine.web.vo.IdentifierVo;
 import com.weghst.pine.web.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +31,12 @@ public class UserResource {
     @POST
     public Restful create(UserVo userVo) {
         LOG.debug("{}", userVo);
-        return new Restful(userVo);
+
+        User user = new User();
+        BeanUtils.copyProperties(userVo, user);
+
+        userService.save(user);
+        return Restful.newRestfulForIdentifier(user.getId());
     }
 
     @Consumes(MediaType.APPLICATION_JSON)
@@ -47,7 +54,7 @@ public class UserResource {
         if (user == null) {
             throw new RestfulException(ErrorCodes.E12000, "未发现ID为[" + idStr + "]的用户");
         }
-        return new Restful(user);
+        return Restful.newRestful(user);
     }
 
     @Consumes(MediaType.APPLICATION_JSON)

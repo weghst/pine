@@ -13,6 +13,11 @@ public interface Constants {
     String ENCODING_PROP = "pine.encoding";
 
     /**
+     * gRPC 服务端口.
+     */
+    String GRPC_PORT_PROP = "pine.grpc.port";
+
+    /**
      * Restful 资源路径前缀.
      */
     String RESTFUL_PATH_PREFIX_PROP = "pine.restful.path.prefix";
