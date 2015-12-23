@@ -37,7 +37,7 @@ project(":pine-core") {
         compile "org.quartz-scheduler:quartz-jobs:2.2.1"
         compile "redis.clients:jedis:2.7.3"
         compile "org.aspectj:aspectjweaver:1.8.6"
-        compile "org.liquibase:liquibase-core:3.4.1"
+        compile "org.flywaydb:flyway-core:3.2.1"
 
         testCompile "org.springframework:spring-test:$springVersion"
         testCompile "ch.qos.logback:logback-classic:1.1.3"

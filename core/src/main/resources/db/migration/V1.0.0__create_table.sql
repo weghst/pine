@@ -1,7 +1,3 @@
---liquibase formatted sql
-
---changeset kevinz@weghst.com:1439026570
-
 /*Table structure for table `t_config` */
 
 CREATE TABLE `t_config` (
@@ -43,7 +39,3 @@ CREATE TABLE `t_user_temp_field` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='用户临时字段存储表, uid与field为联合主键';
 
 /*Data for the table `t_user_temp_field` */
-
---rollback DROP TABLE `t_config`;
---rollback DROP TABLE `t_user`;
---rollback DROP TABLE `t_user_temp_field`;

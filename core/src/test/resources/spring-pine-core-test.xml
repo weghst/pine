@@ -72,6 +72,11 @@
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
 
+    <!--
+        Flyway 数据库初始化
+    -->
+    <bean class="com.weghst.pine.DatabaseInitializingBean"/>
+
     <!--<bean id="liquibase" class="liquibase.integration.spring.SpringLiquibase">-->
         <!--<property name="dataSource" ref="dataSource"/>-->
         <!--<property name="changeLog" value="classpath:db/changelog-master.xml"/>-->
