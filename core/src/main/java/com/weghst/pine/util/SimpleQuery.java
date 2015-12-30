@@ -7,7 +7,7 @@ import org.springframework.util.Assert;
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-public final class SimpleQuery extends AbstractQuery<String> {
+public class SimpleQuery extends AbstractQuery<String> {
 
     private String q;
 
@@ -27,5 +27,12 @@ public final class SimpleQuery extends AbstractQuery<String> {
     public void setQ(String q) {
         Assert.hasLength(q);
         this.q = q;
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleQuery{" +
+                "q='" + q + '\'' +
+                "} " + super.toString();
     }
 }

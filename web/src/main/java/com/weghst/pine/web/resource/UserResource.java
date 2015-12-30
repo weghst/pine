@@ -3,7 +3,7 @@ package com.weghst.pine.web.resource;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.service.UserService;
 import com.weghst.pine.web.ErrorCodes;
-import com.weghst.pine.web.vo.IdentifierVo;
+import com.weghst.pine.web.vo.SimpleQueryVo;
 import com.weghst.pine.web.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,7 +36,7 @@ public class UserResource {
         BeanUtils.copyProperties(userVo, user);
 
         userService.save(user);
-        return Restful.newRestfulForIdentifier(user.getId());
+        return Restful.withPrimitive(user.getId());
     }
 
     @Consumes(MediaType.APPLICATION_JSON)
@@ -54,13 +54,20 @@ public class UserResource {
         if (user == null) {
             throw new RestfulException(ErrorCodes.E12000, "未发现ID为[" + idStr + "]的用户");
         }
-        return Restful.newRestful(user);
+        return Restful.with(user);
     }
 
     @Consumes(MediaType.APPLICATION_JSON)
     @GET
     public Restful getByEmail(@QueryParam("email") String email) {
         User user = userService.get(email);
-        return new Restful(user);
+        return Restful.with(user);
+    }
+
+    @Path("/")
+    @GET
+    public Restful search(@BeanParam SimpleQueryVo simpleQueryVo) {
+        System.out.println(simpleQueryVo);
+        return null;
     }
 }

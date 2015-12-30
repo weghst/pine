@@ -1,5 +1,6 @@
 package com.weghst.pine;
 
+import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.TimeZone;
 
@@ -12,6 +13,16 @@ public final class Pines {
 
     private static final String TIME_ZONE_ID = System.getProperty("pine.timeZone", "GMT+00:00");
     private static final TimeZone TIME_ZONE = TimeZone.getTimeZone(TIME_ZONE_ID);
+
+    /**
+     * Pine 系统字符集.
+     *
+     * @return 字符集
+     * @see Constants#ENCODING_PROP
+     */
+    public static Charset charset() {
+        return Charset.forName(System.getProperty(Constants.ENCODING_PROP));
+    }
 
     /**
      * 返回 Pine 当前时区.

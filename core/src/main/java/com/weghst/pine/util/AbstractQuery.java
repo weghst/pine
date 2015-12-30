@@ -12,14 +12,14 @@ public abstract class AbstractQuery<T> implements Query<T> {
 
     private String sort;
     private Order order = Order.asc;
-    private int count;
-    private int offset;
+    private int page;
+    private int pageSize;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final String getSort() {
+    public String getSort() {
         return sort;
     }
 
@@ -28,7 +28,7 @@ public abstract class AbstractQuery<T> implements Query<T> {
      *
      * @param sort 排序字段名称
      */
-    public final void setSort(String sort) {
+    public void setSort(String sort) {
         this.sort = sort;
     }
 
@@ -36,7 +36,7 @@ public abstract class AbstractQuery<T> implements Query<T> {
      * {@inheritDoc}
      */
     @Override
-    public final Order getOrder() {
+    public Order getOrder() {
         return order;
     }
 
@@ -45,8 +45,7 @@ public abstract class AbstractQuery<T> implements Query<T> {
      *
      * @param order 排序方式
      */
-    public final void setOrder(Order order) {
-        Assert.notNull(order);
+    public void setOrder(Order order) {
         this.order = order;
     }
 
@@ -54,35 +53,43 @@ public abstract class AbstractQuery<T> implements Query<T> {
      * {@inheritDoc}
      */
     @Override
-    public final int getCount() {
-        return count;
+    public int getPage() {
+        return page;
     }
 
     /**
-     * 设置返回结果集记录数, 必须是一个正整数.
+     * 设置当前页码, 必须是一个大于等于0的数字.
      *
-     * @param count 结果集记录数
+     * @param page 页码
      */
-    public final void setCount(int count) {
-        Assert.isTrue(count > 0);
-        this.count = count;
+    public void setPage(int page) {
+        this.page = page;
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public final int getOffset() {
-        return offset;
+    public int getPageSize() {
+        return pageSize;
     }
 
     /**
-     * 设置返回结果集偏移量, 必须是一个大于等于0的数字.
+     * 设置每页的记录数, 必须是一个正整数.
      *
-     * @param offset 结果集偏移量
+     * @param pageSize 记录数
      */
-    public final void setOffset(int offset) {
-        Assert.isTrue(offset >= 0);
-        this.offset = offset;
+    public void setPageSize(int pageSize) {
+        this.pageSize = pageSize;
+    }
+
+    @Override
+    public String toString() {
+        return "AbstractQuery{" +
+                "sort='" + sort + '\'' +
+                ", order=" + order +
+                ", page=" + page +
+                ", pageSize=" + pageSize +
+                '}';
     }
 }

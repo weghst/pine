@@ -2,7 +2,7 @@ package com.weghst.pine.web.resource;
 
 import com.weghst.pine.web.ErrorCodes;
 
-import com.weghst.pine.web.vo.IdentifierVo;
+import com.weghst.pine.web.vo.PrimitiveVo;
 import org.springframework.util.Assert;
 
 /**
@@ -20,49 +20,6 @@ public class Restful {
     private String errorMessage;
 
     private Object result;
-
-    /**
-     * 构建一个返回成功数据的 {@code Restful} 对象.
-     *
-     * @param result 返回数据对象
-     */
-    public Restful(Object result) {
-        this.result = result;
-    }
-
-    /**
-     * 构建一个返回错误信息的 {@code Restful} 对象.
-     *
-     * @param errorCodes 错误码
-     */
-    public Restful(ErrorCodes errorCodes) {
-        Assert.notNull(errorCodes);
-
-        this.errorCode = errorCodes.getCode();
-        this.errorMessage = errorCodes.getMessage();
-    }
-
-    /**
-     * 构建一个返回错误信息的 {@code Restful} 对象.
-     *
-     * @param e 错误异常对象
-     */
-    public Restful(RestfulException e) {
-        this(e.getErrorCode(), e.getMessage());
-    }
-
-    /**
-     * 构建一个返回错误信息的 {@code Restful} 对象.
-     *
-     * @param errorCode    错误码
-     * @param errorMessage 错误描述
-     */
-    public Restful(int errorCode, String errorMessage) {
-        Assert.isTrue(errorCode > 0);
-
-        this.errorCode = errorCode;
-        this.errorMessage = errorMessage;
-    }
 
     /**
      * 返回错误码.
@@ -92,21 +49,52 @@ public class Restful {
     }
 
     /**
-     *
-     * @param result
+     * @param code
+     * @param message
      * @return
      */
-    public static Restful newRestful(Object result) {
-        return new Restful(result);
+    public static Restful with(int code, String message) {
+        Restful restful = new Restful();
+        restful.errorCode = code;
+        restful.errorMessage = message;
+
+        return restful;
     }
 
     /**
-     *
+     * @param result
+     * @return
+     */
+    public static Restful with(Object result) {
+        Assert.notNull(result);
+
+        Restful restful = new Restful();
+        restful.result = result;
+        return restful;
+    }
+
+    /**
      * @param value
      * @return
      */
-    public static Restful newRestfulForIdentifier(Object value) {
-        Restful restful = new Restful(new IdentifierVo(value));
-        return restful;
+    public static Restful withPrimitive(Object value) {
+        return with(new PrimitiveVo(value));
+    }
+
+    /**
+     * @param errorCode
+     * @return
+     */
+    public static Restful withErrorCode(ErrorCodes errorCode) {
+        Assert.notNull(errorCode);
+        return with(errorCode.getCode(), errorCode.getMessage());
+    }
+
+    /**
+     * @param e
+     * @return
+     */
+    public static Restful withException(RestfulException e) {
+        return with(e.getErrorCode(), e.getMessage());
     }
 }

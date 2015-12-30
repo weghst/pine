@@ -30,18 +30,18 @@ public interface Query<T> {
     Order getOrder();
 
     /**
-     * 返回结果集最大记录数.
+     * 返回搜索页码.
      *
-     * @return 结果集长度
+     * @return 页码
      */
-    int getCount();
+    int getPage();
 
     /**
-     * 返回搜索/查询结果集偏移量.
+     * 返回当前页最大记录数.
      *
-     * @return 结果集偏移量
+     * @return 记录数
      */
-    int getOffset();
+    int getPageSize();
 
     /**
      * 搜索/查询排序方式.

@@ -97,6 +97,7 @@
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
         <property name="prefix" value="#{systemProperties[T(com.weghst.pine.Constants).RESTFUL_PATH_PREFIX_PROP]}"/>
+        <property name="throwNotFound" value="true"/>
     </bean>
 
     <!-- View Jackson ObjectMapper -->

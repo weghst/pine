@@ -8,16 +8,16 @@ import java.io.Serializable;
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @Data
-public class IdentifierVo implements Serializable {
+public class PrimitiveVo implements Serializable {
 
     private static final long serialVersionUID = 5750350718186087188L;
 
     private Object value;
 
-    public IdentifierVo() {
+    public PrimitiveVo() {
     }
 
-    public IdentifierVo(Object value) {
+    public PrimitiveVo(Object value) {
         this.value = value;
     }
 }

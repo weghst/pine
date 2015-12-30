@@ -44,7 +44,7 @@ public class Paging<T> {
      * @param q
      */
     public Paging(Query q) {
-        this(q.getOffset());
+        this(q.getPage());
     }
 
     /**

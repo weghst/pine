@@ -112,7 +112,7 @@ public class WebConfigurationListener implements ServletContextListener {
         DispatcherServlet dispatcherServlet = new DispatcherServlet(webApplicationContext);
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
-        dynamic.addMapping(System.getProperty(Constants.RESTFUL_PATH_PREFIX_PROP) + "/*");
+        dynamic.addMapping("/*");
     }
 
 }

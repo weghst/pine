@@ -10,7 +10,7 @@ import java.util.Map;
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-public final class AssembledQuery extends AbstractQuery<Map<String, String>> {
+public class AssembledQuery extends AbstractQuery<Map<String, String>> {
 
     private Map<String, String> q;
 
@@ -193,4 +193,10 @@ public final class AssembledQuery extends AbstractQuery<Map<String, String>> {
         return Double.parseDouble(v);
     }
 
+    @Override
+    public String toString() {
+        return "AssembledQuery{" +
+                "q=" + q +
+                "} " + super.toString();
+    }
 }

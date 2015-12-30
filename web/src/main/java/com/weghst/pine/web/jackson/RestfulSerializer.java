@@ -1,7 +1,6 @@
 package com.weghst.pine.web.jackson;
 
 import com.fasterxml.jackson.core.JsonGenerator;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.weghst.pine.web.resource.Restful;
@@ -22,9 +21,7 @@ public class RestfulSerializer extends JsonSerializer<Restful> {
             gen.writeNumberField("errorCode", value.getErrorCode());
             gen.writeStringField("errorMessage", value.getErrorMessage());
             gen.writeEndObject();
-        }
-
-        if (value.getResult() != null) {
+        } else if (value.getResult() != null) {
             gen.writeObject(value.getResult());
         } else {
             gen.writeStartObject();
