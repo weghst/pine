@@ -7,7 +7,7 @@ option java_package = "com.weghst.pine";
 option java_outer_classname = "UserProto";
 
 service User {
-    rpc save (UserReq) returns (UserRep) {
+    rpc Save (UserReq) returns (UserRep) {
     }
 }
 
