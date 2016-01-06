@@ -27,20 +27,24 @@
 
     <context:component-scan base-package="com.weghst.pine"/>
 
-    <bean id="dataSource" class="com.jolbox.bonecp.BoneCPDataSource" destroy-method="close">
-        <property name="driverClass" value="#{systemProperties['jdbc.driverClass']}"/>
-        <property name="jdbcUrl" value="#{systemProperties['jdbc.url']}"/>
-        <property name="username" value="#{systemProperties['jdbc.username']}"/>
-        <property name="password" value="#{systemProperties['jdbc.password']}"/>
-        <property name="idleConnectionTestPeriodInSeconds"
-                  value="#{systemProperties['bonecp.idleConnectionTestPeriodInSeconds']}"/>
-        <property name="idleMaxAgeInSeconds" value="#{systemProperties['bonecp.idleMaxAgeInSeconds']}"/>
-        <property name="minConnectionsPerPartition" value="#{systemProperties['bonecp.minConnectionsPerPartition']}"/>
-        <property name="maxConnectionsPerPartition" value="#{systemProperties['bonecp.maxConnectionsPerPartition']}"/>
-        <property name="partitionCount" value="#{systemProperties['bonecp.partitionCount']}"/>
-        <property name="acquireIncrement" value="#{systemProperties['bonecp.acquireIncrement']}"/>
-        <property name="statementsCacheSize" value="#{systemProperties['bonecp.statementsCacheSize']}"/>
-        <property name="defaultAutoCommit" value="#{systemProperties['bonecp.defaultAutoCommit']}"/>
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="systemPropertiesMode" value="1"/>
+    </bean>
+
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+        <property name="initialSize" value="${druid.initialSize}"/>
+        <property name="minIdle" value="${druid.minIdle}"/>
+        <property name="maxActive" value="${druid.maxActive}"/>
+        <property name="maxWait" value="${druid.maxWait}"/>
+        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
+        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
+        <property name="validationQuery" value="${druid.validationQuery}"/>
+        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"/>
+        <property name="maxPoolPreparedStatementPerConnectionSize"
+                  value="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
@@ -71,7 +75,7 @@
     <bean id="configService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
 
     <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
-        <property name="port" value="#{systemProperties[T(com.weghst.pine.Constants).GRPC_PORT_PROP]}"/>
+        <property name="port" value="${pine.grpc.port}"/>
     </bean>
 
     <import resource="classpath*:/spring-pine-core.xml"/>
@@ -96,7 +100,7 @@
     <import resource="classpath:springmvc-resteasy.xml"/>
 
     <bean id="resteasy.handlerMapping" parent="abstract.resteasy.handlerMapping">
-        <property name="prefix" value="#{systemProperties[T(com.weghst.pine.Constants).RESTFUL_PATH_PREFIX_PROP]}"/>
+        <property name="prefix" value="${pine.restful.path.prefix}"/>
         <property name="throwNotFound" value="true"/>
     </bean>
 

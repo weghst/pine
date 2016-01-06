@@ -16,20 +16,22 @@
     limitations under the License.
 
 -->
-<configuration>
+<configuration scan="true">
 
-    <!--<property/>-->
+    <property name="logMode" value="${pine.runMode:-test}"/>
+
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
-            <!--<charset>UTF-8</charset>-->
             <pattern>%d [%thread] %-5level %logger{36} - %line - %msg%n%xException</pattern>
         </encoder>
     </appender>
 
-    <logger name="org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor" level="error"/>
-    <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="error"/>
+    <include resource="ext/logback-inc-${logMode}.xml"/>
 
-    <root level="debug">
+    <logger name="org.springframework.core.type.classreading.AnnotationAttributesReadingVisitor" level="${level}"/>
+    <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="${level}"/>
+
+    <root level="${level}">
         <appender-ref ref="STDOUT"/>
     </root>
 

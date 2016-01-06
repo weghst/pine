@@ -2,8 +2,6 @@ package com.weghst.pine.web;
 
 import com.weghst.pine.Constants;
 import com.weghst.pine.PineException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
@@ -32,8 +30,6 @@ import java.util.Properties;
 @WebListener("Web configuration listener")
 public class WebConfigurationListener implements ServletContextListener {
 
-    private static final Logger LOG = LoggerFactory.getLogger(WebConfigurationListener.class);
-
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
@@ -59,7 +55,9 @@ public class WebConfigurationListener implements ServletContextListener {
             try {
 
                 in = url.openStream();
-                LOG.info("load pine properties: [{}]", url);
+
+                String msg = String.format("load pine properties: %s", url);
+                System.out.println(msg);
 
                 Properties properties = new Properties();
                 properties.load(in);
@@ -69,11 +67,12 @@ public class WebConfigurationListener implements ServletContextListener {
                     val = properties.getProperty(name);
                     System.setProperty(name, val);
 
-                    LOG.info("set system property[{}: {}]", name, val);
+                    msg = String.format("set system property[%s: %s]", name, val);
+                    System.out.println(msg);
                 }
             } catch (FileNotFoundException e) {
                 if (ignoreResourceNotFound) {
-                    LOG.info("ignore not found resource: {}", url);
+                    System.out.println("ignore not found resource: " + url);
                 } else {
                     throw new PineException(e);
                 }
@@ -89,7 +88,7 @@ public class WebConfigurationListener implements ServletContextListener {
             }
         } catch (FileNotFoundException e) {
             if (ignoreResourceNotFound) {
-                LOG.info("ignore not found resource: {}", path);
+                System.out.println("ignore not found resource: " + path);
             } else {
                 throw new PineException(e);
             }

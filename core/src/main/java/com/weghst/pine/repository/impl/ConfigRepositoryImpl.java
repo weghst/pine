@@ -2,8 +2,8 @@ package com.weghst.pine.repository.impl;
 
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.repository.ConfigRepository;
+import com.weghst.pine.repository.support.SqlSessionDaoSupport;
 import org.apache.ibatis.session.SqlSession;
-import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -15,27 +15,21 @@ import java.util.Map;
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @Repository
-public class ConfigRepositoryImpl implements ConfigRepository {
-
-    @Autowired
-    private SqlSessionFactory sqlSessionFactory;
+public class ConfigRepositoryImpl extends SqlSessionDaoSupport implements ConfigRepository {
 
     @Override
     public int save(Config config) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.insert("com.weghst.pine.domain.Config.save", config);
+        return getSqlSession().insert("com.weghst.pine.domain.Config.save", config);
     }
 
     @Override
     public int delete(String key) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.delete("com.weghst.pine.domain.Config.deleteByKey", key);
+        return getSqlSession().delete("com.weghst.pine.domain.Config.deleteByKey", key);
     }
 
     @Override
     public int update(Config config) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.update("com.weghst.pine.domain.Config.updateByKey", config);
+        return getSqlSession().update("com.weghst.pine.domain.Config.updateByKey", config);
     }
 
     @Override
@@ -44,19 +38,16 @@ public class ConfigRepositoryImpl implements ConfigRepository {
         params.put("key", key);
         params.put("value", value);
 
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.update("com.weghst.pine.domain.Config.updateValueByKey", params);
+        return getSqlSession().update("com.weghst.pine.domain.Config.updateValueByKey", params);
     }
 
     @Override
     public Config get(String key) {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.selectOne("com.weghst.pine.domain.Config.getByKey", key);
+        return getSqlSession().selectOne("com.weghst.pine.domain.Config.getByKey", key);
     }
 
     @Override
     public List<Config> findAll() {
-        SqlSession sqlSession = sqlSessionFactory.openSession();
-        return sqlSession.selectList("com.weghst.pine.domain.Config.findAll");
+        return getSqlSession().selectList("com.weghst.pine.domain.Config.findAll");
     }
 }
