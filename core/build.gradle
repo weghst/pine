@@ -15,6 +15,7 @@ project(":pine-core") {
         compile "com.google.code.findbugs:jsr305:3.0.0"
         compile "org.glassfish:javax.json:1.0.4"
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
+        compile "com.fasterxml.jackson.dataformat:jackson-dataformat-smile:2.6.4"
         compile("org.apache.curator:curator-recipes:2.9.1") {
             exclude group: "log4j", module: "log4j"
             exclude group: "jline", module: "jline"
@@ -38,6 +39,9 @@ project(":pine-core") {
         compile "redis.clients:jedis:2.7.3"
         compile "org.aspectj:aspectjweaver:1.8.6"
         compile "org.flywaydb:flyway-core:3.2.1"
+        compile "org.springframework.ldap:spring-ldap-core:2.0.4.RELEASE"
+        compile "org.springframework.data:spring-data-commons:1.11.2.RELEASE"
+        compile "org.springframework.data:spring-data-redis:1.6.2.RELEASE"
 
         testCompile "org.springframework:spring-test:$springVersion"
         testCompile "ch.qos.logback:logback-classic:1.1.3"

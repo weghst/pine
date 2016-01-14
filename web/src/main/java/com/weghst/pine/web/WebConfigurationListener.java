@@ -2,7 +2,11 @@ package com.weghst.pine.web;
 
 import com.weghst.pine.Constants;
 import com.weghst.pine.PineException;
+import org.springframework.session.SessionRepository;
+import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -41,10 +45,14 @@ public class WebConfigurationListener implements ServletContextListener {
         // 注册JavaEE组件
         registerCharacterEncodingFilter(sc);
         registerDispatcherServlet(sc);
+
+        // 注册SessionFilter
+        registerSessionRepositoryFilter(sc);
     }
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
+        System.out.println("++++++++++++++++++++++++++++++");
     }
 
     private void loadPineProperties(String path, boolean ignoreResourceNotFound) {
@@ -112,6 +120,16 @@ public class WebConfigurationListener implements ServletContextListener {
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
         dynamic.addMapping("/*");
+    }
+
+    private void registerSessionRepositoryFilter(ServletContext sc) {
+        WebApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
+        SessionRepository sessionRepository = applicationContext.getBean(SessionRepository.class);
+
+        SessionRepositoryFilter sessionRepositoryFilter = new SessionRepositoryFilter(sessionRepository);
+
+        FilterRegistration.Dynamic filterRegistration = sc.addFilter("sessionRepositoryFilter", sessionRepositoryFilter);
+        filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
     }
 
 }
