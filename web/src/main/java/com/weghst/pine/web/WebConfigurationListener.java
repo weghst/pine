@@ -34,6 +34,8 @@ import java.util.Properties;
 @WebListener("Web configuration listener")
 public class WebConfigurationListener implements ServletContextListener {
 
+    private XmlWebApplicationContext applicationContext;
+
     @Override
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
@@ -41,6 +43,11 @@ public class WebConfigurationListener implements ServletContextListener {
         // 加载系统基础配置
         loadPineProperties("classpath:pine.properties", false);
         loadPineProperties(System.getProperty("user.home") + "/.pine/pine.properties", true);
+
+        // 初始化Spring配置
+        applicationContext = new XmlWebApplicationContext();
+        applicationContext.setConfigLocation("classpath:spring-pine-web.xml");
+        applicationContext.afterPropertiesSet();
 
         // 注册JavaEE组件
         registerCharacterEncodingFilter(sc);
@@ -113,19 +120,14 @@ public class WebConfigurationListener implements ServletContextListener {
     }
 
     private void registerDispatcherServlet(ServletContext sc) {
-        XmlWebApplicationContext webApplicationContext = new XmlWebApplicationContext();
-        webApplicationContext.setConfigLocation("classpath:spring-pine-web.xml");
-
-        DispatcherServlet dispatcherServlet = new DispatcherServlet(webApplicationContext);
+        DispatcherServlet dispatcherServlet = new DispatcherServlet(applicationContext);
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
         dynamic.addMapping("/*");
     }
 
     private void registerSessionRepositoryFilter(ServletContext sc) {
-        WebApplicationContext applicationContext = WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
         SessionRepository sessionRepository = applicationContext.getBean(SessionRepository.class);
-
         SessionRepositoryFilter sessionRepositoryFilter = new SessionRepositoryFilter(sessionRepository);
 
         FilterRegistration.Dynamic filterRegistration = sc.addFilter("sessionRepositoryFilter", sessionRepositoryFilter);
