@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userReposy;
-    @Autowired
+//    @Autowired
     private Jedis jedis;
     @Autowired
     private TemplateEngine templateEngine;

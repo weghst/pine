@@ -5,9 +5,8 @@ import com.weghst.pine.PineException;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.util.ResourceUtils;
+import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
-import org.springframework.web.context.support.XmlWebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -32,9 +31,9 @@ import java.util.Properties;
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @WebListener("Web configuration listener")
-public class WebConfigurationListener implements ServletContextListener {
+public class WebConfigurationListener extends ContextLoader implements ServletContextListener {
 
-    private XmlWebApplicationContext applicationContext;
+    private WebApplicationContext applicationContext;
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -45,9 +44,8 @@ public class WebConfigurationListener implements ServletContextListener {
         loadPineProperties(System.getProperty("user.home") + "/.pine/pine.properties", true);
 
         // 初始化Spring配置
-        applicationContext = new XmlWebApplicationContext();
-        applicationContext.setConfigLocation("classpath:spring-pine-web.xml");
-        applicationContext.afterPropertiesSet();
+        sc.setInitParameter("contextConfigLocation", "classpath:spring-pine-web.xml");
+        applicationContext = initWebApplicationContext(sc);
 
         // 注册JavaEE组件
         registerCharacterEncodingFilter(sc);
@@ -59,7 +57,9 @@ public class WebConfigurationListener implements ServletContextListener {
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("++++++++++++++++++++++++++++++");
+        System.out.println("............................DESTROY");
+
+        closeWebApplicationContext(sce.getServletContext());
     }
 
     private void loadPineProperties(String path, boolean ignoreResourceNotFound) {
@@ -128,6 +128,8 @@ public class WebConfigurationListener implements ServletContextListener {
 
     private void registerSessionRepositoryFilter(ServletContext sc) {
         SessionRepository sessionRepository = applicationContext.getBean(SessionRepository.class);
+
+        // TODO: SessionRepositoryFilter -> commitSession() 该方法会被调用多次, 后期需要优化
         SessionRepositoryFilter sessionRepositoryFilter = new SessionRepositoryFilter(sessionRepository);
 
         FilterRegistration.Dynamic filterRegistration = sc.addFilter("sessionRepositoryFilter", sessionRepositoryFilter);

@@ -23,14 +23,16 @@ project(":pine-core") {
 
         compile "org.apache.commons:commons-lang3:3.4"
         compile "javax.mail:mail:1.4.7"
-        compile "io.grpc:grpc-all:0.9.0"
+        compile("io.grpc:grpc-all:0.9.0") {
+            transitive = false
+        }
         // compile "org.freemarker:freemarker:$freemarkerVersion"
         compile "org.mybatis.scripting:mybatis-freemarker:1.1.1"
         compile "org.mybatis:mybatis-spring:1.2.3"
 
         compile "org.springframework:spring-context:$springVersion"
         compile "org.springframework:spring-context-support:$springVersion"
-
+        compile "com.esotericsoftware:kryo:3.0.3"
 
         compile("org.quartz-scheduler:quartz:2.2.1") {
             exclude module: "c3p0"
