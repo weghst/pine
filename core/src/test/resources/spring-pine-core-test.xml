@@ -33,33 +33,22 @@
     <context:property-placeholder location="classpath:pine.properties"/>
     <context:property-placeholder location="~/.pine/pine-config.properties" ignore-resource-not-found="true"/>
 
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="initialSize" value="${druid.initialSize}"/>
-        <property name="minIdle" value="${druid.minIdle}"/>
-        <property name="maxActive" value="${druid.maxActive}"/>
-        <property name="maxWait" value="${druid.maxWait}"/>
-        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
-        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
-        <property name="validationQuery" value="${druid.validationQuery}"/>
-        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize"
-                  value="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
-    </bean>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"
+          p:initialSize="${druid.initialSize}"
+          p:minIdle="${druid.minIdle}"
+          p:maxActive="${druid.maxActive}"
+          p:maxWait="${druid.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${druid.timeBetweenEvictionRunsMillis}"
+          p:minEvictableIdleTimeMillis="${druid.minEvictableIdleTimeMillis}"
+          p:validationQuery="${druid.validationQuery}"
+          p:poolPreparedStatements="${druid.poolPreparedStatements}"
+          p:maxPoolPreparedStatementPerConnectionSize="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
 
-    <!--
-        事务配置, 事务方法命名规范
-            insert -> save*
-            update -> update*
-            delete -> delete*
-            select -> get*/find*
-    -->
-    <bean id="transactionManager"
-          class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          p:dataSource-ref="dataSource"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -94,10 +83,12 @@
     <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:usePool="true"/>
 
-    <!-- FIXME 后面需要使用JedisConnectionFactory替代 -->
-    <bean id="jedis" class="redis.clients.jedis.Jedis" c:host="localhost" c:port="6379"/>
-
-    <ldap:context-source url="ldap://188.188.22.133:10389" base="dc=mychebao,dc=com" username="uid=admin,ou=system"
+    <!--
+        LDAP 服务配置
+    -->
+    <ldap:context-source url="ldap://188.188.22.133:10389"
+                         base="dc=mychebao,dc=com"
+                         username="uid=admin,ou=system"
                          password="secret"/>
     <ldap:ldap-template id="ldapTemplate"/>
 

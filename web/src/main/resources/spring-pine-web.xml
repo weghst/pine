@@ -30,29 +30,25 @@
        default-lazy-init="false">
 
     <context:component-scan base-package="com.weghst.pine"/>
-    <mvc:annotation-driven/>
 
     <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer" p:systemPropertiesMode="1"/>
 
-    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
-        <property name="url" value="${jdbc.url}"/>
-        <property name="username" value="${jdbc.username}"/>
-        <property name="password" value="${jdbc.password}"/>
-        <property name="initialSize" value="${druid.initialSize}"/>
-        <property name="minIdle" value="${druid.minIdle}"/>
-        <property name="maxActive" value="${druid.maxActive}"/>
-        <property name="maxWait" value="${druid.maxWait}"/>
-        <property name="timeBetweenEvictionRunsMillis" value="${druid.timeBetweenEvictionRunsMillis}"/>
-        <property name="minEvictableIdleTimeMillis" value="${druid.minEvictableIdleTimeMillis}"/>
-        <property name="validationQuery" value="${druid.validationQuery}"/>
-        <property name="poolPreparedStatements" value="${druid.poolPreparedStatements}"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize"
-                  value="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
-    </bean>
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"
+          p:url="${jdbc.url}"
+          p:username="${jdbc.username}"
+          p:password="${jdbc.password}"
+          p:initialSize="${druid.initialSize}"
+          p:minIdle="${druid.minIdle}"
+          p:maxActive="${druid.maxActive}"
+          p:maxWait="${druid.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${druid.timeBetweenEvictionRunsMillis}"
+          p:minEvictableIdleTimeMillis="${druid.minEvictableIdleTimeMillis}"
+          p:validationQuery="${druid.validationQuery}"
+          p:poolPreparedStatements="${druid.poolPreparedStatements}"
+          p:maxPoolPreparedStatementPerConnectionSize="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
 
-    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-        <property name="dataSource" ref="dataSource"/>
-    </bean>
+    <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+          p:dataSource-ref="dataSource"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -77,31 +73,27 @@
     <!-- Pine configuration -->
     <bean id="configService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
 
-    <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer">
-        <property name="port" value="${pine.grpc.port}"/>
-    </bean>
-
-    <import resource="classpath*:/spring-pine-core.xml"/>
-
-    <bean id="mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean">
-        <property name="host" value="smtp.mxhichina.com"/>
-        <property name="port" value="25"/>
-        <property name="username" value="noreplay@weghst.com"/>
-        <property name="password" value="njSzbjie0+"/>
-    </bean>
-
-
-    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
-    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-
-    <!-- View Jackson ObjectMapper -->
-    <bean id="viewObjectMapper" class="com.weghst.pine.web.ViewObjectMapperFactory" factory-method="getObjectMapper"/>
+    <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer" p:port="${pine.grpc.port}"/>
 
     <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
           p:hostName="localhost"
           p:port="6379"
           p:usePool="true"/>
+
+    <import resource="classpath*:/spring-pine-core.xml"/>
+
+    <bean id="mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean"
+          p:host="smtp.mxhichina.com"
+          p:port="25"
+          p:username="noreplay@weghst.com"
+          p:password="njSzbjie0+"/>
+
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <!-- +++++++++++++++                   Web Config                    +++++++++++++++ -->
+    <!-- +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+    <mvc:annotation-driven/>
+
+    <bean id="viewObjectMapper" class="com.weghst.pine.web.ViewObjectMapperFactory" factory-method="getObjectMapper"/>
 
     <bean id="sessionRepository" class="org.springframework.session.data.redis.RedisOperationsSessionRepository"
           c:redisConnectionFactory-ref="jedisConnFactory"/>
