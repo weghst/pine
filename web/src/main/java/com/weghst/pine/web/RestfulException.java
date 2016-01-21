@@ -1,4 +1,4 @@
-package com.weghst.pine.web.resource;
+package com.weghst.pine.web;
 
 import com.weghst.pine.web.ErrorCodes;
 

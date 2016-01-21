@@ -139,7 +139,6 @@ configure(subprojects) { project ->
 
     dependencies {
         provided "org.projectlombok:lombok:1.16.6"
-        // provided "org.immutables:value:2.1.4"
 
         compile "org.slf4j:slf4j-api:$slf4jVersion"
         compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"

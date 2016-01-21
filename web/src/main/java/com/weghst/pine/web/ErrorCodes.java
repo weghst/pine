@@ -5,19 +5,10 @@ package com.weghst.pine.web;
  */
 public enum ErrorCodes {
 
-    /**
-     * 服务内部错误.
-     */
+    E_MINUS_1(-1, "未知错误"),
     E10000(10000, "服务内部错误"),
-    /**
-     * 参数错误.
-     */
     E10100(10100, "参数错误"),
-    /**
-     * 用户未找到.
-     */
     E12000(12000, "用户未找到");
-
 
     private int code;
     private String message;

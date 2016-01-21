@@ -30,8 +30,8 @@ import java.util.Properties;
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-@WebListener("Web configuration listener")
-public class WebConfigurationListener extends ContextLoader implements ServletContextListener {
+@WebListener("Web configurer listener")
+public class WebConfigurerListener extends ContextLoader implements ServletContextListener {
 
     private WebApplicationContext applicationContext;
 
@@ -123,13 +123,14 @@ public class WebConfigurationListener extends ContextLoader implements ServletCo
         DispatcherServlet dispatcherServlet = new DispatcherServlet(applicationContext);
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
+        dynamic.addMapping("/v1/*");
         dynamic.addMapping("/*");
     }
 
     private void registerSessionRepositoryFilter(ServletContext sc) {
         SessionRepository sessionRepository = applicationContext.getBean(SessionRepository.class);
 
-        // TODO: SessionRepositoryFilter -> commitSession() 该方法会被调用多次, 后期需要优化
+        // FIXME: SessionRepositoryFilter -> commitSession() 该方法会被调用多次, 后期需要优化
         SessionRepositoryFilter sessionRepositoryFilter = new SessionRepositoryFilter(sessionRepository);
 
         FilterRegistration.Dynamic filterRegistration = sc.addFilter("sessionRepositoryFilter", sessionRepositoryFilter);
