@@ -64,7 +64,6 @@ project(":pine-web") {
 
         runtime "ch.qos.logback:logback-classic:$logbackVersion"
         runtime "com.alibaba:druid:1.0.16"
-        runtime "ch.qos.logback:logback-classic:$logbackVersion"
         runtime "mysql:mysql-connector-java:5.1.37"
 
         def tomcatVersion = '7.0.59'
