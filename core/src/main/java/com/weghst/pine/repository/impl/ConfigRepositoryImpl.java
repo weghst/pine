@@ -2,7 +2,6 @@ package com.weghst.pine.repository.impl;
 
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.repository.ConfigRepository;
-import com.weghst.pine.repository.support.SqlSessionDaoSupport;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -15,21 +14,24 @@ import java.util.Map;
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @Repository
-public class ConfigRepositoryImpl extends SqlSessionDaoSupport implements ConfigRepository {
+public class ConfigRepositoryImpl implements ConfigRepository {
+
+    @Autowired
+    private SqlSession sqlSessionTemplate;
 
     @Override
     public int save(Config config) {
-        return getSqlSession().insert("com.weghst.pine.domain.Config.save", config);
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.Config.save", config);
     }
 
     @Override
     public int delete(String key) {
-        return getSqlSession().delete("com.weghst.pine.domain.Config.deleteByKey", key);
+        return sqlSessionTemplate.delete("com.weghst.pine.domain.Config.deleteByKey", key);
     }
 
     @Override
     public int update(Config config) {
-        return getSqlSession().update("com.weghst.pine.domain.Config.updateByKey", config);
+        return sqlSessionTemplate.update("com.weghst.pine.domain.Config.updateByKey", config);
     }
 
     @Override
@@ -38,16 +40,16 @@ public class ConfigRepositoryImpl extends SqlSessionDaoSupport implements Config
         params.put("key", key);
         params.put("value", value);
 
-        return getSqlSession().update("com.weghst.pine.domain.Config.updateValueByKey", params);
+        return sqlSessionTemplate.update("com.weghst.pine.domain.Config.updateValueByKey", params);
     }
 
     @Override
     public Config get(String key) {
-        return getSqlSession().selectOne("com.weghst.pine.domain.Config.getByKey", key);
+        return sqlSessionTemplate.selectOne("com.weghst.pine.domain.Config.getByKey", key);
     }
 
     @Override
     public List<Config> findAll() {
-        return getSqlSession().selectList("com.weghst.pine.domain.Config.findAll");
+        return sqlSessionTemplate.selectList("com.weghst.pine.domain.Config.findAll");
     }
 }

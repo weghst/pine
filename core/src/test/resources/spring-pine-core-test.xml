@@ -64,6 +64,8 @@
         </property>
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
+    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+          c:sqlSessionFactory-ref="sqlSessionFactory"/>
 
     <!--
         Flyway 数据库初始化

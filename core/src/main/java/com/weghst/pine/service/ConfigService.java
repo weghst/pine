@@ -11,12 +11,29 @@ import java.util.List;
  */
 public interface ConfigService {
 
+    /**
+     *
+     * @param config
+     */
     void saveOrUpdate(Config config);
 
+    /**
+     *
+     * @param key
+     */
     void delete(String key);
 
+    /**
+     *
+     * @param key
+     * @return
+     */
     Config get(String key);
 
+    /**
+     *
+     * @return
+     */
     List<Config> findAll();
 
 }

@@ -5,6 +5,7 @@ import com.weghst.pine.service.UserService;
 import com.weghst.pine.util.BeanUtils;
 import com.weghst.pine.web.ErrorCodes;
 import com.weghst.pine.web.RestfulException;
+import com.weghst.pine.web.vo.PrimitiveVo;
 import com.weghst.pine.web.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,14 +27,14 @@ public class UserRestController {
 
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public int create(UserVo userVo) {
+    public PrimitiveVo save(@RequestBody UserVo userVo) {
         LOG.debug("{}", userVo);
 
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
 
         userService.save(user);
-        return user.getId();
+        return new PrimitiveVo(user.getId());
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

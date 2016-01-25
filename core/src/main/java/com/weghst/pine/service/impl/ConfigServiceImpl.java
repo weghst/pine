@@ -4,10 +4,8 @@ import com.weghst.pine.ConfigUtils;
 import com.weghst.pine.domain.Config;
 import com.weghst.pine.repository.ConfigRepository;
 import com.weghst.pine.service.ConfigService;
-
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -20,7 +18,7 @@ import java.util.List;
 public class ConfigServiceImpl implements InitializingBean, ConfigService {
 
     @Autowired
-    private ConfigRepository configurationReposy;
+    private ConfigRepository configRepository;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -33,9 +31,9 @@ public class ConfigServiceImpl implements InitializingBean, ConfigService {
     @Override
     public void saveOrUpdate(Config config) {
         if (get(config.getKey()) != null) {
-            configurationReposy.update(config);
+            configRepository.update(config);
         } else {
-            configurationReposy.save(config);
+            configRepository.save(config);
         }
 
         ConfigUtils.setProperty(config.getKey(), config.getValue());
@@ -44,7 +42,7 @@ public class ConfigServiceImpl implements InitializingBean, ConfigService {
     @Transactional
     @Override
     public void delete(String key) {
-        configurationReposy.delete(key);
+        configRepository.delete(key);
 
         ConfigUtils.removeProperty(key);
     }
@@ -52,12 +50,12 @@ public class ConfigServiceImpl implements InitializingBean, ConfigService {
     @Transactional(readOnly = true)
     @Override
     public Config get(String key) {
-        return configurationReposy.get(key);
+        return configRepository.get(key);
     }
 
     @Transactional(readOnly = true)
     @Override
     public List<Config> findAll() {
-        return configurationReposy.findAll();
+        return configRepository.findAll();
     }
 }

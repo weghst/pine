@@ -7,11 +7,11 @@ option java_package = "com.weghst.pine";
 option java_outer_classname = "UserProto";
 
 service User {
-    rpc Save (UserReq) returns (UserRep) {
+    rpc Save (UserRequest) returns (UserResponse) {
     }
 }
 
-message UserReq {
+message UserRequest {
     int32 id = 1;
     string email = 2;
     string password = 3;
@@ -19,6 +19,6 @@ message UserReq {
     int64 createdTime = 5;
 }
 
-message UserRep {
+message UserResponse {
     int32 id = 1;
 }

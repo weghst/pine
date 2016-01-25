@@ -4,7 +4,6 @@ import com.weghst.pine.Pines;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.domain.UserTempField;
 import com.weghst.pine.repository.UserRepository;
-import com.weghst.pine.repository.support.SqlSessionDaoSupport;
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
@@ -16,18 +15,21 @@ import java.util.Map;
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @Repository
-public class UserRepositoryImpl extends SqlSessionDaoSupport implements UserRepository {
+public class UserRepositoryImpl implements UserRepository {
+
+    @Autowired
+    private SqlSession sqlSessionTemplate;
 
     @Override
     public int save(User user) {
         user.setCreatedTime(Pines.unixTimestamp());
 
-        return getSqlSession().insert("com.weghst.pine.domain.User.save", user);
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.User.save", user);
     }
 
     @Override
     public int delete(int id) {
-        int r = getSqlSession().delete("com.weghst.pine.domain.User.deleteById", id);
+        int r = sqlSessionTemplate.delete("com.weghst.pine.domain.User.deleteById", id);
 
         deleteUserTempField(id);
         return r;
@@ -35,7 +37,7 @@ public class UserRepositoryImpl extends SqlSessionDaoSupport implements UserRepo
 
     @Override
     public int update(User user) {
-        return getSqlSession().update("com.weghst.pine.domain.User.updateById", user);
+        return sqlSessionTemplate.update("com.weghst.pine.domain.User.updateById", user);
     }
 
     @Override
@@ -44,27 +46,27 @@ public class UserRepositoryImpl extends SqlSessionDaoSupport implements UserRepo
         params.put("email", email);
         params.put("emailValid", emailValid);
 
-        return getSqlSession().update("com.weghst.pine.domain.User.updateEmailValidByEmail", params);
+        return sqlSessionTemplate.update("com.weghst.pine.domain.User.updateEmailValidByEmail", params);
     }
 
     @Override
     public User get(int id) {
-        return getSqlSession().selectOne("com.weghst.pine.domain.User.getById", id);
+        return sqlSessionTemplate.selectOne("com.weghst.pine.domain.User.getById", id);
     }
 
     @Override
     public User get(String email) {
-        return getSqlSession().selectOne("com.weghst.pine.domain.User.getByEmail", email);
+        return sqlSessionTemplate.selectOne("com.weghst.pine.domain.User.getByEmail", email);
     }
 
     @Override
     public int saveOrUpdate(UserTempField userTempField) {
-        return getSqlSession().insert("com.weghst.pine.domain.UserTempField.saveOrUpdate", userTempField);
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.UserTempField.saveOrUpdate", userTempField);
     }
 
     @Override
     public int deleteUserTempField(int uid) {
-        return getSqlSession().insert("com.weghst.pine.domain.UserTempField.deleteByUid", uid);
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.UserTempField.deleteByUid", uid);
     }
 
     @Override
@@ -73,12 +75,12 @@ public class UserRepositoryImpl extends SqlSessionDaoSupport implements UserRepo
         params.put("uid", uid);
         params.put("field", field);
 
-        return getSqlSession().insert("com.weghst.pine.domain.UserTempField.deleteByUidAndField", params);
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.UserTempField.deleteByUidAndField", params);
     }
 
     @Override
     public int cleanUserTempField() {
-        return getSqlSession().insert("com.weghst.pine.domain.UserTempField.cleanByExpiredTime", Pines.unixTimestamp());
+        return sqlSessionTemplate.insert("com.weghst.pine.domain.UserTempField.cleanByExpiredTime", Pines.unixTimestamp());
     }
 
     @Override
@@ -87,6 +89,6 @@ public class UserRepositoryImpl extends SqlSessionDaoSupport implements UserRepo
         params.put("uid", uid);
         params.put("field", field);
 
-        return getSqlSession().selectOne("com.weghst.pine.domain.UserTempField.getByUidAndField", params);
+        return sqlSessionTemplate.selectOne("com.weghst.pine.domain.UserTempField.getByUidAndField", params);
     }
 }
