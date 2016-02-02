@@ -1,5 +1,6 @@
 package com.weghst.pine.service.impl;
 
+import com.weghst.pine.ConfigUtils;
 import com.weghst.pine.Pines;
 import com.weghst.pine.UserTempFields;
 import com.weghst.pine.domain.User;
@@ -9,19 +10,19 @@ import com.weghst.pine.service.UserService;
 import com.weghst.pine.template.TemplateEngine;
 import com.weghst.pine.util.RandomUtils;
 import com.weghst.pine.util.RedisUtils;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.StringWriter;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import redis.clients.jedis.Jedis;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Kevin Zou (kevinz@weghst.com)
@@ -29,14 +30,16 @@ import redis.clients.jedis.Jedis;
 @Service
 public class UserServiceImpl implements UserService {
 
-    public static final String EMAIL_VALIDATING_CODE_CACHE_NS = "pine.core.user.emailValidatingCode";
+    public static final String EMAIL_VALIDATING_CODE_CACHE_NS = "pine:user:emailValidatingCode";
 
     @Autowired
     private UserRepository userReposy;
-//    @Autowired
-    private Jedis jedis;
     @Autowired
+    @Qualifier("pine.core.templateEngine")
     private TemplateEngine templateEngine;
+    @Autowired
+    @Qualifier("pine.core.redisTemplate")
+    private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private JavaMailSender mailSender;
 
@@ -90,11 +93,15 @@ public class UserServiceImpl implements UserService {
         userReposy.saveOrUpdate(userTempField);
 
         // 将验证码放入缓存
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, user.getEmail());
-        jedis.set(cacheName, inteCode, "NX", "PX", userTempField.getSurvivalMillis());
+        valueOperations.set(cacheName, inteCode, 30, TimeUnit.MINUTES);
 
         // 处理邮件模板
         Map<String, Object> model = new HashMap<>();
+        model.put("name", user.getEmail());
+        model.put("vendor", ConfigUtils.getString("pine.vendor", "Weghst Pine"));
+        model.put("activationUrl", ConfigUtils.getString("pine.user.register.activationUrl"));
         model.put("code", inteCode);
 
         StringWriter writer = new StringWriter();
@@ -116,7 +123,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean emailValidate(String email, String code) {
         String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, email);
-        String inteCode = jedis.get(cacheName);
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String inteCode = valueOperations.get(cacheName);
         if (inteCode == null) {
             User user = get(email);
             UserTempField userTempField = getUserTempField0(user.getId(),
@@ -127,7 +135,7 @@ public class UserServiceImpl implements UserService {
         }
 
         if (code.equals(inteCode)) {
-            jedis.del(cacheName); // 删除缓存
+            redisTemplate.delete(cacheName);// 删除缓存
 
             userReposy.updateEmailValid(email, true);
             return true;

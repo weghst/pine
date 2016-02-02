@@ -5,10 +5,14 @@ package com.weghst.pine.util;
  */
 public final class RedisUtils {
 
+    /**
+     * @param args
+     * @return
+     */
     public static String getCacheName(String... args) {
-        StringBuilder sb = new StringBuilder();
-        for (String s : args) {
-            sb.append(":").append(s);
+        StringBuilder sb = new StringBuilder(args[0]);
+        for (int i = 1; i < args.length; i++) {
+            sb.append(":").append(args[i]);
         }
         return sb.toString();
     }

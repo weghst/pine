@@ -51,4 +51,9 @@ public class UserRestController {
         User user = userService.get(email);
         return user;
     }
+
+    @RequestMapping(value = "/activationEmail", method = RequestMethod.GET)
+    public void activateUser(String email, String code) {
+
+    }
 }

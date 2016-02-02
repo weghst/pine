@@ -20,6 +20,9 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
+    <!--
+        FreeMarker 模板引擎配置
+     -->
     <bean id="pine.core.freemarker.configuration"
           class="org.springframework.ui.freemarker.FreeMarkerConfigurationFactoryBean">
         <property name="defaultEncoding" value="UTF-8"/>
@@ -30,9 +33,27 @@
             </list>
         </property>
     </bean>
-
     <bean id="pine.core.templateEngine" class="com.weghst.pine.template.FreemarkerTemplateEngine">
         <property name="configuration" ref="pine.core.freemarker.configuration"/>
+    </bean>
+
+    <!--
+        Redis 连接配置
+     -->
+    <bean id="pine.core.redisConnectionFactory"
+          class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory">
+        <property name="hostName" value="${pine.redis.host}"/>
+        <property name="port" value="${pine.redis.port}"/>
+    </bean>
+    <bean id="pine.core.redisKeySerializer" class="org.springframework.data.redis.serializer.StringRedisSerializer"/>
+    <bean id="pine.core.kryoRedisSerializer" class="com.weghst.pine.util.redis.KryoRedisSerializer"/>
+    <bean id="pine.core.redisTemplate" class="org.springframework.data.redis.core.RedisTemplate">
+        <property name="enableDefaultSerializer" value="false"/>
+        <property name="connectionFactory" ref="pine.core.redisConnectionFactory"/>
+        <property name="keySerializer" ref="pine.core.redisKeySerializer"/>
+        <property name="hashKeySerializer" ref="pine.core.redisKeySerializer"/>
+        <property name="valueSerializer" ref="pine.core.kryoRedisSerializer"/>
+        <property name="hashValueSerializer" ref="pine.core.kryoRedisSerializer"/>
     </bean>
 
     <bean id="pine.core.mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean"/>

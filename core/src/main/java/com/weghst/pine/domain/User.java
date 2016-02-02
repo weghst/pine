@@ -16,6 +16,7 @@ public class User implements Serializable {
     private String email;
     private String password;
     private boolean emailValid;
+    private boolean enabled;
     private long createdTime;
 
     public int getId() {

@@ -26,7 +26,6 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-
         http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd">
 
     <context:component-scan base-package="com.weghst.pine"/>
@@ -81,9 +80,6 @@
           p:port="25"
           p:username="noreplay@weghst.com"
           p:password="njSzbjie0+"/>
-
-    <bean id="jedisConnFactory" class="org.springframework.data.redis.connection.jedis.JedisConnectionFactory"
-          p:usePool="true"/>
 
     <!--
         LDAP 服务配置
