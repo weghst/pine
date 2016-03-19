@@ -1,12 +1,11 @@
 package com.weghst.pine.util.redis;
 
-import com.esotericsoftware.kryo.Kryo;
-import com.esotericsoftware.kryo.io.Input;
-import com.esotericsoftware.kryo.io.Output;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.SerializationException;
 
-import java.io.ByteArrayOutputStream;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
 
 /**
  * @author Kevin Zou (kevinz@weghst.com)
@@ -24,15 +23,22 @@ public class KryoRedisSerializer<T> implements RedisSerializer<T> {
     @Override
     public byte[] serialize(T t) throws SerializationException {
         Output output = new Output(2048, -1);
-        kryo.writeClassAndObject(output, t);
-        // output.close();
-        return output.toBytes();
+        try {
+            kryo.writeClassAndObject(output, t);
+            return output.toBytes();
+        } finally {
+            output.close();
+        }
     }
 
     @Override
     public T deserialize(byte[] bytes) throws SerializationException {
         Input input = new Input(bytes);
-        T object = (T) kryo.readClassAndObject(input);
-        return object;
+        try {
+            T object = (T) kryo.readClassAndObject(input);
+            return object;
+        } finally {
+            input.close();
+        }
     }
 }

@@ -28,8 +28,7 @@
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
         http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
-        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd"
-       default-lazy-init="false">
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
 
     <context:component-scan base-package="com.weghst.pine"/>
 
@@ -68,16 +67,6 @@
     </bean>
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
-
-    <!--
-        Flyway 数据库初始化
-    -->
-    <bean class="com.weghst.pine.DatabaseInitializingBean"/>
-
-    <!-- Pine configuration -->
-    <bean id="configService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
-
-    <bean id="pine.grpcServer" class="com.weghst.pine.GrpcServer" p:port="${pine.grpc.port}"/>
 
     <!--
         Redis 服务配置示例暂时没有实际应用

@@ -12,6 +12,11 @@ import java.util.List;
 public interface ConfigService {
 
     /**
+     * ConfigService 被 IoC 容器所管理的 ID.
+     */
+    String BEAN_NAME = "com.weghst.pine.service.ConfigService";
+
+    /**
      *
      * @param config
      */

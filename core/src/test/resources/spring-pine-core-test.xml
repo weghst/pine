@@ -66,13 +66,6 @@
     <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
 
-    <!--
-        Flyway 数据库初始化
-    -->
-    <bean class="com.weghst.pine.DatabaseInitializingBean"/>
-
-    <bean id="configurationService" class="com.weghst.pine.service.impl.ConfigServiceImpl"/>
-
     <import resource="classpath:/spring-pine-core.xml"/>
 
     <bean id="mailSender" class="com.weghst.pine.service.JavaMailSenderFactoryBean"

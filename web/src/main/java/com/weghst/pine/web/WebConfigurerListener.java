@@ -1,7 +1,15 @@
 package com.weghst.pine.web;
 
-import com.weghst.pine.Constants;
-import com.weghst.pine.PineException;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.util.EnumSet;
+import java.util.Properties;
+import javax.servlet.*;
+import javax.servlet.annotation.WebListener;
+
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.util.ResourceUtils;
@@ -10,14 +18,9 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
-import javax.servlet.*;
-import javax.servlet.annotation.WebListener;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
-import java.util.EnumSet;
-import java.util.Properties;
+import ch.qos.logback.ext.spring.web.WebLogbackConfigurer;
+import com.weghst.pine.Constants;
+import com.weghst.pine.PineException;
 
 /**
  * Pine Web 配置监听器实现.
@@ -39,12 +42,16 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
     public void contextInitialized(ServletContextEvent sce) {
         ServletContext sc = sce.getServletContext();
 
+        // 初始化logback
+        sc.setInitParameter(WebLogbackConfigurer.CONFIG_LOCATION_PARAM, findLogbackConfigLocation());
+        WebLogbackConfigurer.initLogging(sc);
+
         // 加载系统基础配置
         loadPineProperties("classpath:pine.properties", false);
         loadPineProperties(System.getProperty("user.home") + "/.pine/pine.properties", true);
 
         // 初始化Spring配置
-        sc.setInitParameter("contextConfigLocation", "classpath:spring-pine-web.xml");
+        sc.setInitParameter(ContextLoader.CONFIG_LOCATION_PARAM, "classpath:spring-pine-web.xml");
         applicationContext = initWebApplicationContext(sc);
 
         // 注册JavaEE组件
@@ -60,6 +67,16 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
         System.out.println("............................DESTROY");
 
         closeWebApplicationContext(sce.getServletContext());
+
+        WebLogbackConfigurer.shutdownLogging(sce.getServletContext());
+    }
+
+    private String findLogbackConfigLocation() {
+        File file = new File(System.getProperty("user.home") + "/.pine/logback.xml");
+        if (file.exists()) {
+            return file.getAbsolutePath();
+        }
+        return "classpath:logback.xml";
     }
 
     private void loadPineProperties(String path, boolean ignoreResourceNotFound) {

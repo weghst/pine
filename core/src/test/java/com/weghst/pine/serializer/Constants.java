@@ -5,5 +5,5 @@ package com.weghst.pine.serializer;
  */
 class Constants {
 
-    public static final int MAX_ROUND = 100000;
+    public static final int MAX_ROUND = 10000 * 10;
 }

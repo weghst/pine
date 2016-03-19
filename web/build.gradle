@@ -1,17 +1,17 @@
-project(":pine-web") {
+project(':pine-web') {
 
-    apply plugin: "war"
-    apply plugin: "rebel"
-    apply plugin: "com.bmuschko.tomcat"
+    apply plugin: 'war'
+    apply plugin: 'rebel'
+    apply plugin: 'com.bmuschko.tomcat'
 
     tomcat {
         httpPort = 8080
-        contextPath = "/"
+        contextPath = '/'
     }
 
     task tomcatDebug {
-        description "Start Tomcat debug."
-        group "web application"
+        description 'Start Tomcat debug.'
+        group 'web application'
     } << {
         org.gradle.tooling.GradleConnector gradleConnector = org.gradle.tooling.GradleConnector.newConnector()
         if (System.env.GRADLE_HOME != null) {   // 如果设置$GRADLE_HOME环境变量, 则直接使用否则通过Gradle Wrapper从远程下载
@@ -23,10 +23,10 @@ project(":pine-web") {
             org.gradle.tooling.model.build.BuildEnvironment env = conn.getModel(org.gradle.tooling.model.build.BuildEnvironment.class)
             org.gradle.tooling.BuildLauncher build = conn.newBuild()
 
-            build.forTasks("generateRebel", "tomcatRun")
+            build.forTasks('generateRebel', 'tomcatRun')
 
-            def suspend = System.getProperty("jpdaSuspend", "n")
-            def address = System.getProperty("jpdaAddress", "5005")
+            def suspend = System.getProperty('jpdaSuspend', 'n')
+            def address = System.getProperty('jpdaAddress', '5005')
 
             // Enable debug via jvm arguments and append JVM arguments of the currently running vm (except -D).
             build.setJvmArguments("-javaagent:$System.env.JREBEL_HOME/jrebel.jar",
@@ -50,21 +50,22 @@ project(":pine-web") {
     }
 
     dependencies {
-        providedCompile "javax.servlet:javax.servlet-api:3.1.0"
+        providedCompile 'javax.servlet:javax.servlet-api:3.1.0'
 
-        compile project(":pine-core")
-        compile "org.ow2.asm:asm:5.0.4"
+        compile project(':pine-core')
+        compile 'org.ow2.asm:asm:5.0.4'
         compile "org.slf4j:jcl-over-slf4j:$slf4jVersion"
         compile "org.springframework:spring-webmvc:$springVersion"
-        compile "org.springframework.session:spring-session-data-redis:1.0.2.RELEASE"
+        compile 'org.springframework.session:spring-session-data-redis:1.0.2.RELEASE'
 
-        compile "org.hibernate:hibernate-validator:5.2.2.Final"
+        compile 'org.hibernate:hibernate-validator:5.2.2.Final'
         compile "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
-        // compile "com.belerweb:pinyin4j:2.5.0"
+        // compile 'com.belerweb:pinyin4j:2.5.0'
+        compile "org.logback-extensions:logback-ext-spring:0.1.4"
 
         runtime "ch.qos.logback:logback-classic:$logbackVersion"
-        runtime "com.alibaba:druid:1.0.16"
-        runtime "mysql:mysql-connector-java:5.1.37"
+        runtime 'com.alibaba:druid:1.0.16'
+        runtime 'mysql:mysql-connector-java:5.1.37'
 
         def tomcatVersion = '7.0.59'
         tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",

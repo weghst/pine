@@ -31,6 +31,7 @@ import java.util.ServiceLoader;
  */
 public final class ConfigUtils {
 
+    private final static String DEFAULT_CONFIGURATION_CLASS = "com.weghst.pine.DefaultConfiguration";
     private final static ConfigurationProvider configurationProvider;
 
     static {
@@ -39,7 +40,12 @@ public final class ConfigUtils {
         if (it.hasNext()) {
             configurationProvider = it.next();
         } else {
-            configurationProvider = new DefaultConfiguration();
+            try {
+                Class<?> clazz = Class.forName(DEFAULT_CONFIGURATION_CLASS);
+                configurationProvider = (ConfigurationProvider) clazz.newInstance();
+            } catch (Exception e) {
+                throw new IllegalStateException(e);
+            }
         }
     }
 
