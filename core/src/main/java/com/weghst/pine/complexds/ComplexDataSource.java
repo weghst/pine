@@ -12,7 +12,9 @@ import javax.sql.DataSource;
 import org.springframework.util.Assert;
 
 /**
- * @author zouyong (zouyong@mychebao.com)
+ * JDBC 复合数据源定义。
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class ComplexDataSource implements DataSource {
 
@@ -20,8 +22,10 @@ public class ComplexDataSource implements DataSource {
     private final Map<String, DataSource> slaveDataSources;
 
     /**
-     * @param masterDataSource
-     * @param slaveDataSources
+     * 通过 Master/Slave 构建复合数据源。
+     *
+     * @param masterDataSource Master 数据源
+     * @param slaveDataSources Slaves 数据库源集
      */
     public ComplexDataSource(DataSource masterDataSource, Map<String, DataSource> slaveDataSources) {
         Assert.notNull(masterDataSource);

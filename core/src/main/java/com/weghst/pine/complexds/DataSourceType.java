@@ -3,16 +3,19 @@ package com.weghst.pine.complexds;
 import java.lang.annotation.*;
 
 /**
- * @author zouyong (zouyong@mychebao.com)
+ * 声明数据源类型。
+ *
+ * @author Kevin Zou (kevinz@weghst.com)
  */
-
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface DataSourceType {
 
     /**
-     * @return
+     * Slave 数据源名称。
+     *
+     * @return Slave 数据源名称
      */
     String value();
 }

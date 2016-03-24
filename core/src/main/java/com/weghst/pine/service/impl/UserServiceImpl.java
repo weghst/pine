@@ -1,15 +1,11 @@
 package com.weghst.pine.service.impl;
 
-import com.weghst.pine.ConfigUtils;
-import com.weghst.pine.Pines;
-import com.weghst.pine.UserTempFields;
-import com.weghst.pine.domain.User;
-import com.weghst.pine.domain.UserTempField;
-import com.weghst.pine.repository.UserRepository;
-import com.weghst.pine.service.UserService;
-import com.weghst.pine.template.TemplateEngine;
-import com.weghst.pine.util.RandomUtils;
-import com.weghst.pine.util.RedisUtils;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -19,10 +15,18 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
+import com.weghst.pine.ConfigUtils;
+import com.weghst.pine.Pines;
+import com.weghst.pine.UserTempFields;
+import com.weghst.pine.domain.User;
+import com.weghst.pine.domain.UserTempField;
+import com.weghst.pine.repository.UserRepository;
+import com.weghst.pine.service.PasswordNotMatchedException;
+import com.weghst.pine.service.UserNotFoundException;
+import com.weghst.pine.service.UserService;
+import com.weghst.pine.template.TemplateEngine;
+import com.weghst.pine.util.RandomUtils;
+import com.weghst.pine.util.RedisUtils;
 
 /**
  * @author Kevin Zou (kevinz@weghst.com)
@@ -78,6 +82,20 @@ public class UserServiceImpl implements UserService {
         save(user);
 
         sendEmailValidate(user);
+    }
+
+    @Override
+    public User login(String email, String password) {
+        User user = get(email);
+        if (user == null) {
+            throw new UserNotFoundException("未发现邮箱为[" + email + "]的用户");
+        }
+
+        if (!Objects.equals(password, user.getPassword())) {
+            throw new PasswordNotMatchedException("用户[" + email + "]输入密码不匹配");
+        }
+
+        return user;
     }
 
     @Transactional

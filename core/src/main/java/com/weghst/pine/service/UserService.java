@@ -48,6 +48,16 @@ public interface UserService {
 
     /**
      *
+     * @param email
+     * @param password
+     * @return
+     * @throws UserNotFoundException
+     * @throws PasswordNotMatchedException
+     */
+    User login(String email, String password) throws UserNotFoundException, PasswordNotMatchedException;
+
+    /**
+     *
      * @param user
      */
     void sendEmailValidate(User user);

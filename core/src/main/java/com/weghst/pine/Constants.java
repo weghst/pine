@@ -22,4 +22,9 @@ public interface Constants {
      */
     String SLAVE_DATA_SOURCE_TYPE = "salveDataSource";
 
+    /**
+     * 系统超级管理员邮箱。
+     */
+    String ROOT_EMAIL = "root@weghst.com";
+
 }

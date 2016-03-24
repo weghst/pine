@@ -22,11 +22,9 @@
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:c="http://www.springframework.org/schema/c"
        xmlns:tx="http://www.springframework.org/schema/tx"
-       xmlns:ldap="http://www.springframework.org/schema/ldap"
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
-        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
-        http://www.springframework.org/schema/ldap http://www.springframework.org/schema/ldap/spring-ldap.xsd">
+        http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
 
     <context:component-scan base-package="com.weghst.pine"/>
     <context:property-placeholder location="classpath:pine.properties"/>
@@ -63,7 +61,7 @@
         </property>
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+    <bean id="sqlSessionTemplate" class="com.weghst.pine.repository.FastSqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
 
     <import resource="classpath:/spring-pine-core.xml"/>
@@ -73,14 +71,5 @@
           p:port="25"
           p:username="noreplay@weghst.com"
           p:password="njSzbjie0+"/>
-
-    <!--
-        LDAP 服务配置
-    -->
-    <ldap:context-source url="ldap://188.188.22.133:10389"
-                         base="dc=mychebao,dc=com"
-                         username="uid=admin,ou=system"
-                         password="secret"/>
-    <ldap:ldap-template id="ldapTemplate"/>
 
 </beans>

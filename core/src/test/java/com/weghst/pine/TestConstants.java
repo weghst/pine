@@ -6,6 +6,11 @@ package com.weghst.pine;
  */
 public class TestConstants {
 
+    /**
+     *
+     */
+    public static final String ROOT_PASSWORD = "root";
+
     public static final String EMAIL = "501276913@qq.com";
 
     public static final String PASSWORD = "[PASSWORD]";

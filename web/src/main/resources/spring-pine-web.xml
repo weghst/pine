@@ -65,7 +65,7 @@
         </property>
         <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
     </bean>
-    <bean id="sqlSessionTemplate" class="org.mybatis.spring.SqlSessionTemplate"
+    <bean id="sqlSessionTemplate" class="com.weghst.pine.repository.FastSqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
 
     <!--

@@ -67,6 +67,10 @@ project(':pine-web') {
         runtime 'com.alibaba:druid:1.0.16'
         runtime 'mysql:mysql-connector-java:5.1.37'
 
+        testCompile project(path: ':pine-core', configuration: 'tests')
+        testCompile "org.springframework:spring-test:$springVersion"
+        testCompile 'org.mockito:mockito-core:1.10.19'
+
         def tomcatVersion = '7.0.59'
         tomcat "org.apache.tomcat.embed:tomcat-embed-core:${tomcatVersion}",
                 "org.apache.tomcat.embed:tomcat-embed-logging-juli:${tomcatVersion}",

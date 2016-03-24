@@ -1,0 +1,1 @@
+INSERT INTO `t_user` (`email`, `password`, `emailValid`, `createdTime`) VALUES ('root@weghst.com', 'root', '1', UNIX_TIMESTAMP());

@@ -9,7 +9,7 @@ import org.aspectj.lang.reflect.MethodSignature;
 import org.springframework.util.ReflectionUtils;
 
 /**
- * @author zouyong (zouyong@mychebao.com)
+ * @author Kevin Zou (kevinz@weghst.com)
  */
 public class ComplexDataSourceInterceptor {
 

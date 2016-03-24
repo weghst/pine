@@ -1,5 +1,18 @@
 project(':pine-core') {
 
+    task testJar(type: Jar, dependsOn: testClasses) {
+        baseName = "${project.archivesBaseName}-${version}-test"
+        from sourceSets.test.output
+    }
+
+    configurations {
+        tests
+    }
+
+    artifacts {
+        tests testJar
+    }
+
     dependencies {
         compile 'commons-codec:commons-codec:1.10'
         compile 'org.apache.commons:commons-lang3:3.4'
@@ -19,11 +32,12 @@ project(':pine-core') {
         compile 'org.springframework.data:spring-data-redis:1.6.2.RELEASE'
         compile 'redis.clients:jedis:2.7.3'
 
-        compile 'org.springframework.ldap:spring-ldap-core:2.0.4.RELEASE'
+        // compile 'org.springframework.ldap:spring-ldap-core:2.0.4.RELEASE'
 
         compile 'org.mybatis.scripting:mybatis-freemarker:1.1.1'
         compile 'org.mybatis:mybatis-spring:1.2.3'
 
+        compile 'com.squareup.okhttp3:okhttp:3.2.0'
         compile('org.quartz-scheduler:quartz:2.2.1') {
             exclude module: 'c3p0'
         }
@@ -36,10 +50,10 @@ project(':pine-core') {
         compile 'org.apache.kafka:kafka-clients:0.9.0.1'
 
         testCompile "org.springframework:spring-test:$springVersion"
+        testCompile 'org.mockito:mockito-core:1.10.19'
         testCompile 'ch.qos.logback:logback-classic:1.1.3'
         testCompile 'com.alibaba:druid:1.0.16'
         testCompile 'mysql:mysql-connector-java:5.1.37'
-        testCompile 'org.mockito:mockito-core:1.10.19'
 
         // 序列化效率测试依赖库
         testCompile 'de.ruedigermoeller:fst:2.43'

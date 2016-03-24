@@ -141,7 +141,7 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
         ServletRegistration.Dynamic dynamic = sc.addServlet("dispatcherServlet", dispatcherServlet);
         dynamic.setLoadOnStartup(1);
         dynamic.addMapping("/v1/*");
-        dynamic.addMapping("/*");
+        // dynamic.addMapping("/*");
     }
 
     private void registerSessionRepositoryFilter(ServletContext sc) {
