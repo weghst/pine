@@ -10,6 +10,8 @@ import java.util.Properties;
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.util.ResourceUtils;
@@ -64,7 +66,7 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
 
     @Override
     public void contextDestroyed(ServletContextEvent sce) {
-        System.out.println("............................DESTROY");
+        getLog().info("pine destroy");
 
         closeWebApplicationContext(sce.getServletContext());
 
@@ -88,8 +90,7 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
 
                 in = url.openStream();
 
-                String msg = String.format("load pine properties: %s", url);
-                System.out.println(msg);
+                getLog().info("load pine properties: {}", url);
 
                 Properties properties = new Properties();
                 properties.load(in);
@@ -99,12 +100,11 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
                     val = properties.getProperty(name);
                     System.setProperty(name, val);
 
-                    msg = String.format("set system property[%s: %s]", name, val);
-                    System.out.println(msg);
+                    getLog().info("set system property[%s: %s]", name, val);
                 }
             } catch (FileNotFoundException e) {
                 if (ignoreResourceNotFound) {
-                    System.out.println("ignore not found resource: " + url);
+                    getLog().info("ignore not found resource: {}", url);
                 } else {
                     throw new PineException(e);
                 }
@@ -120,7 +120,7 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
             }
         } catch (FileNotFoundException e) {
             if (ignoreResourceNotFound) {
-                System.out.println("ignore not found resource: " + path);
+                getLog().info("ignore not found resource: {}", path);
             } else {
                 throw new PineException(e);
             }
@@ -152,6 +152,10 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
 
         FilterRegistration.Dynamic filterRegistration = sc.addFilter("sessionRepositoryFilter", sessionRepositoryFilter);
         filterRegistration.addMappingForUrlPatterns(EnumSet.allOf(DispatcherType.class), true, "/*");
+    }
+
+    private Logger getLog() {
+        return LoggerFactory.getLogger(WebLogbackConfigurer.class);
     }
 
 }
