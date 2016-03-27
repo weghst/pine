@@ -1,10 +1,8 @@
-gradle.ext.privateMavenRepositoryUrl = "http://188.188.22.221:9011/nexus/content/groups/public"
+rootProject.name = 'pine'
 
-rootProject.name = "pine"
+include ':pine-core'
+include ':pine-web'
 
-include ":pine-core"
-include ":pine-web"
-
-project(":pine-core").projectDir = "$rootDir/core" as File
-project(":pine-web").projectDir = "$rootDir/web" as File
+project(':pine-core').projectDir = "$rootDir/core" as File
+project(':pine-web').projectDir = "$rootDir/web" as File
 

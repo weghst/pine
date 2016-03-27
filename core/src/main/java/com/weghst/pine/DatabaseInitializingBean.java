@@ -30,6 +30,7 @@ public class DatabaseInitializingBean {
 
         Flyway flyway = new Flyway();
         flyway.setDataSource(dataSource);
+//        flyway.baseline();
         flyway.migrate();
     }
 
