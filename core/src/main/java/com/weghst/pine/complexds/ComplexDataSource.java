@@ -24,8 +24,8 @@ public class ComplexDataSource implements DataSource {
     /**
      * 通过 Master/Slave 构建复合数据源。
      *
-     * @param masterDataSource Master 数据源
-     * @param slaveDataSources Slaves 数据库源集
+     * @param masterDataSource Master 数据源（必须）
+     * @param slaveDataSources Slaves 数据库源集（至少一个 Slave 节点）
      */
     public ComplexDataSource(DataSource masterDataSource, Map<String, DataSource> slaveDataSources) {
         Assert.notNull(masterDataSource);
@@ -81,7 +81,8 @@ public class ComplexDataSource implements DataSource {
     }
 
     private DataSource getDataSource() {
-        DataSource dataSource = slaveDataSources.get(DataSourceTypeValue.get());
+        String contextName = NamedDSUtils.get();
+        DataSource dataSource = slaveDataSources.get(contextName);
         if (dataSource == null) {
             dataSource = masterDataSource;
         }

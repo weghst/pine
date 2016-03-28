@@ -17,9 +17,7 @@ import org.springframework.util.Assert;
 public class FastSqlSessionTemplate implements SqlSession {
 
     private final SqlSessionFactory sqlSessionFactory;
-
     private final ExecutorType executorType;
-
     private final PersistenceExceptionTranslator exceptionTranslator;
 
     public FastSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {

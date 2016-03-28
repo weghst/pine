@@ -20,6 +20,7 @@ project(':pine-core') {
         compile 'com.google.code.findbugs:jsr305:3.0.0'
         compile 'org.glassfish:javax.json:1.0.4'
         compile "com.fasterxml.jackson.datatype:jackson-datatype-jsr353:$jacksonVersion"
+        compile 'cglib:cglib:3.2.1'
 
         compile 'javax.mail:mail:1.4.7'
         compile 'org.apache.thrift:libthrift:0.9.3'

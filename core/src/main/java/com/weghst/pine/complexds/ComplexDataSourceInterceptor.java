@@ -4,40 +4,46 @@ import java.lang.reflect.Method;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
-import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint;
 import org.springframework.util.ReflectionUtils;
 
 /**
+ * 复合数据源拦截器。
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class ComplexDataSourceInterceptor {
 
-    private ConcurrentMap<Object, Object> methodSignatures = new ConcurrentHashMap<>();
+    private final ConcurrentMap<Object, Object> namedMap = new ConcurrentHashMap<>();
 
-    public Object invoke(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+    /**
+     * @param proceedingJoinPoint 被拦截的方法
+     * @return 方法执行结果
+     * @throws Throwable
+     */
+    public Object invoke(MethodInvocationProceedingJoinPoint proceedingJoinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-        Object obj = methodSignatures.get(methodSignature.getMethod());
+        Object obj = namedMap.get(methodSignature.getMethod());
         if (obj == null) {
             Class<?> clazz = proceedingJoinPoint.getTarget().getClass();
             Method method = ReflectionUtils.findMethod(clazz, methodSignature.getName(),
                     methodSignature.getParameterTypes());
 
             // 查询目标实现是否声明
-            DataSourceType dataSourceType = method.getAnnotation(DataSourceType.class);
-            if (dataSourceType == null) {
+            NamedDS named = method.getAnnotation(NamedDS.class);
+            if (named == null) {
                 // 查询接口定义是否声明
-                dataSourceType = methodSignature.getMethod().getAnnotation(DataSourceType.class);
-                if (dataSourceType == null) {
-                    methodSignatures.put(methodSignature.getMethod(), Boolean.FALSE);
+                named = methodSignature.getMethod().getAnnotation(NamedDS.class);
+                if (named == null) {
                     obj = Boolean.FALSE;
                 }
             }
 
-            if (dataSourceType != null) {
-                methodSignatures.put(methodSignature.getMethod(), dataSourceType);
-                obj = dataSourceType;
+            if (named != null) {
+                obj = named;
             }
+            namedMap.put(methodSignature.getMethod(), named);
         }
 
         if (obj == Boolean.FALSE) {
@@ -45,11 +51,11 @@ public class ComplexDataSourceInterceptor {
         }
 
         try {
-            DataSourceType dataSourceType = (DataSourceType) obj;
-            DataSourceTypeValue.set(dataSourceType.value());
+            NamedDS named = (NamedDS) obj;
+            NamedDSUtils.set(named.value());
             return proceedingJoinPoint.proceed();
         } finally {
-            DataSourceTypeValue.remove();
+            NamedDSUtils.remove();
         }
     }
 
