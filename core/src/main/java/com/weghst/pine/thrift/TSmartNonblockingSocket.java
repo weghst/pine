@@ -12,19 +12,24 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * 自动连接的非阻塞<code>Socket</code>。如果服务器停止或者网络闪断导致连接中断<code>TSmartNonblockingSocket</code>
+ * 会在每次调用读/写接口时尝试自动连接，如果手动调用{@link #close()} 方法关闭<code>Socket</code>将会永远关闭自动连接。
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
-public class TStableNonblockingSocket extends TNonblockingTransport {
+public class TSmartNonblockingSocket extends TNonblockingTransport {
 
-    private static final Logger LOG = LoggerFactory.getLogger(TStableNonblockingSocket.class);
+    private static final Logger LOG = LoggerFactory.getLogger(TSmartNonblockingSocket.class);
 
     private boolean autoConnected = true;
     private TNonblockingSocket socket;
 
     /**
-     * @param socket
+     * 构建自动连接非阻塞<code>Socket</code>实例。
+     *
+     * @param socket 非阻塞<code>Socket</code>
      */
-    public TStableNonblockingSocket(TNonblockingSocket socket) {
+    public TSmartNonblockingSocket(TNonblockingSocket socket) {
         if (socket == null) {
             throw new IllegalArgumentException("TNonblockingSocket 不能为 null");
         }
@@ -99,7 +104,7 @@ public class TStableNonblockingSocket extends TNonblockingTransport {
     private void ensureOpen() throws IOException {
         if (!isOpen()) {
             if (!autoConnected) {
-                throw new IOException("TStableNonblockingSocket 已被手动关闭，无法自动重连");
+                throw new IOException("TSmartNonblockingSocket 已被手动关闭，无法自动重连");
             }
 
             try {
