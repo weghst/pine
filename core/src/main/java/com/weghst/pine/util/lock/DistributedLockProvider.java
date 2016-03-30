@@ -21,11 +21,10 @@ public class DistributedLockProvider implements LockProvider {
     /**
      * 通过连接地址端口构建分布式锁实例.
      *
-     * @param connectString 连接地址 (.e.g 127.0.0.1:6370)
+     * @param curatorFramework CuratorFramework
      */
-    public DistributedLockProvider(String connectString) {
-        curatorFramework = CuratorFrameworkFactory.newClient(connectString, new ExponentialBackoffRetry(1000, 3));
-        curatorFramework.start();
+    public DistributedLockProvider(CuratorFramework curatorFramework) {
+        this.curatorFramework = curatorFramework;
     }
 
     @Override

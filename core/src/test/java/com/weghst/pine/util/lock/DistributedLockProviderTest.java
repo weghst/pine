@@ -1,8 +1,13 @@
 package com.weghst.pine.util.lock;
 
-import org.testng.annotations.Test;
-
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Lock;
+
+import org.apache.curator.RetryPolicy;
+import org.apache.curator.RetrySleeper;
+import org.apache.curator.framework.CuratorFramework;
+import org.apache.curator.framework.CuratorFrameworkFactory;
+import org.testng.annotations.Test;
 
 /**
  * @author Zou Yong(zouyong@mychebao.com)
@@ -13,7 +18,20 @@ public class DistributedLockProviderTest {
 
     @Test
     public void testGetLock() throws Exception {
-        DistributedLockProvider distributedLockProvider = new DistributedLockProvider("localhost:2181");
+        CuratorFramework curatorFramework = CuratorFrameworkFactory.newClient("localhost:2181", new RetryPolicy() {
+            @Override
+            public boolean allowRetry(int retryCount, long elapsedTimeMs, RetrySleeper sleeper) {
+                try {
+                    sleeper.sleepFor(1, TimeUnit.SECONDS);
+                    return true;
+                } catch (InterruptedException e) {
+                }
+                return false;
+            }
+        });
+        curatorFramework.start();
+
+        DistributedLockProvider distributedLockProvider = new DistributedLockProvider(curatorFramework);
         Thread t = new Thread() {
 
             @Override
