@@ -48,8 +48,31 @@
           p:poolPreparedStatements="${druid.poolPreparedStatements}"
           p:maxPoolPreparedStatementPerConnectionSize="${druid.maxPoolPreparedStatementPerConnectionSize}"/>
 
+    <bean id="slaveDataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close"
+          p:url="${slave.jdbc.url}"
+          p:username="${slave.jdbc.username}"
+          p:password="${slave.jdbc.password}"
+          p:initialSize="${slave.druid.initialSize}"
+          p:minIdle="${slave.druid.minIdle}"
+          p:maxActive="${slave.druid.maxActive}"
+          p:maxWait="${slave.druid.maxWait}"
+          p:timeBetweenEvictionRunsMillis="${slave.druid.timeBetweenEvictionRunsMillis}"
+          p:minEvictableIdleTimeMillis="${slave.druid.minEvictableIdleTimeMillis}"
+          p:validationQuery="${slave.druid.validationQuery}"
+          p:poolPreparedStatements="${slave.druid.poolPreparedStatements}"
+          p:maxPoolPreparedStatementPerConnectionSize="${slave.druid.maxPoolPreparedStatementPerConnectionSize}"/>
+
+    <bean id="complexDataSource" class="com.weghst.pine.complexds.ComplexDataSource">
+        <constructor-arg index="0" ref="dataSource"/>
+        <constructor-arg index="1">
+            <map>
+                <entry key="#{T(com.weghst.pine.complexds.NamedDS).DEFAULT_SLAVE_NAME}" value-ref="slaveDataSource"/>
+            </map>
+        </constructor-arg>
+    </bean>
+
     <bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
-          p:dataSource-ref="dataSource"/>
+          p:dataSource-ref="complexDataSource"/>
 
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
@@ -57,15 +80,15 @@
         MyBatis 配置
     -->
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"/>
+        <property name="dataSource" ref="complexDataSource"/>
         <property name="configurationProperties">
             <props>
                 <prop key="defaultScriptingLanguage">org.mybatis.scripting.freemarker.FreeMarkerLanguageDriver</prop>
             </props>
         </property>
-        <property name="mapperLocations" value="classpath*:com/weghst/pine/domain/*Mapper.xml"/>
+        <property name="mapperLocations" value="classpath*:com/weghst/pine/repository/*Mapper.xml"/>
     </bean>
-    <bean id="sqlSessionTemplate" class="com.weghst.pine.repository.FastSqlSessionTemplate"
+    <bean id="sqlSessionTemplate" class="com.weghst.pine.util.FastSqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
 
     <!--

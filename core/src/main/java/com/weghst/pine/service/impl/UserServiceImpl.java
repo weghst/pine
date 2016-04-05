@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
+import com.weghst.pine.repository.UserTempFieldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -39,6 +40,8 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userReposy;
     @Autowired
+    private UserTempFieldRepository userTempFieldRepository;
+    @Autowired
     @Qualifier("pine.core.templateEngine")
     private TemplateEngine templateEngine;
     @Autowired
@@ -68,13 +71,13 @@ public class UserServiceImpl implements UserService {
     @Transactional(readOnly = true)
     @Override
     public User get(int id) {
-        return userReposy.get(id);
+        return userReposy.getById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public User get(String email) {
-        return userReposy.get(email);
+        return userReposy.getByEmail(email);
     }
 
     @Override
@@ -108,7 +111,7 @@ public class UserServiceImpl implements UserService {
         userTempField.setField(UserTempFields.USER_EMAIL_VALIDATING_CODE_FIELD);
         userTempField.setValue(inteCode);
         userTempField.setSurvivalMillis(24 * 60 * 60 * 1000);
-        userReposy.saveOrUpdate(userTempField);
+        userTempFieldRepository.saveOrUpdate(userTempField);
 
         // 将验证码放入缓存
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
@@ -162,7 +165,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private UserTempField getUserTempField0(int uid, String field) {
-        UserTempField userTempField = userReposy.getUserTempField(uid, field);
+        UserTempField userTempField = userTempFieldRepository.getUserTempField(uid, field);
         long expiredTime = userTempField.getCreatedTime() + userTempField.getSurvivalMillis();
         if (userTempField != null && expiredTime > Pines.unixTimestamp()) {
             return userTempField;

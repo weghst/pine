@@ -1,5 +1,6 @@
 package com.weghst.pine.web;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -21,6 +22,7 @@ public final class ViewObjectMapperFactory {
 
         OBJECT_MAPPER.enable(SerializationFeature.WRITE_ENUMS_USING_TO_STRING);
         OBJECT_MAPPER.enable(DeserializationFeature.READ_ENUMS_USING_TO_STRING);
+        OBJECT_MAPPER.setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     /**

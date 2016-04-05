@@ -1,6 +1,8 @@
 package com.weghst.pine.repository;
 
+import com.weghst.pine.complexds.NamedDS;
 import com.weghst.pine.domain.Config;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
@@ -9,6 +11,7 @@ import java.util.List;
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
+@Repository
 public interface ConfigRepository {
 
     /**
@@ -57,5 +60,6 @@ public interface ConfigRepository {
      *
      * @return 配置信息集
      */
+    @NamedDS
     List<Config> findAll();
 }

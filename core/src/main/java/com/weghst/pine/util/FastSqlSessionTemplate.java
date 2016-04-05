@@ -1,4 +1,4 @@
-package com.weghst.pine.repository;
+package com.weghst.pine.util;
 
 import java.sql.Connection;
 import java.util.List;
@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.executor.BatchResult;
 import org.apache.ibatis.session.*;
 import org.mybatis.spring.MyBatisExceptionTranslator;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.mybatis.spring.SqlSessionUtils;
 import org.springframework.dao.support.PersistenceExceptionTranslator;
 import org.springframework.util.Assert;
@@ -14,11 +15,7 @@ import org.springframework.util.Assert;
 /**
  * @author zouyong (zouyong@mychebao.com)
  */
-public class FastSqlSessionTemplate implements SqlSession {
-
-    private final SqlSessionFactory sqlSessionFactory;
-    private final ExecutorType executorType;
-    private final PersistenceExceptionTranslator exceptionTranslator;
+public class FastSqlSessionTemplate extends SqlSessionTemplate {
 
     public FastSqlSessionTemplate(SqlSessionFactory sqlSessionFactory) {
         this(sqlSessionFactory, sqlSessionFactory.getConfiguration().getDefaultExecutorType());
@@ -31,12 +28,7 @@ public class FastSqlSessionTemplate implements SqlSession {
 
     public FastSqlSessionTemplate(SqlSessionFactory sqlSessionFactory, ExecutorType executorType,
                                   PersistenceExceptionTranslator exceptionTranslator) {
-        Assert.notNull(sqlSessionFactory, "Property 'sqlSessionFactory' is required");
-        Assert.notNull(executorType, "Property 'executorType' is required");
-
-        this.sqlSessionFactory = sqlSessionFactory;
-        this.executorType = executorType;
-        this.exceptionTranslator = exceptionTranslator;
+        super(sqlSessionFactory, executorType, exceptionTranslator);
     }
 
     @Override
@@ -161,7 +153,7 @@ public class FastSqlSessionTemplate implements SqlSession {
 
     @Override
     public Configuration getConfiguration() {
-        return sqlSessionFactory.getConfiguration();
+        return getSqlSessionFactory().getConfiguration();
     }
 
     @Override
@@ -175,6 +167,6 @@ public class FastSqlSessionTemplate implements SqlSession {
     }
 
     private SqlSession getSqlSession() {
-        return SqlSessionUtils.getSqlSession(sqlSessionFactory, executorType, exceptionTranslator);
+        return SqlSessionUtils.getSqlSession(getSqlSessionFactory(), getExecutorType(), getPersistenceExceptionTranslator());
     }
 }

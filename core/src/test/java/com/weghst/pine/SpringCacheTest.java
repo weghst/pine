@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
-import java.util.Date;
 
 import redis.clients.jedis.Jedis;
 

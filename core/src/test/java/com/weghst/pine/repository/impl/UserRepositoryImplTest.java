@@ -4,6 +4,7 @@ import com.weghst.pine.SpringTestSupport;
 import com.weghst.pine.domain.User;
 import com.weghst.pine.domain.UserTempField;
 import com.weghst.pine.repository.UserRepository;
+import com.weghst.pine.repository.UserTempFieldRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.testng.annotations.Test;
 
@@ -16,6 +17,8 @@ public class UserRepositoryImplTest extends SpringTestSupport {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserTempFieldRepository userTempFieldRepository;
 
     @Test
     public void testSave() throws Exception {
@@ -57,7 +60,7 @@ public class UserRepositoryImplTest extends SpringTestSupport {
         User user = newUser();
         userRepository.save(user);
 
-        User dbUser = userRepository.get(user.getId());
+        User dbUser = userRepository.getById(user.getId());
         assertNotNull(dbUser);
     }
 
@@ -66,7 +69,7 @@ public class UserRepositoryImplTest extends SpringTestSupport {
         User user = newUser();
         userRepository.save(user);
 
-        User dbUser = userRepository.get(user.getEmail());
+        User dbUser = userRepository.getByEmail(user.getEmail());
         assertNotNull(dbUser);
     }
 
@@ -80,16 +83,16 @@ public class UserRepositoryImplTest extends SpringTestSupport {
     @Test
     public void testSaveOrUpdate() throws Exception {
         UserTempField userTempField = newUserTempField();
-        int r = userRepository.saveOrUpdate(userTempField);
+        int r = userTempFieldRepository.saveOrUpdate(userTempField);
         assertEquals(r, 1);
     }
 
     @Test
     public void testDeleteUserTempField() throws Exception {
         UserTempField userTempField = newUserTempField();
-        userRepository.saveOrUpdate(userTempField);
+        userTempFieldRepository.saveOrUpdate(userTempField);
 
-        int r = userRepository.deleteUserTempField(userTempField.getUid(), userTempField.getField());
+        int r = userTempFieldRepository.deleteUserTempFieldByUidAndField(userTempField.getUid(), userTempField.getField());
         assertEquals(r, 1);
     }
 
@@ -97,18 +100,18 @@ public class UserRepositoryImplTest extends SpringTestSupport {
     public void testCleanUserTempField() throws Exception {
         UserTempField userTempField = newUserTempField();
         userTempField.setSurvivalMillis(-1000);
-        userRepository.saveOrUpdate(userTempField);
+        userTempFieldRepository.saveOrUpdate(userTempField);
 
-        int r = userRepository.cleanUserTempField();
+        int r = userTempFieldRepository.cleanUserTempField();
         assertTrue(r >= 1);
     }
 
     @Test
     public void testGetUserTempField() throws Exception {
         UserTempField userTempField = newUserTempField();
-        userRepository.saveOrUpdate(userTempField);
+        userTempFieldRepository.saveOrUpdate(userTempField);
 
-        UserTempField dbUserTempField = userRepository.getUserTempField(userTempField.getUid(),
+        UserTempField dbUserTempField = userTempFieldRepository.getUserTempField(userTempField.getUid(),
                 userTempField.getField());
         assertNotNull(dbUserTempField);
     }

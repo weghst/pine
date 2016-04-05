@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.weghst.pine.domain.Config">
+<mapper namespace="com.weghst.pine.repository.ConfigRepository">
 
     <insert id="save" parameterType="com.weghst.pine.domain.Config">
         INSERT INTO t_config(`key`, value, remarks, comments, needReboot)
         VALUES(#{key}, #{value}, #{remarks}, #{comments}, #{needReboot})
     </insert>
 
-    <delete id="deleteByKey" parameterType="string">
+    <delete id="delete" parameterType="string">
         DELETE FROM t_config WHERE `key`=#{value}
     </delete>
 
-    <update id="updateByKey" parameterType="com.weghst.pine.domain.Config">
+    <update id="update" parameterType="com.weghst.pine.domain.Config">
         UPDATE t_config SET value=#{value}, remarks=#{remarks}, comments=#{comments}, needReboot=#{needReboot},
           lastUpdatedTime=UNIX_TIMESTAMP(), lastBut2UpdatedTime=lastUpdatedTime
         WHERE `key`=#{key}
     </update>
 
-    <update id="updateValueByKey" parameterType="map">
+    <update id="updateValue" parameterType="map">
         UPDATE t_config SET value=#{value} WHERE `key`=#{key}
     </update>
 
-    <select id="getByKey" parameterType="string" resultType="com.weghst.pine.domain.Config">
+    <select id="get" parameterType="string" resultType="com.weghst.pine.domain.Config">
         SELECT `key`, value, remarks, comments, needReboot, lastUpdatedTime, lastBut2UpdatedTime
         FROM t_config WHERE `key`=#{value}
     </select>
