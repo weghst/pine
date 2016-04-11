@@ -4,7 +4,7 @@ import java.lang.annotation.*;
 
 
 /**
- * 声明数据源类型。
+ * 声明式数据源。
  *
  * @author Kevin Zou (kevinz@weghst.com)
  */
@@ -14,7 +14,7 @@ import java.lang.annotation.*;
 public @interface NamedDS {
 
     /**
-     *
+     * 默认 Slave 数据源名称。
      */
     String DEFAULT_SLAVE_NAME = "default.slave";
 

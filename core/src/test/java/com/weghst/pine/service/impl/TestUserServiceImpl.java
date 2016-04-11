@@ -28,7 +28,7 @@ public class TestUserServiceImpl extends SpringTestSupport {
     @Test
     public void testRegister() {
         User user = newUser();
-        userService.register(user);
+        userService.registerForEmail(user);
     }
 
     private User newUser() {

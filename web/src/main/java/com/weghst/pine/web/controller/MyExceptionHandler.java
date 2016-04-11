@@ -38,7 +38,7 @@ public class MyExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(DuplicateKeyException.class)
     public ResponseEntity<Object> handleDuplicateKeyException(DuplicateKeyException e, NativeWebRequest webRequest) {
         if (isRestful(webRequest)) {
-            return handleExceptionToJson(e, webRequest, HttpStatus.BAD_REQUEST, ErrorCodes.E10100.getCode(),
+            return handleExceptionToJson(e, webRequest, HttpStatus.CONFLICT, ErrorCodes.E10101.getCode(),
                     "重复的键值 >>> " + e.getMostSpecificCause().getMessage());
         }
         return null;

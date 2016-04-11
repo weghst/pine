@@ -35,10 +35,17 @@ import com.weghst.pine.util.RedisUtils;
 @Service
 public class UserServiceImpl implements UserService {
 
+    /**
+     *
+     */
+    public static final String MOBILE_VALIDATING_CODE_CACHE_NS = "pine:user:mobileValidatingCode";
+    /**
+     *
+     */
     public static final String EMAIL_VALIDATING_CODE_CACHE_NS = "pine:user:emailValidatingCode";
 
     @Autowired
-    private UserRepository userReposy;
+    private UserRepository userRepository;
     @Autowired
     private UserTempFieldRepository userTempFieldRepository;
     @Autowired
@@ -53,42 +60,57 @@ public class UserServiceImpl implements UserService {
     @Transactional
     @Override
     public void save(User user) {
-        userReposy.save(user);
+        userRepository.save(user);
     }
 
     @Transactional
     @Override
     public void delete(int id) {
-        userReposy.delete(id);
+        userRepository.delete(id);
     }
 
     @Transactional
     @Override
     public void update(User user) {
-        userReposy.update(user);
+        userRepository.update(user);
     }
 
     @Transactional(readOnly = true)
     @Override
     public User get(int id) {
-        return userReposy.getById(id);
+        return userRepository.getById(id);
     }
 
     @Transactional(readOnly = true)
     @Override
     public User get(String email) {
-        return userReposy.getByEmail(email);
+        return userRepository.getByEmail(email);
     }
 
     @Override
-    public void register(User user) {
+    public void registerForMobile(User user) {
+
+    }
+
+    @Override
+    public void sendMobileValidate(User user) {
+
+    }
+
+    @Override
+    public boolean mobileValidate(String mobile, String code) {
+        return false;
+    }
+
+    @Override
+    public void registerForEmail(User user) {
         save(user);
 
         sendEmailValidate(user);
     }
 
     @Override
-    public User login(String email, String password) {
+    public User loginForEmail(String email, String password) {
         User user = get(email);
         if (user == null) {
             throw new UserNotFoundException("未发现邮箱为[" + email + "]的用户");
@@ -99,6 +121,11 @@ public class UserServiceImpl implements UserService {
         }
 
         return user;
+    }
+
+    @Override
+    public User loginForMobile(String mobile, String password) throws UserNotFoundException, PasswordNotMatchedException {
+        return null;
     }
 
     @Transactional
@@ -158,13 +185,13 @@ public class UserServiceImpl implements UserService {
         if (code.equals(inteCode)) {
             redisTemplate.delete(cacheName);// 删除缓存
 
-            userReposy.updateEmailValid(email, true);
+            userRepository.updateEmailValid(email, true);
             return true;
         }
         return false;
     }
 
-    private UserTempField getUserTempField0(int uid, String field) {
+    private UserTempField getUserTempField0(long uid, String field) {
         UserTempField userTempField = userTempFieldRepository.getUserTempField(uid, field);
         long expiredTime = userTempField.getCreatedTime() + userTempField.getSurvivalMillis();
         if (userTempField != null && expiredTime > Pines.unixTimestamp()) {

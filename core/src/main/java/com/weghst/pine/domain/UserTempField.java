@@ -12,17 +12,17 @@ public class UserTempField implements Serializable {
 
     private static final long serialVersionUID = -7494062694414583353L;
 
-    private int uid;
+    private long uid;
     private String field;
     private String value;
     private long createdTime;
     private int survivalMillis;
 
-    public int getUid() {
+    public long getUid() {
         return uid;
     }
 
-    public void setUid(int uid) {
+    public void setUid(long uid) {
         this.uid = uid;
     }
 

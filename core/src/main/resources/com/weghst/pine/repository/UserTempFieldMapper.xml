@@ -10,7 +10,7 @@
     </insert>
 
     <delete id="deleteByUid" parameterType="long">
-        DELETE FROM t_user_temp_field WHERE uid=#{uid}
+        DELETE FROM t_user_temp_field WHERE uid=#{value}
     </delete>
 
     <delete id="deleteByUidAndField" parameterType="map">

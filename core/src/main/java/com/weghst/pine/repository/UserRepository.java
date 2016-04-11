@@ -1,6 +1,7 @@
 package com.weghst.pine.repository;
 
 import com.weghst.pine.domain.User;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -26,22 +27,20 @@ public interface UserRepository {
      * @param id 用户ID
      * @return 成功的记录数
      */
-    int delete(int id);
+    int delete(long id);
 
     /**
-     *
      * @param user
      * @return
      */
     int update(User user);
 
     /**
-     *
      * @param email
      * @param emailValid
      * @return
      */
-    int updateEmailValid(String email, boolean emailValid);
+    int updateEmailValid(@Param("email") String email, @Param("emailValid") boolean emailValid);
 
     /**
      * 返回用户信息.
@@ -49,7 +48,7 @@ public interface UserRepository {
      * @param id 用户ID
      * @return 用户信息
      */
-    User getById(int id);
+    User getById(long id);
 
     /**
      * 返回用户信息.

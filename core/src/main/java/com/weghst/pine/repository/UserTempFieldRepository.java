@@ -1,6 +1,7 @@
 package com.weghst.pine.repository;
 
 import com.weghst.pine.domain.UserTempField;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,12 +30,12 @@ public interface UserTempFieldRepository {
      * @param field 临时属性名称
      * @return 成功的记录数
      */
-    int deleteUserTempFieldByUidAndField(int uid, String field);
+    int deleteUserTempFieldByUidAndField(@Param("uid") long uid, @Param("field") String field);
 
     /**
      * 清理所有用户的临时属性.
      *
-     * @return 成功的记录数
+     * @return 清理的记录数
      */
     int cleanUserTempField();
 
@@ -43,5 +44,5 @@ public interface UserTempFieldRepository {
      * @param field
      * @return
      */
-    UserTempField getUserTempField(int uid, String field);
+    UserTempField getUserTempField(@Param("uid") long uid, @Param("field") String field);
 }

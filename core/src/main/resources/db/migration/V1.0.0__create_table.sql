@@ -16,13 +16,14 @@ CREATE TABLE `t_config` (
 /*Table structure for table `t_user` */
 
 CREATE TABLE `t_user` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '用户唯一标识, 自动增长',
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '用户唯一标识, 自动增长',
+  `mobile` varchar(18) COLLATE utf8_bin DEFAULT NULL COMMENT '用户手机，唯一值',
   `email` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '用户邮箱, 唯一值',
   `password` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '用户密码',
+  `mobileValid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户手机是否验证',
   `emailValid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户邮箱是否验证',
   `createdTime` bigint(20) NOT NULL COMMENT '用户创建时间',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `EMAIL(UNIQUE)` (`email`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin COMMENT='系统用户';
 
 /*Data for the table `t_user` */

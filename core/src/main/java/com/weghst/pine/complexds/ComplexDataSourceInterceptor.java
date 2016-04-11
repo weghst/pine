@@ -6,8 +6,8 @@ import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 复合数据源拦截器。
@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentMap;
  */
 public class ComplexDataSourceInterceptor {
 
-    private final ConcurrentMap<Object, Object> namedMap = new ConcurrentHashMap<>();
+    private final Map<Object, Object> namedMap = new HashMap<>();
 
     /**
      * @param proceedingJoinPoint 被拦截的方法

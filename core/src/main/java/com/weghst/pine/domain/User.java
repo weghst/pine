@@ -12,19 +12,29 @@ public class User implements Serializable {
 
     private static final long serialVersionUID = 8302778139312618271L;
 
-    private int id;
+    private long id;
+    private String mobile;
     private String email;
     private String password;
+    private boolean mobileValid;
     private boolean emailValid;
     private boolean enabled;
     private long createdTime;
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
+    }
+
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
     }
 
     public String getEmail() {
@@ -43,12 +53,28 @@ public class User implements Serializable {
         this.password = password;
     }
 
+    public boolean isMobileValid() {
+        return mobileValid;
+    }
+
+    public void setMobileValid(boolean mobileValid) {
+        this.mobileValid = mobileValid;
+    }
+
     public boolean isEmailValid() {
         return emailValid;
     }
 
     public void setEmailValid(boolean emailValid) {
         this.emailValid = emailValid;
+    }
+
+    public boolean isEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
     public long getCreatedTime() {
@@ -76,9 +102,12 @@ public class User implements Serializable {
     public String toString() {
         return MoreObjects.toStringHelper(this)
                 .add("id", id)
+                .add("mobile", mobile)
                 .add("email", email)
                 .add("password", password)
+                .add("mobileValid", mobileValid)
                 .add("emailValid", emailValid)
+                .add("enabled", enabled)
                 .add("createdTime", createdTime)
                 .toString();
     }

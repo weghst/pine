@@ -4,8 +4,8 @@
 <mapper namespace="com.weghst.pine.repository.UserRepository">
 
     <insert id="save" parameterType="com.weghst.pine.domain.User" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO t_user(email, password, emailValid, createdTime)
-        VALUES (#{email}, #{password}, #{emailValid}, UNIX_TIMESTAMP())
+        INSERT INTO t_user(mobile, email, password, mobileValid, emailValid, createdTime)
+        VALUES (#{mobile}, #{email}, #{password}, #{mobileValid}, #{emailValid}, UNIX_TIMESTAMP())
     </insert>
 
     <delete id="delete" parameterType="int">
@@ -13,7 +13,7 @@
     </delete>
 
     <update id="update" parameterType="com.weghst.pine.domain.User">
-        UPDATE t_user SET email=#{email}, password=#{password}, emailValid=#{emailValid} WHERE id=#{id}
+        UPDATE t_user SET mobile=#{mobile}, email=#{email}, password=#{password}, mobileValid=#{mobileValid}, emailValid=#{emailValid} WHERE id=#{id}
     </update>
 
     <update id="updateEmailValid" parameterType="map">

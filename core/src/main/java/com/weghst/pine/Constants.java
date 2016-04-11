@@ -13,6 +13,11 @@ public interface Constants {
     String ENCODING_PROP = "pine.encoding";
 
     /**
+     * 自动升级数据库属性键。
+     */
+    String AUTO_UPGRADE_DATABASE = "pine.autoUpgradeDatabase";
+
+    /**
      * Restful 资源路径前缀.
      */
     String RESTFUL_PATH_PREFIX_PROP = "pine.restful.path.prefix";
