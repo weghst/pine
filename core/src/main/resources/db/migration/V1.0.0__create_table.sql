@@ -20,7 +20,6 @@ CREATE TABLE `t_user` (
   `mobile` varchar(18) COLLATE utf8_bin DEFAULT NULL COMMENT '用户手机，唯一值',
   `email` varchar(32) COLLATE utf8_bin DEFAULT NULL COMMENT '用户邮箱, 唯一值',
   `password` varchar(128) COLLATE utf8_bin DEFAULT NULL COMMENT '用户密码',
-  `mobileValid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户手机是否验证',
   `emailValid` tinyint(1) NOT NULL DEFAULT '0' COMMENT '用户邮箱是否验证',
   `createdTime` bigint(20) NOT NULL COMMENT '用户创建时间',
   PRIMARY KEY (`id`)

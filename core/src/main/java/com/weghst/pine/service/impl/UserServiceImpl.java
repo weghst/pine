@@ -1,12 +1,19 @@
 package com.weghst.pine.service.impl;
 
-import java.io.StringWriter;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.concurrent.TimeUnit;
-
+import com.weghst.pine.ConfigUtils;
+import com.weghst.pine.Pines;
+import com.weghst.pine.UserTempFields;
+import com.weghst.pine.domain.Sms;
+import com.weghst.pine.domain.User;
+import com.weghst.pine.domain.UserTempField;
+import com.weghst.pine.repository.UserRepository;
 import com.weghst.pine.repository.UserTempFieldRepository;
+import com.weghst.pine.service.*;
+import com.weghst.pine.template.TemplateEngine;
+import com.weghst.pine.util.RandomUtils;
+import com.weghst.pine.util.RedisUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -16,24 +23,19 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.weghst.pine.ConfigUtils;
-import com.weghst.pine.Pines;
-import com.weghst.pine.UserTempFields;
-import com.weghst.pine.domain.User;
-import com.weghst.pine.domain.UserTempField;
-import com.weghst.pine.repository.UserRepository;
-import com.weghst.pine.service.PasswordNotMatchedException;
-import com.weghst.pine.service.UserNotFoundException;
-import com.weghst.pine.service.UserService;
-import com.weghst.pine.template.TemplateEngine;
-import com.weghst.pine.util.RandomUtils;
-import com.weghst.pine.util.RedisUtils;
+import java.io.StringWriter;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author Kevin Zou (kevinz@weghst.com)
  */
 @Service
 public class UserServiceImpl implements UserService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserServiceImpl.class);
 
     /**
      *
@@ -56,6 +58,8 @@ public class UserServiceImpl implements UserService {
     private RedisTemplate<String, String> redisTemplate;
     @Autowired
     private JavaMailSender mailSender;
+    @Autowired
+    private SmsService smsService;
 
     @Transactional
     @Override
@@ -88,18 +92,43 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void registerForMobile(User user) {
+    public void registerForMobile(User user, String code) throws CodeIncorrectException {
+        if (!mobileValidate(user.getMobile(), code)) {
+            LOG.info("用户[{}]注册输入的验证码[{}]错误", user, code);
+            throw new CodeIncorrectException("错误码的验证码[" + code + "]");
+        }
 
+        user.setMobileValid(true);
+        userRepository.save(user);
     }
 
     @Override
-    public void sendMobileValidate(User user) {
+    public String sendMobileValidate(String mobile) {
+        String inteCode = String.valueOf(RandomUtils.nextCode6());
 
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String cacheName = RedisUtils.getCacheName(MOBILE_VALIDATING_CODE_CACHE_NS, mobile);
+        valueOperations.set(cacheName, inteCode, ConfigUtils.getInt("pine.user.mobileRegister.code.expiredTime"),
+                TimeUnit.MILLISECONDS);
+
+        Sms sms = new Sms();
+        sms.setMobile(mobile)
+                .setSignName("注册验证")
+                .setTemplateCode(ConfigUtils.getString("pine.user.mobileRegister.sms.templateCode"))
+                .addParam("code", inteCode)
+                .addParam("product", ConfigUtils.getString("pine.vendor", "Weghst Pine"));
+        smsService.send(sms);
+
+        return inteCode;
     }
 
     @Override
     public boolean mobileValidate(String mobile, String code) {
-        return false;
+        ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
+        String cacheName = RedisUtils.getCacheName(MOBILE_VALIDATING_CODE_CACHE_NS, mobile);
+
+        String inteCode = valueOperations.get(cacheName);
+        return code.equals(inteCode);
     }
 
     @Override
@@ -125,7 +154,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User loginForMobile(String mobile, String password) throws UserNotFoundException, PasswordNotMatchedException {
-        return null;
+        User user = userRepository.getByMobile(mobile);
+        if (user == null) {
+            throw new UserNotFoundException("未发现手机为[" + mobile + "]的用户");
+        }
+
+        if (!Objects.equals(password, user.getPassword())) {
+            throw new PasswordNotMatchedException("用户[" + mobile + "]输入密码不匹配");
+        }
+        return user;
     }
 
     @Transactional
@@ -133,17 +170,11 @@ public class UserServiceImpl implements UserService {
     public void sendEmailValidate(User user) {
         String inteCode = String.valueOf(RandomUtils.nextCode6());
 
-        UserTempField userTempField = new UserTempField();
-        userTempField.setUid(user.getId());
-        userTempField.setField(UserTempFields.USER_EMAIL_VALIDATING_CODE_FIELD);
-        userTempField.setValue(inteCode);
-        userTempField.setSurvivalMillis(24 * 60 * 60 * 1000);
-        userTempFieldRepository.saveOrUpdate(userTempField);
-
         // 将验证码放入缓存
+        int expiredTime = ConfigUtils.getInt("pine.user.emailRegister.code.expiredTime", 24 * 60 * 60 * 1000);
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
         String cacheName = RedisUtils.getCacheName(EMAIL_VALIDATING_CODE_CACHE_NS, user.getEmail());
-        valueOperations.set(cacheName, inteCode, 30, TimeUnit.MINUTES);
+        valueOperations.set(cacheName, inteCode, expiredTime, TimeUnit.MINUTES);
 
         // 处理邮件模板
         Map<String, Object> model = new HashMap<>();

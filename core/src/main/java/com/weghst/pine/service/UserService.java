@@ -36,13 +36,14 @@ public interface UserService {
 
     /**
      * @param user
+     * @param code
      */
-    void registerForMobile(User user);
+    void registerForMobile(User user, String code) throws CodeIncorrectException;
 
     /**
-     * @param user
+     * @param mobile
      */
-    void sendMobileValidate(User user);
+    String sendMobileValidate(String mobile);
 
     /**
      * @param mobile

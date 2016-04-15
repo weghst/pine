@@ -6,13 +6,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * 微信实体对象。
+ *
  * @author Kevin Zou (zouyong@shzhiduan.com)
  */
 public class Sms {
 
+    /**
+     * 短信目标手机号码。
+     */
     private String mobile;
+    /**
+     * 短信签名名称。
+     */
     private String signName;
+    /**
+     * 短信参数。
+     */
     private Map<String, String> params;
+    /**
+     * 短信模板ID。
+     */
     private String templateCode;
 
     public String getMobile() {

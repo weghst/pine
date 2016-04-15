@@ -32,13 +32,32 @@ public class UserRestController {
     @RequestMapping(method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
     public PrimitiveVo save(@RequestBody UserVo userVo) {
-        LOG.debug("{}", userVo);
+        LOG.debug("邮箱注册用户 -> {}", userVo);
 
         User user = new User();
         BeanUtils.copyProperties(userVo, user);
 
         userService.save(user);
         return new PrimitiveVo(user.getId());
+    }
+
+    @RequestMapping(value = "/register4mobile", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PrimitiveVo registerForMobile(@RequestBody UserVo userVo, @RequestParam String code) {
+        LOG.debug("手机注册用户 -> {}", userVo);
+
+        User user = new User();
+        BeanUtils.copyProperties(userVo, user);
+
+        userService.registerForMobile(user, code);
+        return new PrimitiveVo(user.getId());
+    }
+
+    @RequestMapping(value = "/send-mobile-code/{mobile}", method = RequestMethod.GET,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public PrimitiveVo sendMobileCode(@PathVariable String mobile) {
+        userService.sendMobileValidate(mobile);
+        return PrimitiveVo.SUCCESS;
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

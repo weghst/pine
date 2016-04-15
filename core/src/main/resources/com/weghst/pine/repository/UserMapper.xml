@@ -28,4 +28,8 @@
         select * from t_user where email=#{value}
     </select>
 
+    <select id="getByMobile" parameterType="string" resultType="com.weghst.pine.domain.User">
+        select * from t_user where mobile=#{value}
+    </select>
+
 </mapper>

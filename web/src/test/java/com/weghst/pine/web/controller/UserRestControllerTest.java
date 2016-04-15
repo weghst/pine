@@ -3,6 +3,7 @@ package com.weghst.pine.web.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.weghst.pine.util.JsonUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.MediaType;
@@ -13,7 +14,6 @@ import org.testng.annotations.Test;
 
 import com.weghst.pine.Constants;
 import com.weghst.pine.TestConstants;
-import com.weghst.pine.util.ObjectMapperUtils;
 import com.weghst.pine.web.ErrorCodes;
 import com.weghst.pine.web.SpringTestSupport;
 import com.weghst.pine.web.vo.ErrorResult;
@@ -45,7 +45,7 @@ public class UserRestControllerTest extends SpringTestSupport {
         loginUser.put("password", TestConstants.ROOT_PASSWORD);
 
         ResultActions resultActions = mockMvc.perform(post("/users/login").contentType(MediaType.APPLICATION_JSON)
-                .content(ObjectMapperUtils.writeValueAsString(loginUser)));
+                .content(JsonUtils.writeValueAsString(loginUser)));
         resultActions.andExpect(result -> {
             MockHttpServletResponse response = result.getResponse();
 
@@ -59,13 +59,13 @@ public class UserRestControllerTest extends SpringTestSupport {
     @Test(dataProvider = "loginUserData")
     public void testLogin1(Map<String, String> loginUser) throws Exception {
         ResultActions resultActions = mockMvc.perform(post("/users/login").contentType(MediaType.APPLICATION_JSON)
-                .content(ObjectMapperUtils.writeValueAsString(loginUser)));
+                .content(JsonUtils.writeValueAsString(loginUser)));
         resultActions.andExpect(result -> {
             MockHttpServletResponse response = result.getResponse();
 
             LOG.debug(response.getContentAsString());
 
-            ErrorResult errorResult = ObjectMapperUtils.readValue(response.getContentAsString(), ErrorResult.class);
+            ErrorResult errorResult = JsonUtils.readValue(response.getContentAsString(), ErrorResult.class);
             assertEquals(errorResult.getErrorCode(), ErrorCodes.E12100.getCode());
         });
     }

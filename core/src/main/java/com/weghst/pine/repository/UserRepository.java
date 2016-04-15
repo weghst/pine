@@ -58,4 +58,12 @@ public interface UserRepository {
      */
     User getByEmail(String email);
 
+    /**
+     * 返回用户信息。
+     *
+     * @param mobile 手机号码
+     * @return 用户信息
+     */
+    User getByMobile(String mobile);
+
 }

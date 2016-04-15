@@ -9,15 +9,29 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 /**
+ * 创建 <code>JavaMailSender</code> 对象工厂类。
+ *
  * @author Kevin Zou (kevinz@weghst.com)
  */
 public class JavaMailSenderFactoryBean implements FactoryBean<JavaMailSender>, InitializingBean {
 
     private JavaMailSenderImpl javaMailSender;
 
+    /**
+     * 邮箱主机地址。
+     */
     private String host;
+    /**
+     * 邮箱主机端口。
+     */
     private int port;
+    /**
+     * 邮箱用户名。
+     */
     private String username;
+    /**
+     * 邮箱用户密码。
+     */
     private String password;
 
     @Override

@@ -20,7 +20,6 @@ public class AliSmsServiceImplTest extends SpringTestSupport {
 
     @Test
     public void testSend() throws Exception {
-        ConfigUtils.setProperty(AliSmsServiceImpl.ALI_SMS_API_URL, "http://gw.api.taobao.com/router/rest");
         ConfigUtils.setProperty(AliSmsServiceImpl.ALI_SMS_APP_KEY, "23342731");
         ConfigUtils.setProperty(AliSmsServiceImpl.ALI_SMS_APP_SECRET, "b324481b5e0f7a2438c7bb7c4a9f8629");
 

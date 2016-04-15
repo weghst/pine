@@ -11,6 +11,10 @@ buildscript {
         classpath 'org.zeroturnaround:gradle-jrebel-plugin:1.1.2'
         classpath 'com.bmuschko:gradle-tomcat-plugin:2.2.2'
         classpath 'gradle.plugin.com.zeroc.gradle.ice-builder:slice:1.0.5'
+
+        //
+        classpath 'com.github.iamsteveholmes:scrooge-gradle-plugin:0.5'
+        classpath 'com.twitter:scrooge-generator_2.11:4.6.0'
     }
 }
 

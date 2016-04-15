@@ -2,14 +2,18 @@ package com.weghst.pine.service.impl;
 
 import com.weghst.pine.ConfigUtils;
 import com.weghst.pine.domain.Sms;
+import com.weghst.pine.service.SmsException;
 import com.weghst.pine.service.SmsService;
 import com.weghst.pine.util.JsonUtils;
 import okhttp3.*;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.time.FastDateFormat;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.DigestUtils;
 
+import javax.json.JsonObject;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -23,7 +27,9 @@ import java.util.Map;
 @Service
 public class AliSmsServiceImpl implements SmsService {
 
-    static final String ALI_SMS_API_URL = "pine.ali.sms.apiUrl";
+    private static final Logger LOG = LoggerFactory.getLogger(AliSmsServiceImpl.class);
+    private static final HttpUrl SMS_HTTP_URL = HttpUrl.parse("http://gw.api.taobao.com/router/rest");
+
     static final String ALI_SMS_APP_KEY = "pine.ali.sms.appKey";
     static final String ALI_SMS_APP_SECRET = "pine.ali.sms.appSecret";
 
@@ -31,9 +37,6 @@ public class AliSmsServiceImpl implements SmsService {
 
     @Override
     public void send(Sms sms) {
-        // 23342731
-        // b324481b5e0f7a2438c7bb7c4a9f8629
-
         Map<String, String> params = new HashMap<>();
         params.put("method", "alibaba.aliqin.fc.sms.num.send");
         params.put("app_key", ConfigUtils.getString(ALI_SMS_APP_KEY));
@@ -48,39 +51,29 @@ public class AliSmsServiceImpl implements SmsService {
         params.put("sms_template_code", sms.getTemplateCode());
         params.put("sign", buildSign(params).toUpperCase());
 
-//        HttpUrl httpUrl = HttpUrl.parse(ConfigUtils.getString(ALI_SMS_API_URL));
-//        HttpUrl.Builder httpUrlBuilder = httpUrl.newBuilder();
-//        for (Map.Entry<String, String> entry : params.entrySet()) {
-//            httpUrlBuilder.setQueryParameter(entry.getKey(), entry.getValue());
-//        }
-
-        FormBody.Builder builder = new FormBody.Builder();
+        FormBody.Builder formBodyBuilder = new FormBody.Builder();
         for (Map.Entry<String, String> entry : params.entrySet()) {
-            builder.add(entry.getKey(), entry.getValue());
+            formBodyBuilder.add(entry.getKey(), entry.getValue());
         }
 
-        Request request = new Request.Builder()
-                .url(ConfigUtils.getString(ALI_SMS_API_URL))
-                .post(builder.build())
-                .build();
+        Request request = new Request.Builder().url(SMS_HTTP_URL).post(formBodyBuilder.build()).build();
         try {
             Response response = httpClient.newCall(request).execute();
-            System.out.println(response.body().string());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+            if (!response.isSuccessful()) {
+                LOG.error("发送短信失败 {}-> {}", request, response);
+                throw new SmsException("发送短信失败[httpStatus: " + response.code() + "]");
+            }
 
-//        .enqueue(new Callback() {
-//            @Override
-//            public void onFailure(Call call, IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            @Override
-//            public void onResponse(Call call, Response response) throws IOException {
-//                System.out.println(response.body());
-//            }
-//        });
+            JsonObject result = JsonUtils.readValue(response.body().bytes(), JsonObject.class);
+            if (result.containsKey("error_response")) {
+                LOG.error("发送短信失败 {}-> {}", request, response.body().string());
+                throw new SmsException("发送短信失败 -> " + response.body().string());
+            }
+
+            LOG.debug("短信[{}]发送成功", sms);
+        } catch (IOException e) {
+            throw new SmsException("发送短信失败[" + request.toString() + "]", e);
+        }
     }
 
     private String buildSign(Map<String, String> params) {
