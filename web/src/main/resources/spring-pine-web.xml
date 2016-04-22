@@ -90,6 +90,11 @@
     </bean>
     <bean id="sqlSessionTemplate" class="com.weghst.pine.util.FastSqlSessionTemplate"
           c:sqlSessionFactory-ref="sqlSessionFactory"/>
+    <bean id="mapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.weghst.pine.repository"/>
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="sqlSessionTemplateBeanName" value="sqlSessionTemplate"/>
+    </bean>
 
     <!--
         Redis 服务配置示例暂时没有实际应用

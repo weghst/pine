@@ -4,6 +4,7 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,8 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Autowired
     private ConfigRepository configRepository;
+    @Value("${pine.timeZone}")
+    public String testKey;
 
     @PostConstruct
     public void init() throws Exception {

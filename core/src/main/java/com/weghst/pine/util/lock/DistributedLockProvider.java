@@ -1,9 +1,7 @@
 package com.weghst.pine.util.lock;
 
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.curator.framework.CuratorFrameworkFactory;
 import org.apache.curator.framework.recipes.locks.InterProcessMutex;
-import org.apache.curator.retry.ExponentialBackoffRetry;
 
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.Condition;

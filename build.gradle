@@ -59,8 +59,6 @@ allprojects {
     apply plugin: 'idea'
     apply plugin: 'eclipse'
 
-    apply plugin: 'slice'
-
     configurations {
         deployerJars
     }

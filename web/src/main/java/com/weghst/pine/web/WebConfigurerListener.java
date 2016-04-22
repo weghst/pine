@@ -10,13 +10,19 @@ import java.util.Properties;
 import javax.servlet.*;
 import javax.servlet.annotation.WebListener;
 
+import com.weghst.pine.service.ConfigService;
+import com.weghst.pine.service.impl.ConfigServiceImpl;
+import com.weghst.pine.web.controller.ConfigRestController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.session.SessionRepository;
 import org.springframework.session.web.http.SessionRepositoryFilter;
 import org.springframework.util.ResourceUtils;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 
@@ -62,6 +68,26 @@ public class WebConfigurerListener extends ContextLoader implements ServletConte
 
         // 注册SessionFilter
         registerSessionRepositoryFilter(sc);
+
+
+        // ====================================== 测试重新注入
+        ConfigurableApplicationContext applicationContext = (ConfigurableApplicationContext) WebApplicationContextUtils.getRequiredWebApplicationContext(sc);
+        ConfigServiceImpl configService = (ConfigServiceImpl) applicationContext.getBean(ConfigService.class);
+        ConfigRestController configRestController = applicationContext.getBean(ConfigRestController.class);
+
+        System.out.println(configService.testKey);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++");
+
+        System.setProperty("pine.timeZone", "GMT+12:0000000000000000000000");
+
+        applicationContext.getAutowireCapableBeanFactory().configureBean(configService, "configServiceImpl");
+        applicationContext.getAutowireCapableBeanFactory().configureBean(configRestController, "configRestController");
+
+        System.out.println(configService.testKey);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + configRestController.configService.hashCode());
+
+        configRestController = applicationContext.getBean(ConfigRestController.class);
+        System.out.println("+++++++++++++++++++++++++++++++++++++++++++++++" + configRestController.configService.hashCode());
     }
 
     @Override

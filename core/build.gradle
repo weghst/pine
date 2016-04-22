@@ -1,15 +1,13 @@
 project(':pine-core') {
 
-    apply plugin: 'scala'
-    apply plugin: 'scrooge-gradle-plugin'
+    // apply plugin: 'scala'
+    // apply plugin: 'scrooge-gradle-plugin'
 
-    sourceSets.main.scala.srcDirs += ["src/gen/scala"]
-
-    compileScrooge {
-        thriftFiles = fileTree(dir: "src/main/thrift", include: "**/*.thrift")
-        dest = file("src/gen/scala")
-        opts = ["--finagle"]
-    }
+    // compileScrooge {
+    //     thriftFiles = fileTree(dir: "src/main/thrift", include: "**/*.thrift")
+    //     dest = file("src/gen/scala")
+    //     opts = ["--finagle"]
+    // }
 
     task testJar(type: Jar, dependsOn: testClasses) {
         baseName = "${project.archivesBaseName}-${version}-test"
@@ -68,8 +66,6 @@ project(':pine-core') {
         testCompile 'ch.qos.logback:logback-classic:1.1.3'
         testCompile 'com.alibaba:druid:1.0.16'
         testCompile 'mysql:mysql-connector-java:5.1.37'
-        // testCompile 'com.twitter:finagle-thrift_2.11:6.34.0'
-        testCompile 'com.twitter:finagle-thriftmux_2.11:6.34.0'
 
         // 序列化效率测试依赖库
         testCompile 'de.ruedigermoeller:fst:2.43'
